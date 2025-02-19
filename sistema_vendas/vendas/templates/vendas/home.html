@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+            <li><a href="{% url 'carrinho' %}">Cadastrar venda</a></li>
+            <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+        </ul>
+    </nav>
+
+    <h1>Bem-vindo ao sistema de vendas!</h1>
+</body>
+</html>

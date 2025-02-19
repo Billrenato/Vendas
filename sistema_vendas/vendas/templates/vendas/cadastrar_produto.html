@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastrar produto</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+            <li><a href="{% url 'carrinho' %}">Cadastrar venda</a></li>
+            <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+        </ul>
+    </nav>
+
+    <h1>Bem-vindo ao sistema de vendas!</h1>
+</body>
+<body>
+    <h1>Cadastrar produto</h1>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Cadastrar</button>
+    </form>
+    <h2>Produtos cadastrados:</h2>
+    <form method="get">
+        <input type="text" name="q" placeholder="Pesquisar pelo descricao...">
+        <button type="submit">Pesquisar</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>descricao</th>
+                <th>grupo</th>
+                <th>marca</th>
+                <th>unidade_medida</th>
+                <th>custo</th>
+                <th>preco</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+                <tr>
+                    <td>{{ produto.descricao }}</td>
+                    <td>{{ produto.grupo }}</td>
+                    <td>{{ produto.marca }}</td>
+                    <td>{{ produto.unidade_medida }}</td>
+                    <td>{{ produto.custo }}</td>
+                    <td>{{ produto.preco }}</td>
+                    <td>
+                        <a href="{% url 'editar_produto' produto.id %}">Editar</a>
+                        <button type="button" onclick="if (confirm('Tem certeza que deseja excluir este produto?')) { window.location.href='{% url 'excluir_produto' produto.id %}'; }">Excluir</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

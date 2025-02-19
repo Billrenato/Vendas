@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carrinho de compras</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+            <li><a href="{% url 'carrinho' %}">Cadastrar venda</a></li>
+            <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+        </ul>
+    </nav>
+
+    <h1>Bem-vindo ao sistema de vendas!</h1>
+</body>
+<body>
+    <h1>Carrinho de compras</h1>
+    <h2>Buscar Cliente:</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="nome_cliente" placeholder="Digite o nome do cliente...">
+        <button type="submit" name="buscar_cliente">Buscar</button>
+    </form>
+    {% if resultados_cliente %}
+        <h2>Clientes encontrados:</h2>
+        <form method="post">
+            {% csrf_token %}
+            <select name="cliente_selecionado">
+                {% for cliente in resultados_cliente %}
+                    <option value="{{ cliente.pk }}">{{ cliente.nome }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" name="selecionar_cliente">Selecionar</button>
+        </form>
+    {% else %}
+        {% if mensagem_cliente %}
+            <h2>{{ mensagem_cliente }}</h2>
+        {% endif %}
+    {% endif %}
+
+    <h2>Buscar Produto:</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="descricao_produto" placeholder="Digite a descrição do produto...">
+        <input type="number" name="quantidade" placeholder="Digite a quantidade...">
+        <button type="submit" name="buscar_produto">Buscar</button>
+    </form>
+    {% if resultados_produto %}
+        <h2>Produtos encontrados:</h2>
+        <form method="post">
+            {% csrf_token %}
+            <select name="produto_selecionado">
+                {% for produto in resultados_produto %}
+                    <option value="{{ produto.pk }}">{{ produto.descricao }}</option>
+                {% endfor %}
+            </select>
+            <input type="number" name="quantidade" placeholder="Digite a quantidade...">
+            <button type="submit" name="selecionar_produto">Selecionar</button>
+        </form>
+    {% else %}
+        {% if mensagem_produto %}
+            <h2>{{ mensagem_produto }}</h2>
+        {% endif %}
+    {% endif %}
+
+    <h2>Carrinho:</h2>
+    <ul>
+        {% for item in carrinho %}
+            {% if item.produto %}
+                <li>{{ item.produto.descricao }} ({{ item.quantidade }}) - R$ {{ item.total }}</li>
+            {% elif item.cliente %}
+                <li>{{ item.cliente.nome }}</li>
+            {% else %}
+                <li>Item desconhecido</li>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="carrinho" value="{{ item.pk }}">
+                <button type="submit" name="remover_produto">Remover</button>
+            </form>
+        {% endfor %}
+    </ul>
+    {% if mensagem %}
+        <h2>{{ mensagem }}</h2>
+    {% endif %}
+    {% if mensagem_cliente %}
+        <h2>{{ mensagem_cliente }}</h2>
+    {% endif %}
+    {% if mensagem_produto %}
+        <h2>{{ mensagem_produto }}</h2>
+    {% endif %}
+    <h2>Total: R$ {{ total }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="number" name="desconto_porcentagem" placeholder="Desconto em %">
+        <button type="submit" name="aplicar_desconto">Aplicar Desconto</button>
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <input type="number" name="desconto" placeholder="Desconto">
+        <button type="submit" name="finalizar_compra">Finalizar Compra</button>
+    </form>
+    {% if mensagem %}
+        <h2>{{ mensagem }}</h2>
+        <h2>ID Venda: {{ id_venda }}</h2>
+    {% endif %}
+
+</body>
+</html>

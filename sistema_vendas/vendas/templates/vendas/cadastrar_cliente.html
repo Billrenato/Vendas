@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+                <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+                <li><a href="{% url 'carrinho' %}">Cadastrar venda</a></li>
+                <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+            </ul>
+        </nav>
+    
+        <h1>Bem-vindo ao sistema de vendas!</h1>
+    </body>
+<head>
+    <title>Cadastrar cliente</title>
+</head>
+<body>
+    <h1>Cadastrar cliente</h1>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Cadastrar</button>
+    </form>
+    <h2>Clientes cadastrados:</h2>
+    <form method="get">
+        <input type="text" name="q" placeholder="Pesquisar pelo nome...">
+        <button type="submit">Pesquisar</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Inscrição Estadual</th>
+                <th>CPF</th>
+                <th>RG</th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+                <th>CEP</th>
+                <th>Número</th>
+                <th>Bairro</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.nome }}</td>
+                <td>{{ cliente.cnpj }}</td>
+                <td>{{ cliente.inscricao_estadual }}</td>
+                <td>{{ cliente.cpf }}</td>
+                <td>{{ cliente.rg }}</td>
+                <td>{{ cliente.telefone }}</td>
+                <td>{{ cliente.endereco }}</td>
+                <td>{{ cliente.cep }}</td>
+                <td>{{ cliente.numero }}</td>
+                <td>{{ cliente.bairro }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>
+                    <a href="{% url 'editar_cliente' cliente.id %}">Editar</a>
+                    <button type="button" onclick="if (confirm('Tem certeza que deseja excluir este cliente?')) { window.location.href='{% url 'excluir_cliente' cliente.id %}'; }">Excluir</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
