@@ -1,4 +1,4 @@
-# Sistema de Vendas
+# Sistema de Vendas 
 
 Este é um sistema de vendas simples desenvolvido em Django, um framework web Python. O sistema permite que os usuários cadastrem produtos, clientes e vendas, além de visualizar um resumo das vendas.
 
@@ -15,6 +15,7 @@ Tecnologias Utilizadas
 - Python (linguagem de programação)
 - HTML (linguagem de marcação)
 - CSS (linguagem de estilo)
+- PostgreSQL (banco de dados)
 
 Estrutura do Projeto
 - home.html: página inicial do sistema
