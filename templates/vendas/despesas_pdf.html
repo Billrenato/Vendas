@@ -1,0 +1,38 @@
+<!-- despesas_pdf.html -->
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Despesas</title>
+</head>
+<body>
+    <h1>Despesas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Data Vencimento</th>
+                <th>Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for despesa in despesas %}
+                <tr>
+                    <td>{{ despesa.descricao }}</td>
+                    <td>{{ despesa.valor }}</td>
+                    <td>{{ despesa.data_vencimento }}</td>
+                    <td>
+                        {% if despesa.pago %}
+                            <span style="color: green;">Sim</span>
+                        {% else %}
+                            <span style="color: red;">Não</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>Soma das despesas: {{ soma_despesas }}</p>
+</body>
+</html>

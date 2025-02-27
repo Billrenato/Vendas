@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'despesas' %}">Despesas</a></li>
+                <li><a href="{% url 'vendas_conta_cliente' %}">Conta A receber</a></li>
+                <li><a href="{% url 'cadastrar_empresa' %}">Informações da empresa</a></li>
+                <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+                <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+                <li><a href="{% url 'cadastrar_vendedor' %}">Cadastrar vendedor</a></li>
+                <li><a href="{% url 'cadastrar_venda' %}">Cadastrar venda</a></li>
+                <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+                <li><a href="{% url 'gerar_nfe' %}">NFE</a></li>
+            </ul>
+        </nav>
+    </body>
+    <title>Despesas</title>
+</head>
+<body>
+    <h1>Despesas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Data Vencimento</th>
+                <th>Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for despesa in despesas %}
+                <tr>
+                    <td>{{ despesa.descricao }}</td>
+                    <td>{{ despesa.valor }}</td>
+                    <td>{{ despesa.data_vencimento }}</td>
+                    <td>{{ despesa.pago }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>Total: {{ soma_despesas }}</p>
+</body>
+</html>

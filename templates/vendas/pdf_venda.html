@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Venda - {{ venda.id_venda }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Venda #{{ venda.id_venda }}</h1>
+    <h2>Dados da Venda</h2>
+    <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
+    <p><strong>Vendedor:</strong> {{ venda.vendedor.nome }}</p>
+    <p><strong>Forma de Pagamento:</strong> {{ venda.get_forma_pagamento_display }}</p>
+    {% if venda.forma_pagamento == "conta_cliente" %}
+        <p><strong>Data de Vencimento:</strong> {{ venda.data_vencimento }}</p>
+    {% endif %}
+    
+    <h2>Produtos</h2>
+    <table>
+        <tr>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Unidade</th>
+            <th>Quantidade</th>
+            <th>Total</th>
+        </tr>
+        <tr>
+            <td>{{ venda.produto.descricao }}</td>
+            <td>R$ {{ venda.produto.preco }}</td>
+            <td>{{ venda.produto.unidade_medida }}</td>
+            <td>{{ venda.quantidade }}</td>
+            <td>R$ {{ venda.total }}</td>
+        </tr>
+    </table>
+    
+    <div class="total">
+        <p><strong>Desconto:</strong> R$ {{ venda.desconto }}</p>
+        <p><strong>Total da Venda:</strong> R$ {{ venda.total }}</p>
+    </div>
+    
+</body>
+</html>

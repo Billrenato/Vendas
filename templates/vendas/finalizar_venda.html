@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'despesas' %}">Despesas</a></li>
+                <li><a href="{% url 'vendas_conta_cliente' %}">Conta A receber</a></li>
+                <li><a href="{% url 'cadastrar_empresa' %}">Informações da empresa</a></li>
+                <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+                <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+                <li><a href="{% url 'cadastrar_vendedor' %}">Cadastrar vendedor</a></li>
+                <li><a href="{% url 'cadastrar_venda' %}">Cadastrar venda</a></li>
+                <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+                <li><a href="{% url 'gerar_nfe' %}">NFE</a></li>
+            </ul>
+        </nav>
+    </body>
+    <title>Finalizar Venda</title>
+</head>
+<body>
+    <h1>Venda Finalizada</h1>
+    <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
+    <p><strong>Vendedor:</strong> {{ venda.vendedor.nome }}</p>
+    <p><strong>Forma de Pagamento:</strong> {{ venda.forma_pagamento }}</p>
+    <p><strong>Desconto:</strong> R$ {{ venda.desconto }}</p>
+    <p><strong>Total:</strong> R$ {{ venda.total }}</p>
+
+    <h2>Itens da Venda</h2>
+    <table border="1">
+        <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Preço Unitário</th>
+            <th>Subtotal</th>
+        </tr>
+        {% for item in itens %}
+        <tr>
+            <td>{{ item.produto.nome }}</td>
+            <td>{{ item.quantidade }}</td>
+            <td>R$ {{ item.preco_unitario }}</td>
+            <td>R$ {{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{% url 'gerar_pdf_venda' venda.id %}">Gerar PDF</a>
+    <form action="{% url 'limpar_campos_venda' venda.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Limpar Campos</button>
+    </form>
+</body>
+</html>

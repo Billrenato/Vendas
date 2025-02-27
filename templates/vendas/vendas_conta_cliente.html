@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'despesas' %}">Despesas</a></li>
+                <li><a href="{% url 'vendas_conta_cliente' %}">Conta A receber</a></li>
+                <li><a href="{% url 'cadastrar_empresa' %}">Informações da empresa</a></li>
+                <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+                <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+                <li><a href="{% url 'cadastrar_vendedor' %}">Cadastrar vendedor</a></li>
+                <li><a href="{% url 'cadastrar_venda' %}">Cadastrar venda</a></li>
+                <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+                <li><a href="{% url 'gerar_nfe' %}">NFE</a></li>
+            </ul>
+        </nav>
+    </body>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendas com forma de pagamento "Conta do cliente"</title>
+</head>
+<body>
+    <h1> "Conta do cliente"</h1>
+    <form method="get">
+        <label>Data de vencimento:</label>
+        <input type="date" name="data_vencimento" value="{{ request.GET.data_vencimento }}">
+        <br>
+        <label>Nome do cliente:</label>
+        <input type="text" name="nome_cliente" value="{{ request.GET.nome_cliente }}">
+        <br>
+        <label>Código do cliente:</label>
+        <input type="text" name="codigo_cliente" value="{{ request.GET.codigo_cliente }}">
+        <br>
+        <button type="submit">Pesquisar</button>
+        <button type="submit" name="imprimir" value="imprimir">Imprimir/Salvar como PDF</button>
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Venda</th>
+                    <th>Produto</th>
+                    <th>Cliente</th>
+                    <th>Data de Venda</th>
+                    <th>Data de Vencimento</th>
+                    <th>Quantidade</th>
+                    <th>Total</th>
+                    <th>Pago</th>
+                    <th>Selecionar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venda in vendas %}
+                    <tr>
+                        <td>{{ venda.id_venda }}</td>
+                        <td>{{ venda.produto.descricao }}</td>
+                        <td>{{ venda.cliente.nome }}</td>
+                        <td>{{ venda.data_venda }}</td>
+                        <td>{{ venda.data_vencimento }}</td>
+                        <td>{{ venda.quantidade }}</td>
+                        <td>{{ venda.total }}</td>
+                        <td>
+                            {% if venda.pago %}
+                                <span style="color: green;">Sim</span>
+                            {% else %}
+                                <span style="color: red;">Não</span>
+                            {% endif %}
+                        </td>
+                        <td><input type="checkbox" name="venda_{{ venda.id }}" value="{{ venda.id }}"></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="10">Nenhuma venda encontrada.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" name="marcar_pago">Marcar como pago</button>
+        <button type="submit" name="marcar_nao_pago" value="1">Marcar como não pago</button>
+        <p>Total: {{ total }}</p>
+    </form>
+</body>
+</html>

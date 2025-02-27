@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'despesas' %}">Despesas</a></li>
+                <li><a href="{% url 'vendas_conta_cliente' %}">Conta A receber</a></li>
+                <li><a href="{% url 'cadastrar_empresa' %}">Informações da empresa</a></li>
+                <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+                <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+                <li><a href="{% url 'cadastrar_vendedor' %}">Cadastrar vendedor</a></li>
+                <li><a href="{% url 'cadastrar_venda' %}">Cadastrar venda</a></li>
+                <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+                <li><a href="{% url 'gerar_nfe' %}">NFE</a></li>
+            </ul>
+        </nav>
+    </body>
+    
+    <title>{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</title>
+    <script>
+        function ativarTela() {
+            // Habilita todos os inputs, selects e botões dentro do formulário
+            document.querySelectorAll("input, select, button").forEach(elemento => {
+                elemento.disabled = false;
+            });
+
+            // Restaura a visibilidade e interação com o conteúdo da tela
+            let telaVenda = document.getElementById("tela_venda");
+            telaVenda.style.pointerEvents = "auto";
+            telaVenda.style.opacity = "1"; 
+
+            // Esconde o botão de ativação após ser clicado
+            document.getElementById("ativar_funcionalidade").style.display = "none";
+        }
+
+        // Desativa todos os inputs, selects e botões inicialmente
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll("input, select, button").forEach(elemento => {
+                elemento.disabled = true;
+            });
+
+            // Mantém o botão de ativação ativado
+            document.getElementById("ativar_funcionalidade").disabled = false;
+        });
+    </script>
+</head>
+<body>
+    <button id="ativar_funcionalidade" onclick="ativarTela()">Liberar venda</button>
+    <div id="tela_venda" style="pointer-events: none; opacity: 0.5;">
+        <!-- Conteúdo da tela de venda -->
+    </div>
+</body>
+
+</form>
+
+<body>
+    
+    
+    <h1>{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</h1>
+    <script>
+        
+
+    </script>
+    
+    <!-- Formulário de pesquisa de venda -->
+    <form method="post" action="{% url 'pesquisar_venda' %}">
+        {% csrf_token %}
+        <label for="venda_id">Pesquisar Venda (ID):</label>
+        <input type="number" name="venda_id" id="venda_id">
+        <button type="submit">Buscar</button>
+    </form>
+
+    {% if venda %}
+        
+        <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
+        <p><strong>Vendedor:</strong> {{ venda.vendedor.nome_vendedor }}</p>
+        <p><strong>Forma de Pagamento:</strong> {{ venda.forma_pagamento }}</p>
+        <p><strong>Total:</strong> R$ {{ venda.total|floatformat:2 }}</p>
+
+        <h3>Itens da Venda:</h3>
+        <table>
+            <tr>
+                
+            </tr>
+            {% for item in itens %}
+            <tr>
+                
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Nenhum item encontrado para esta venda.</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <!-- Formulário de cadastro/edição de venda -->
+    <form method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
+        {% csrf_token %}
+
+        <label for="cliente">Cliente:</label>
+        <select name="cliente" id="cliente" required>
+            <option value="" disabled>Selecione um cliente</option>
+            {% for cliente in clientes %}
+                <option value="{{ cliente.id }}" {% if venda and venda.cliente.id == cliente.id %}selected{% endif %}>{{ cliente.nome }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="vendedor">Vendedor:</label>
+        <select name="vendedor" id="vendedor" required>
+            <option value="" disabled>Selecione um vendedor</option>
+            {% for vendedor in vendedores %}
+                <option value="{{ vendedor.id }}" {% if venda and venda.vendedor.id == vendedor.id %}selected{% endif %}>{{ vendedor.nome_vendedor }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="forma_pagamento">Forma de Pagamento</label>
+        <select name="forma_pagamento" id="forma_pagamento" onchange="verificarFormaPagamento()">
+            <option value="dinheiro" {% if venda.forma_pagamento == 'dinheiro' %}selected{% endif %}>Dinheiro</option>
+            <option value="cartao_credito" {% if venda.forma_pagamento == 'cartao_credito' %}selected{% endif %}>Cartão de Crédito</option>
+            <option value="boleto" {% if venda.forma_pagamento == 'boleto' %}selected{% endif %}>Boleto</option>
+            <option value="conta_cliente" {% if venda.forma_pagamento == 'conta_cliente' %}selected{% endif %}>Conta Cliente</option>
+        </select>
+
+        <div id="data_vencimento_container" style="display: none;">
+            <label for="data_vencimento">Data de Vencimento</label>
+            <input type="date" id="data_vencimento" name="data_vencimento" value="{{ venda.data_vencimento }}">
+        </div>
+
+        <label>Produtos:</label>
+        <select id="produto_selecionado">
+            {% for produto in produtos %}
+                <option value="{{ produto.id }}" data-descricao="{{ produto.descricao }}" data-preco="{{ produto.preco }}" data-unidade="{{ produto.unidade_medida }}">
+                    {{ produto.descricao }} - R$ {{ produto.preco }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="button" id="adicionar_produto">Adicionar Produto</button>
+
+        <h3>Produtos Adicionados:</h3>
+        <table id="tabela_produtos">
+            <tr>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Unidade</th>
+                <th>Quantidade</th>
+                <th>Ações</th>
+            </tr>
+            {% for item in itens %}
+            <tr>
+                <td>{{ item.produto.descricao }}</td>
+                <td>R$ {{ item.preco_unitario|floatformat:2 }}</td>
+                <td>{{ item.produto.unidade_medida }}</td>
+                <td><input type="number" class="quantidade" value="{{ item.quantidade }}" min="1" data-produto-id="{{ item.produto.id }}"></td>
+                <td><button type="button" onclick="removerProduto(this)">Remover</button></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <input type="hidden" name="produtos" id="produtos_input">
+        <input type="hidden" name="quantidades" id="quantidades_input">
+
+        <label>Desconto:</label>
+        
+        <input type="number" id="desconto" step="0.01" value="{% if venda %}{{ venda.desconto }}{% else %}0.00{% endif %}">
+        <button type="button" onclick="aplicarDesconto()">Aplicar</button>
+
+        <label>Acréscimo:</label>
+        <input type="number" id="acrescimo" step="0.01" value="{% if venda %}{{ venda.acrescimo }}{% else %}0.00{% endif %}">
+        <button type="button" onclick="aplicarAcrescimo()">Aplicar</button>
+
+        <h3>Total da Venda: R$ <span id="total_venda">{% if venda %}{{ venda.total|floatformat:2 }}{% else %}0.00{% endif %}</span></h3>
+
+
+        {% if not venda or venda.status != "finalizada" %}
+        <button type="submit" onclick="atualizarInputs();">
+            {% if venda %}Atualizar Venda{% else %}Finalizar Venda{% endif %}
+        </button>
+        {% endif %}
+
+        
+    </form>
+    <script>
+        function verificarFormaPagamento() {
+            var formaPagamento = document.getElementById('forma_pagamento').value;
+            var dataVencimentoContainer = document.getElementById('data_vencimento_container');
+            
+            if (formaPagamento === 'conta_cliente') {
+                dataVencimentoContainer.style.display = 'block';  // Exibe o campo de data de vencimento
+            } else {
+                dataVencimentoContainer.style.display = 'none';  // Esconde o campo de data de vencimento
+            }
+        }
+    
+        // Garantir que o campo de data de vencimento esteja correto ao carregar a página
+        document.addEventListener('DOMContentLoaded', verificarFormaPagamento);
+    </script>
+    
+    <script>
+
+
+        
+
+    // Chama a função ao carregar a página para garantir que o campo seja mostrado ou escondido com base no valor inicial
+    document.addEventListener('DOMContentLoaded', verificarFormaPagamento);
+
+
+
+        function atualizarTotal() {
+            let total = 0;
+        document.querySelectorAll(".quantidade").forEach(input => {
+            let preco = parseFloat(input.closest("tr").querySelector(".preco").textContent.replace("R$", "").trim());
+            let quantidade = parseInt(input.value);
+            total += preco * quantidade;
+        });
+
+        let desconto = parseFloat(document.getElementById("desconto").value) || 0;
+        let acrescimo = parseFloat(document.getElementById("acrescimo").value) || 0;
+
+        let totalFinal = total - desconto + acrescimo;
+        if (totalFinal < 0) {
+            totalFinal = 0;
+        }
+
+        document.getElementById("total_venda").textContent = "R$ " + totalFinal.toFixed(2);
+    }
+
+    function aplicarDesconto() {
+        atualizarTotal();
+    }
+
+    function aplicarAcrescimo() {
+        atualizarTotal();
+    }
+    
+        document.getElementById("adicionar_produto").addEventListener("click", function() {
+            let selectProduto = document.getElementById("produto_selecionado");
+            let produtoId = selectProduto.value;
+            let descricao = selectProduto.options[selectProduto.selectedIndex].getAttribute("data-descricao");
+            let preco = parseFloat(selectProduto.options[selectProduto.selectedIndex].getAttribute("data-preco")).toFixed(2);
+            let unidade = selectProduto.options[selectProduto.selectedIndex].getAttribute("data-unidade");
+    
+            let tabela = document.getElementById("tabela_produtos");
+            let novaLinha = tabela.insertRow();
+            
+            novaLinha.innerHTML = `
+                <td>${descricao}</td>
+                <td class="preco">R$ ${preco}</td>
+                <td>${unidade}</td>
+                <td><input type="number" class="quantidade" value="1" min="1" data-produto-id="${produtoId}" onchange="atualizarTotal(); atualizarInputs();"></td>
+                <td><button type="button" onclick="removerProduto(this)">Remover</button></td>
+            `;
+    
+            atualizarTotal();
+            atualizarInputs();
+        });
+    
+        function removerProduto(botao) {
+            botao.parentNode.parentNode.remove();
+            atualizarTotal();
+            atualizarInputs();
+        }
+    
+        function atualizarInputs() {
+            let produtos = [];
+            let quantidades = [];
+    
+            document.querySelectorAll(".quantidade").forEach(input => {
+                produtos.push(input.getAttribute("data-produto-id"));
+                quantidades.push(input.value);
+            });
+    
+            document.getElementById("produtos_input").value = JSON.stringify(produtos);
+            document.getElementById("quantidades_input").value = JSON.stringify(quantidades);
+        }
+    </script>
+</body>
+</html>

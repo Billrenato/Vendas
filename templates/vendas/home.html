@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>Home</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'despesas' %}">Despesas</a></li>
+            <li><a href="{% url 'vendas_conta_cliente' %}">Conta A receber</a></li>
+            <li><a href="{% url 'cadastrar_empresa' %}">Informações da empresa</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+            <li><a href="{% url 'cadastrar_vendedor' %}">Cadastrar vendedor</a></li>
+            <li><a href="{% url 'cadastrar_venda' %}">Cadastrar venda</a></li>
+            <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+            <li><a href="{% url 'gerar_nfe' %}">NFE</a></li>
+        </ul>
+    </nav>
+
+    <h1>Bem-vindo ao sistema !</h1>
+</body>
+</html>

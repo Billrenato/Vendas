@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'despesas' %}">Despesas</a></li>
+                <li><a href="{% url 'vendas_conta_cliente' %}">Conta A receber</a></li>
+                <li><a href="{% url 'cadastrar_empresa' %}">Informações da empresa</a></li>
+                <li><a href="{% url 'cadastrar_produto' %}">Cadastrar produto</a></li>
+                <li><a href="{% url 'cadastrar_cliente' %}">Cadastrar cliente</a></li>
+                <li><a href="{% url 'cadastrar_vendedor' %}">Cadastrar vendedor</a></li>
+                <li><a href="{% url 'cadastrar_venda' %}">Cadastrar venda</a></li>
+                <li><a href="{% url 'resumo_vendas' %}">Resumo de vendas</a></li>
+                <li><a href="{% url 'gerar_nfe' %}">NFE</a></li>
+            </ul>
+        </nav>
+    
+        <h1>Bem-vindo ao sistema !</h1>
+    </body>
+
+    <title>Cadastrar Empresa</title>
+</head>
+<body>
+    <h1>Cadastrar Empresa</h1>
+    {% if empresa %}
+        <h2>Empresa Cadastrada</h2>
+        <p>Nome Fantasia: {{ empresa.nome_fantasia }}</p>
+        <p>Razão Social: {{ empresa.razao_social }}</p>
+        <p>Endereço: {{ empresa.endereco }}</p>
+        <p>Número: {{ empresa.numero }}</p>
+        <p>Bairro: {{ empresa.bairro }}</p>
+        <p>UF: {{ empresa.uf }}</p>
+        <p>Cidade: {{ empresa.cidade }}</p>
+        <p>Complemento: {{ empresa.complemento }}</p>
+        <p>Contato: {{ empresa.contato }}</p>
+        <p>Inscrição Estadual: {{ empresa.inscricao_estadual }}</p>
+        <p>CNPJ: {{ empresa.cnpj }}</p>
+        <p>Inscrição Municipal: {{ empresa.inscricao_municipal }}</p>
+        <p>CEP: {{ empresa.cep }}</p>
+        <p>Regime Tributário: {{ empresa.regime_tributario }}</p>
+        <p>Dados Sintegra: {{ empresa.dados_sintegra }}</p>
+        <p>Telefone: {{ empresa.telefone }}</p>
+        <p>IBGE Município: {{ empresa.ibge_municipio }}</p>
+        <p>IBGE Estado: {{ empresa.ibge_estado }}</p>
+        <button id="botao-editar">Editar</button>
+        <div id="formulario-editar" style="display: none;">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+    {% else %}
+        <h2>Cadastrar Empresa</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Cadastrar</button>
+        </form>
+    {% endif %}
+    <script>
+        document.getElementById("botao-editar").addEventListener("click", function(){
+            document.getElementById("formulario-editar").style.display = "block";
+        });
+    </script>
+</body>
+</html>
