@@ -1,28 +1,19 @@
-# Sistema de Vendas 
+# Sistema de Vendas  🚀
 
 Este é um sistema de vendas simples desenvolvido em Django, um framework web Python. O sistema permite que os usuários cadastrem produtos, clientes e vendas, além de visualizar um resumo das vendas.
 
 Funcionalidades
-- Cadastro de produtos
-- Cadastro de clientes
-- Cadastro de vendas
-- Visualização de resumo das vendas
-- Pesquisa de vendas por nome de cliente
-- Filtragem de vendas por data
+- Cadastro de produtos ✅
+- Cadastro de clientes ✅
+- Cadastro de vendas ✅
+- Gerenciamento de contas a pagar e receber ✅
+- Geração de NF-e e envio para a Receita Federal ✅
+- Relatórios de vendas e contas a pagar/receber ✅
+- Interface de usuário intuitiva e fácil de usar ✅
 
-Tecnologias Utilizadas
-- Django (framework web Python)
-- Python (linguagem de programação)
-- HTML (linguagem de marcação)
-- CSS (linguagem de estilo)
-- PostgreSQL (banco de dados)
+Requisitos
+- Python 3.9 ou superior
+- Django 3.2 ou superior
+- PostgreSQL 13 ou superior
+- Bibliotecas adicionais: pdfkit, wkhtmltopdf, pyOpenSSL, psycopg2
 
-Estrutura do Projeto
-- home.html: página inicial do sistema
-- resumo_vendas.html: página de resumo das vendas
-- cadastrar_produto.html: página de cadastro de produtos
-- cadastrar_cliente.html: página de cadastro de clientes
-- carrinho.html: página de cadastro de vendas
-- views.py: arquivo de views do Django
-- models.py: arquivo de modelos do Django
-- urls.py: arquivo de URLs do Django
