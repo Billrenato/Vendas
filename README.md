@@ -1,6 +1,6 @@
 # 📌 Sistema de Vendas  🚀
 
-Este é um sistema de vendas simples desenvolvido em Django com a API do Mercado Livre, um framework web Python. O sistema permite que os usuários cadastrem produtos, clientes e vendas, além de visualizar um resumo das vendas.
+Este é um sistema de vendas simples desenvolvido em Django um framework web Python e com a API do Mercado Livre. O sistema permite que os usuários cadastrem produtos, clientes e vendas, além de visualizar um resumo das vendas.
 
 Funcionalidades 🚀
 - 📦 Cadastro de produtos
