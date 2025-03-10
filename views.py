@@ -15,13 +15,29 @@ from django.http import HttpResponse
 import pdfkit
 from datetime import datetime
 from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from urllib.parse import quote_plus
 
-
+@login_required
 def home(request):
-    return render(request, 'vendas/home.html', {})
+    return render(request, 'vendas\home.html')
+#def home(request):
+    #return render(request, 'vendas/home.html', {})
 
-
-
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')  # Redireciona para a página inicial após o cadastro
+    else:
+        form = UserCreationForm()
+    
+    return render(request, 'vendas/register.html', {'form': form}) 
 
 #--------------------------------------------Dados da empresa------------------------------------------#
 def cadastrar_empresa(request):
@@ -52,43 +68,265 @@ def editar_empresa(request, pk):
 
 
 #---------------------------------------------CADASTRO DE PRODUTOS-------------------------------------------------#
+import requests
+import json
+from django.conf import settings
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .forms import ProdutoFormComImagens
+from .models import Produto, ImagemProduto
+import urllib.parse
+from django.conf import settings
+
+
+MERCADO_LIVRE_ACCESS_TOKEN = settings.MERCADO_LIVRE_ACCESS_TOKEN  # Agora está globalizado
+
+MERCADO_LIVRE_API_URL = "https://api.mercadolibre.com"
+
+def obter_categoria(descricao):
+    """Busca a melhor categoria para um produto com base na descrição."""
+    url = f"{MERCADO_LIVRE_API_URL}/sites/MLB/domain_discovery/search?q={descricao}"
+    headers = {"Authorization": f"Bearer {MERCADO_LIVRE_ACCESS_TOKEN}"}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        categorias = response.json()
+        if categorias:
+            return categorias[0]["category_id"]
+    return None
+
+def obter_atributos_obrigatorios(category_id):
+    """Obtém os atributos obrigatórios para uma categoria no Mercado Livre."""
+    url = f"{MERCADO_LIVRE_API_URL}/categories/{category_id}/attributes"
+    headers = {"Authorization": f"Bearer {MERCADO_LIVRE_ACCESS_TOKEN}"}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        atributos = response.json()
+        return [attr for attr in atributos if "required" in attr.get("tags", [])]
+    return []
+
+def publicar_no_mercado_livre(produto_id):
+    """Publica o produto no Mercado Livre."""
+    try:
+        produto = Produto.objects.get(id=produto_id)
+
+        # 1️⃣ Buscar a categoria do produto
+        category_id = obter_categoria(produto.descricao)
+        if not category_id:
+            return {"erro": "Categoria não encontrada"}
+
+        # 2️⃣ Obter atributos obrigatórios da categoria
+        atributos_obrigatorios = obter_atributos_obrigatorios(category_id)
+
+        # 3️⃣ Montar os atributos com base no banco de dados
+        atributos = []
+        for atributo in atributos_obrigatorios:
+            if atributo["id"] == "BRAND":
+                atributos.append({"id": "BRAND", "value_name": produto.marca})
+            elif atributo["id"] == "MODEL":
+                atributos.append({"id": "MODEL", "value_name": produto.descricao})
+            elif atributo["id"] == "COLOR" and produto.prod_cor:
+                atributos.append({"id": "COLOR", "value_name": produto.prod_cor})
+            elif atributo["id"] == "MATERIAL":
+                atributos.append({"id": "MATERIAL", "value_name": produto.material})
+            elif atributo["id"] == "OBJECT_TYPE":
+                atributos.append({"id": "OBJECT_TYPE", "value_name": produto.object_type})   
+            # Verifique se o atributo GTIN está entre os obrigatórios
+        if any(attr["id"] == "GTIN" for attr in atributos_obrigatorios):
+            if produto.codigo_barras:
+                atributos.append({"id": "GTIN", "value_name": produto.codigo_barras})
+            else:
+                print("GTIN não encontrado para o produto.")
+                return {"erro": "GTIN é obrigatório para esta categoria, mas o código de barras está ausente"}
+        
+
+        imagens = produto.imagens.all()
+        if imagens:
+            pictures = [{"source": imagem.imagem.url} for imagem in imagens]
+        else:
+            pictures = []
+
+        if produto.codigo_barras:
+           atributos.append({"id": "GTIN", "value_name": produto.codigo_barras})
+
+
+
+        # 4️⃣ Montar os dados do produto
+        dados_produto = {
+            "title": produto.descricao,
+            "category_id": category_id,
+            "price": float(produto.preco),  
+            "currency_id": "BRL",
+            "available_quantity": produto.quantidade,
+            "buying_mode": "buy_it_now",
+            "listing_type_id": "gold_special",
+            "condition": "new" if produto.condicao == "novo" else "used" if produto.condicao == "usado" else "not_specified",
+            "pictures": pictures,
+            "attributes": atributos,
+            "shipping": {
+                "mode": "me2" if produto.tipo_envio == "mercado_envios" else "custom",
+                "local_pick_up": True if produto.tipo_envio == "retirada" else False,
+                "free_shipping": produto.envio_gratis,
+                "dimensions": f"{int(produto.altura*100)}x{int(produto.largura*100)}x{int(produto.profundidade*100)},{int(produto.peso*100)}",
+                 }
+            }
+        
+    
+    
+
+        # Print do JSON enviado para o Mercado Livre
+        print("JSON gerado para envio ao Mercado Livre:")
+        print(json.dumps(dados_produto, indent=4))
+
+        # 5️⃣ Enviar para o Mercado Livre
+        url = f"{MERCADO_LIVRE_API_URL}/items"
+        headers = {
+            "Authorization": f"Bearer {MERCADO_LIVRE_ACCESS_TOKEN}",
+            "Content-Type": "application/json"
+        }
+        response = requests.post(url, headers=headers, data=json.dumps(dados_produto))
+
+        # 6️⃣ Verificar resposta
+        if response.status_code == 201:
+            resposta_ml = response.json()
+            produto.mercado_livre_id = resposta_ml["id"]
+            produto.link_mercado_livre = resposta_ml["permalink"]
+            produto.save()
+            return resposta_ml
+        else:
+            resposta_ml = response.json()
+            erro_msg = resposta_ml.get('message', 'Erro desconhecido')
+            detalhes_erro = resposta_ml.get('cause', [])
+            print("Erro ao publicar produto no Mercado Livre:")
+            print(f"Mensagem de erro: {erro_msg}")
+            print(f"Detalhes do erro: {detalhes_erro}")
+            return {"erro": f"Validation error: {erro_msg}"}
+
+    except Produto.DoesNotExist:
+        print("Erro: Produto não encontrado")
+        return {"erro": "Produto não encontrado"}
+    except Exception as e:
+        print(f"Erro inesperado: {e}")
+        return {"erro": f"Erro inesperado: {str(e)}"}
+
+
+def excluir_do_mercado_livre(ml_product_id):
+    """Exclui um produto do Mercado Livre via API."""
+    url = f"https://api.mercadolibre.com/items/{ml_product_id}"
+    headers = {
+        'Authorization': f'Bearer {MERCADO_LIVRE_ACCESS_TOKEN}'
+    }
+    try:
+        response = requests.delete(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return {"success": False, "message": f"Erro ao excluir produto: {e}"}
+
 
 def cadastrar_produto(request):
+    """Função de cadastro de produto."""
     if request.method == 'POST':
-        form = ProdutoForm(request.POST)
+        form = ProdutoFormComImagens(request.POST)
+        arquivos = request.FILES.getlist('imagens')
+
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Produto cadastrado com sucesso!')
+            produto = form.save()
+
+            # Salvar imagens associadas ao produto
+            for imagem in arquivos:
+                ImagemProduto.objects.create(produto=produto, imagem=imagem)
+
+            # Publicar no Mercado Livre
+            resposta_ml = publicar_no_mercado_livre(produto.id)
+
+            # Verificar se a publicação foi bem-sucedida
+            if 'id' in resposta_ml:
+                messages.success(request, f'Produto cadastrado e sincronizado com o Mercado Livre! ID: {resposta_ml["id"]}')
+            else:
+                # Tratar caso a chave 'erro' esteja presente na resposta
+                mensagem_erro = resposta_ml.get('erro', 'Erro desconhecido')
+                messages.warning(request, f'Produto cadastrado, mas houve um erro no Mercado Livre: {mensagem_erro}')
+
             return redirect('cadastrar_produto')
     else:
-        form = ProdutoForm()
+        form = ProdutoFormComImagens()
+
     produtos = Produto.objects.all()
     q = request.GET.get('q', '')
     if q:
         produtos = Produto.objects.filter(descricao__icontains=q)
+
     return render(request, 'vendas/cadastrar_produto.html', {'form': form, 'produtos': produtos})
 
 def editar_produto(request, pk):
+    """Função de edição de produto."""
     produto = get_object_or_404(Produto, pk=pk)
+
     if request.method == 'POST':
-        form = ProdutoForm(request.POST, instance=produto)
+        form = ProdutoFormComImagens(request.POST, request.FILES, instance=produto)
+        arquivos = request.FILES.getlist('imagens')
+
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Produto editado com sucesso!')
+            produto = form.save()
+
+            # Salvar novas imagens
+            for imagem in arquivos:
+                ImagemProduto.objects.create(produto=produto, imagem=imagem)
+
+            # Atualizar no Mercado Livre
+            resposta_ml = publicar_no_mercado_livre(produto.id)
+
+            if 'id' in resposta_ml:
+                messages.success(request, f'Produto atualizado e sincronizado com o Mercado Livre! ID: {resposta_ml["id"]}')
+            else:
+                # Tratar caso a chave 'erro' esteja presente na resposta
+                mensagem_erro = resposta_ml.get('erro', 'Erro desconhecido')
+                messages.warning(request, f'Produto atualizado, mas houve um erro no Mercado Livre: {mensagem_erro}')
+
             return redirect('cadastrar_produto')
+
     else:
-        form = ProdutoForm(instance=produto)
-    return render(request, 'vendas/editar_produto.html', {'form': form})
+        form = ProdutoFormComImagens(instance=produto)
 
-
+    imagens = produto.imagens.all()
+    return render(request, 'vendas/editar_produto.html', {'form': form, 'produto': produto, 'imagens': imagens})
 
 def excluir_produto(request, pk):
+    """Função para excluir um produto."""
     produto = get_object_or_404(Produto, pk=pk)
+
     if request.method == 'POST':
+        # Verifica se o produto tem código do Mercado Livre
+        if produto.codigo_produto:
+            resposta_ml = excluir_do_mercado_livre(produto.codigo_produto)
+
+            if 'error' in resposta_ml:
+                messages.warning(request, f'Houve um erro ao excluir do Mercado Livre: {resposta_ml}')
+            else:
+                messages.success(request, 'Produto excluído do Mercado Livre com sucesso!')
+        else:
+            messages.warning(request, 'Este produto não está sincronizado com o Mercado Livre.')
+
+        # Excluir imagens e o produto do banco de dados
+        produto.imagens.all().delete()
         produto.delete()
-        messages.success(request, 'Produto Excluido!')
+        messages.success(request, 'Produto e suas imagens foram excluídos do sistema!')
+
         return redirect('cadastrar_produto')
+
     return render(request, 'vendas/editar_produto.html', {'produto': produto})
+
+def excluir_imagem_produto(request, imagem_id):
+    """Exclui uma imagem de produto."""
+    imagem = get_object_or_404(ImagemProduto, id=imagem_id)
+    produto_id = imagem.produto.pk
+
+    imagem.delete()
+    messages.success(request, 'Imagem excluída com sucesso!')
+
+    return redirect('editar_produto', pk=produto_id)
 
 #--------------------------------------------------CADASTRO CLIENTES-------------------------------------------------------#
 
@@ -289,11 +527,11 @@ def pesquisar_venda(request):
         if venda_id:
             try:
                 itens = ItemVenda.objects.filter(venda__id=venda_id)
-                print(f"Itens encontrados: {itens}")  # <-- Adicionado para depuração
+                
 
                 if itens.exists():
                     venda = itens.first().venda
-                    print(f"Venda encontrada: {venda}")  # <-- Adicionado para depuração
+                    
                 else:
                     print("Nenhuma venda encontrada!")
 
@@ -435,42 +673,46 @@ def limpar_campos_venda(request, venda_id):
     return redirect("cadastrar_venda")
 #---------------------------------------RESUMO DE VENDAS----------------------------------------------#
 
-
 def resumo_vendas(request):
     vendas = Venda.objects.all()
     pesquisa = request.GET.get('pesquisa')
-    data_inicial = request.GET.get('data_inicial')
-    data_final = request.GET.get('data_final')
+    data_venda = request.GET.get('data_venda')
+    forma_pagamento = request.GET.get('forma_pagamento')
     total = 0
-    
+
+    # Filtragem por pesquisa (cliente ou ID de venda)
     if pesquisa:
-        vendas = vendas.filter(Q(cliente__nome__icontains=pesquisa))
-    
-    if data_inicial and data_final:
-        vendas = vendas.filter(data_venda__range=[data_inicial, data_final])
-    
+        vendas = vendas.filter(Q(cliente__nome__icontains=pesquisa) | Q(id__icontains=pesquisa))
+
+    # Filtragem por data da venda
+    if data_venda:
+        data_venda_obj = datetime.strptime(data_venda, '%Y-%m-%d').date()
+        vendas = vendas.filter(data_venda__date=data_venda_obj)
+
+    # Filtragem por forma de pagamento
+    if forma_pagamento:
+        vendas = vendas.filter(forma_pagamento__icontains=forma_pagamento)
+
+    # Geração do PDF (após a filtragem)
     if request.GET.get('imprimir'):
+        venda_ids = request.GET.get('venda_ids', '').split(',')
+        venda_ids = [int(x) for x in venda_ids if x]
+        total = float(request.GET.get('total', 0))
+        vendas_selecionadas = Venda.objects.filter(id__in=venda_ids)
         template = get_template('vendas/resumo_vendas_pdf.html')
-        html = template.render({'vendas': vendas})
-        
+        html = template.render({'vendas': vendas_selecionadas, 'total': total})
         config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
         pdf = pdfkit.from_string(html, False, configuration=config)
-        
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="resumo_vendas.pdf"'
         return response
     
-    if request.POST:
-        if 'somar' in request.POST:
-            total = 0
-            for venda in vendas:
-                if 'venda_{}'.format(venda.id) in request.POST:
-                    total += venda.total
-            return render(request, 'vendas/resumo_vendas.html', {'vendas': vendas, 'total': total})
     
+
+    # Soma total das vendas para exibir na página
     for venda in vendas:
         total += venda.total
-    
+
     return render(request, 'vendas/resumo_vendas.html', {'vendas': vendas, 'total': total})
 
 
@@ -527,105 +769,105 @@ def nfe_enviado(request):
 
 def despesas(request):
     form = DespesaForm()
+    filtro_pagamento = request.GET.get('status', '')
+
+    
+
     if request.method == 'POST':
+        filtro_pagamento = request.POST.get('status', '')
+        despesas_ids = request.POST.getlist('despesas')
+
         if 'marcar_pago' in request.POST:
-            despesas_ids = request.POST.getlist('despesas')
-            for despesa_id in despesas_ids:
-                despesa = Despesa.objects.get(pk=despesa_id)
-                despesa.pago = True
-                despesa.save()
+            Despesa.objects.filter(pk__in=despesas_ids).update(pago=True)
         elif 'marcar_nao_pago' in request.POST:
-            despesas_ids = request.POST.getlist('despesas')
-            for despesa_id in despesas_ids:
-                despesa = Despesa.objects.get(pk=despesa_id)
-                despesa.pago = False
-                despesa.save()
-        elif 'imprimir_pdf' in request.POST:
-            despesas = Despesa.objects.all()
-            if request.GET.get('data'):
-                despesas = despesas.filter(data_vencimento__gte=request.GET.get('data'))
-            if request.GET.get('descricao'):
-                despesas = despesas.filter(descricao__icontains=request.GET.get('descricao'))
-            soma_despesas = 0
-            for despesa in despesas:
-                soma_despesas += despesa.valor
-            template_path = 'vendas/despesas_pdf.html'
-            context = {'despesas': despesas, 'soma_despesas': soma_despesas}
-            template = get_template(template_path)
-            html = template.render(context)
-            options = {
-                'page-size': 'A4',
-                'margin-top': '0.75in',
-                'margin-right': '0.75in',
-                'margin-bottom': '0.75in',
-                'margin-left': '0.75in',
-                'encoding': "UTF-8",
-                'no-outline': None
-            }
-            pdf = pdfkit.from_string(html, False, options=options)
-            response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="despesas.pdf"'
-            return response
+            Despesa.objects.filter(pk__in=despesas_ids).update(pago=False)
+        elif 'excluir' in request.POST:
+            Despesa.objects.filter(pk__in=despesas_ids).delete()
         else:
             form = DespesaForm(request.POST)
             if form.is_valid():
                 form.save()
                 return redirect('despesas')
+
+    # Filtros de pesquisa
     despesas = Despesa.objects.all()
-    if request.GET.get('data'):
-        despesas = despesas.filter(data_vencimento__gte=request.GET.get('data'))
+    if request.GET.get('data_vencimento'):
+        data = request.GET.get('data_vencimento')
+    try:
+        data_formatada = datetime.strptime(data, '%Y-%m-%d').date()
+        despesas = despesas.filter(data_vencimento__exact=data_formatada)
+    except ValueError:
+        pass
+    except UnboundLocalError:
+        pass# Evita erro se a data não estiver no formato correto
+
+    # Filtragem por data de vencimento corrigida
+    
+    # Filtro por descrição
     if request.GET.get('descricao'):
         despesas = despesas.filter(descricao__icontains=request.GET.get('descricao'))
-    soma_despesas = 0
-    for despesa in despesas:
-        soma_despesas += despesa.valor
-    return render(request, 'vendas/despesas.html', {'form': form, 'despesas': despesas, 'soma_despesas': soma_despesas})
+
+    # Filtro por status de pagamento (agora com a opção "Nenhuma")
+    if filtro_pagamento == 'pagas':
+        despesas = despesas.filter(pago=True)
+    elif filtro_pagamento == 'nao_pagas':
+        despesas = despesas.filter(pago=False)
+    # Se "Nenhuma" ou vazio, não aplica filtro de pagamento
+
+    soma_despesas = sum(despesa.valor for despesa in despesas)
+
+    return render(request, 'vendas/despesas.html', {
+        'form': form,
+        'despesas': despesas,
+        'soma_despesas': soma_despesas,
+        'filtro_pagamento': filtro_pagamento,
+        'data_formatada': data_formatada if 'data_formatada' in locals() else None
+    })
+
+
 
 #------------------------------------------------contas a receber---------------------------------------------------------#
 
-
 def vendas_conta_cliente(request):
     vendas = Venda.objects.filter(forma_pagamento='conta_cliente')
-    total = 0
     
-    if request.GET:
-        data_vencimento = request.GET.get('data_vencimento')
-        nome_cliente = request.GET.get('nome_cliente')
-        codigo_cliente = request.GET.get('codigo_cliente')
-        
-        if data_vencimento:
-            vendas = vendas.filter(data_vencimento=data_vencimento)
-        if nome_cliente:
-            vendas = vendas.filter(cliente__nome__icontains=nome_cliente)
-        if codigo_cliente:
-            vendas = vendas.filter(cliente__codigo_cliente__icontains=codigo_cliente)
-    
+    # Filtros
+    data_vencimento = request.GET.get('data_vencimento')
+    nome_cliente = request.GET.get('nome_cliente')
+    codigo_cliente = request.GET.get('codigo_cliente')
+    pago = request.GET.get('pago')  # Filtro por pago/não pago
+
+    if data_vencimento:
+        vendas = vendas.filter(data_vencimento=data_vencimento)
+    if nome_cliente:
+        vendas = vendas.filter(cliente__nome__icontains=nome_cliente)
+    if codigo_cliente:
+        vendas = vendas.filter(cliente__codigo_cliente__icontains=codigo_cliente)
+    if pago in ['True', 'False']:  # Evita filtros vazios
+        vendas = vendas.filter(pago=(pago == 'True'))
+
+    total = sum(venda.total for venda in vendas)
+
     if request.POST:
         if 'marcar_pago' in request.POST:
             for venda in vendas:
-                if 'venda_{}'.format(venda.id) in request.POST:
+                if f'venda_{venda.id}' in request.POST:
                     venda.pago = True
                     venda.save(update_fields=['pago'])
         elif 'marcar_nao_pago' in request.POST:
             for venda in vendas:
-                if 'venda_{}'.format(venda.id) in request.POST:
+                if f'venda_{venda.id}' in request.POST:
                     venda.pago = False
                     venda.save(update_fields=['pago'])
         return redirect('vendas_conta_cliente')
-    
-    for venda in vendas:
-        total += venda.total
-    
+
     if request.GET.get('imprimir'):
         template = get_template('vendas/vendas_conta_cliente_pdf.html')
-        html = template.render({'vendas': vendas})
-        
+        html = template.render({'vendas': vendas, 'total': total})
         config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
         pdf = pdfkit.from_string(html, False, configuration=config)
-        
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="vendas_conta_cliente.pdf"'
         return response
-    
-    return render(request, 'vendas/vendas_conta_cliente.html', {'vendas': vendas, 'total': total})
 
+    return render(request, 'vendas/vendas_conta_cliente.html', {'vendas': vendas, 'total': total, 'pago': pago})
