@@ -1,0 +1,81 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastro Empresa</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        
+    </head>
+    
+<body>
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+            <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+            <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+            <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+            <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+            <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+            <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+            <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            
+        </ul>
+    </nav>
+        
+    <div class="main-content">
+        <div class="nav-padrao">
+            INFORMÇÕES DA EMPRESA
+        </div>
+    {% if empresa %}
+        <h2>Empresa Cadastrada</h2>
+        <p>Nome Fantasia: {{ empresa.nome_fantasia }}</p>
+        <p>Razão Social: {{ empresa.razao_social }}</p>
+        <p>Endereço: {{ empresa.endereco }}</p>
+        <p>Número: {{ empresa.numero }}</p>
+        <p>Bairro: {{ empresa.bairro }}</p>
+        <p>UF: {{ empresa.uf }}</p>
+        <p>Cidade: {{ empresa.cidade }}</p>
+        <p>Complemento: {{ empresa.complemento }}</p>
+        <p>Contato: {{ empresa.contato }}</p>
+        <p>Inscrição Estadual: {{ empresa.inscricao_estadual }}</p>
+        <p>CNPJ: {{ empresa.cnpj }}</p>
+        <p>Inscrição Municipal: {{ empresa.inscricao_municipal }}</p>
+        <p>CEP: {{ empresa.cep }}</p>
+        <p>Regime Tributário: {{ empresa.regime_tributario }}</p>
+        <p>Dados Sintegra: {{ empresa.dados_sintegra }}</p>
+        <p>Telefone: {{ empresa.telefone }}</p>
+        <p>IBGE Município: {{ empresa.ibge_municipio }}</p>
+        <p>IBGE Estado: {{ empresa.ibge_estado }}</p>
+        <button id="botao-editar">Editar</button>
+        <div id="formulario-editar" style="display: none;">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+    {% else %}
+        <h2>Cadastrar Empresa</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Cadastrar</button>
+        </form>
+    {% endif %}
+    <script>
+        document.getElementById("botao-editar").addEventListener("click", function(){
+            document.getElementById("formulario-editar").style.display = "block";
+        });
+    </script>
+        
+    </div>
+
+        
+</body>
+</html>

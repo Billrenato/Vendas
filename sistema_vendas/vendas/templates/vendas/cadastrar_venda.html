@@ -1,0 +1,354 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vendas</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        
+    </head>
+    
+<body>
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+            <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+            <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+            <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+            <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+            <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+            <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+            <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="nav-padrao">
+            VENDAS
+        </div>
+        <title c>{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    
+
+
+
+</form>
+
+<body>
+    
+    
+
+
+    <form style="justify-content: center; padding:60px;background-color: #d1d1d1;" method="post" action="{% url 'pesquisar_venda' %}">
+        
+
+        {% csrf_token %}
+        <label for="venda_id">Pesquisar Venda (ID):</label>
+        <input style="width:50%;" type="number" name="venda_id" id="venda_id">
+        <button class="button_edit" type="submit">Buscar</button>
+        
+    </form>
+    
+
+    {% if venda %}
+        <p><strong>Venda #</strong> {{ venda.id}}</p>
+        <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
+        <p><strong>Vendedor:</strong> {{ venda.vendedor.nome_vendedor }}</p>
+        <p><strong>Forma de Pagamento:</strong> {{ venda.forma_pagamento }}</p>
+        <p><strong>Total:</strong> R$ {{ venda.total|floatformat:2 }}</p>
+
+        <h3>Itens da Venda:</h3>
+        <table>
+            <tr>
+                
+            </tr>
+            {% for item in itens %}
+            <tr>
+                
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Nenhum item encontrado para esta venda.</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+
+
+    <!-- Formulário de cadastro/edição de venda -->
+    <form style="background-color: #d1d1d1; padding:60px;" method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
+
+        
+        <h1 class="h1_prod">{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</h1>
+        {% csrf_token %}
+
+       
+
+        <label for="cliente">Cliente:</label>
+        <select name="cliente" id="cliente" class="cliente-select" required>
+            <option value="" disabled>Selecione um cliente</option>
+        {% for cliente in clientes %}
+            <option value="{{ cliente.id }}" {% if venda and venda.cliente.id == cliente.id %}selected{% endif %}>{{ cliente.nome }}</option>
+        {% endfor %}
+        </select>
+
+
+
+        <script>
+            $(document).ready(function() {
+                $('.cliente-select').select2({
+                    placeholder: "Selecione um cliente",
+                    allowClear: true
+                });
+            });
+        </script>
+
+        
+        
+
+        
+        <select id="produto_selecionado" class="produto-select">
+            
+            <option value="" disabled selected>Selecione um produto</option>
+            {% for produto in produtos %}
+                <option value="{{ produto.id }}" 
+                    data-descricao="{{ produto.descricao }}" 
+                    data-preco="{{ produto.preco }}" 
+                    data-unidade="{{ produto.unidade_medida }}">
+                    {{ produto.descricao }} - {{ produto.unidade_medida }} - R$ {{ produto.preco }}
+                </option>
+            {% endfor %}
+        </select>
+    
+        <button  class="button" type="button" id="adicionar_produto" disabled>Adicionar</button>
+
+        <label for="vendedor">Vendedor:</label>
+        <select name="vendedor" id="vendedor" required>
+            <option value="" disabled>Selecione um vendedor</option>
+            {% for vendedor in vendedores %}
+                <option value="{{ vendedor.id }}" {% if venda and venda.vendedor.id == vendedor.id %}selected{% endif %}>{{ vendedor.nome_vendedor }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- jQuery e Select2 (adicione antes do fechamento da tag body) -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+        <!-- Inicializar Select2 no campo de produtos -->
+        <script>
+            $(document).ready(function() {
+                // Inicializar Select2
+                $('#produto_selecionado').select2({
+                    placeholder: "Digite para pesquisar um produto...",
+                    allowClear: true
+                });
+        
+                // Monitorar a seleção para habilitar/desabilitar o botão
+                $('#produto_selecionado').on('change', function() {
+                    let produtoSelecionado = $(this).val();
+                    $('#adicionar_produto').prop('disabled', !produtoSelecionado); // Habilita apenas se houver seleção
+                });
+        
+                // Adicionar evento de clique ao botão
+                $('#adicionar_produto').click(function() {
+                    let produtoSelecionado = $('#produto_selecionado').val();
+        
+                    // Validação reforçada no clique
+                    if (!produtoSelecionado || produtoSelecionado === "") {
+                        alert("Erro: Nenhum produto selecionado.");
+                        return;
+                    }
+        
+                    
+                });
+            });
+        </script>
+    
+
+    
+
+        
+        <table id="tabela_produtos">
+            <tr>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Unidade</th>
+                <th>Quantidade</th>
+                <th>Ações</th>
+            </tr>
+            {% for item in itens %}
+            <tr class="item_produto">
+                <td>{{ item.produto.descricao }}</td>
+                <td>R$ {{ item.preco_unitario|floatformat:2 }}</td>
+                <td>{{ item.produto.unidade_medida }}</td>
+                <td><input type="number" class="quantidade" value="{{ item.quantidade }}" min="1" data-produto-id="{{ item.produto.id }}"></td>
+                <td><button class="button_delete" type="button" onclick="removerProduto(this)">Remover</button></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <input type="hidden" name="produtos" id="produtos_input">
+        <input type="hidden" name="quantidades" id="quantidades_input">
+
+
+
+        <div >
+        <label for="forma_pagamento">Forma de Pagamento</label>
+        <select name="forma_pagamento" id="forma_pagamento" onchange="verificarFormaPagamento()">
+            <option value="dinheiro" {% if venda.forma_pagamento == 'dinheiro' %}selected{% endif %}>Dinheiro</option>
+            <option value="cartao_credito" {% if venda.forma_pagamento == 'cartao_credito' %}selected{% endif %}>Cartão de Crédito</option>
+            <option value="boleto" {% if venda.forma_pagamento == 'boleto' %}selected{% endif %}>Boleto</option>
+            <option value="conta_cliente" {% if venda.forma_pagamento == 'conta_cliente' %}selected{% endif %}>Conta Cliente</option>
+        </select>
+
+        <div id="data_vencimento_container" style="display: none;">
+            <label for="data_vencimento">Data de Vencimento</label>
+            <input type="date" id="data_vencimento" name="data_vencimento" value="{{ venda.data_vencimento }}">
+        </div>
+
+        
+
+        
+        <div class="form-container">
+            <div>
+                <label>Desconto:</label>
+            <input type="number" id="desconto" step="0.01" value="{% if venda %}{{ venda.desconto }}{% else %}0.00{% endif %}">
+            <button class="button_edit" type="button" onclick="aplicarDesconto()">Aplicar</button>
+    
+            <label>Acréscimo:</label>
+            <input type="number" id="acrescimo" step="0.01" value="{% if venda %}{{ venda.acrescimo }}{% else %}0.00{% endif %}">
+            <button class="button_edit" type="button" onclick="aplicarAcrescimo()">Aplicar</button>
+
+            </div>
+            <div class="total">
+                <span>Total da Venda: R$</span> 
+                <h3 > <span style="font-size:50px;" id="total_venda">{% if venda %}{{ venda.total|floatformat:2 }}{% else %}0.00{% endif %}</span></h3>
+                {% if not venda or venda.status != "finalizada" %}
+                    <button class="button_prod" type="submit" onclick="atualizarInputs();">
+                {% if venda %}Atualizar Venda{% else %}Finalizar Venda{% endif %}
+                    </button>
+                {% endif %}
+
+            </div>
+        </div>
+            
+
+ 
+            
+        
+        
+
+        
+
+        
+
+        
+    </form>
+    <script>
+        function verificarFormaPagamento() {
+            var formaPagamento = document.getElementById('forma_pagamento').value;
+            var dataVencimentoContainer = document.getElementById('data_vencimento_container');
+            
+            if (formaPagamento === 'conta_cliente') {
+                dataVencimentoContainer.style.display = 'block';  // Exibe o campo de data de vencimento
+            } else {
+                dataVencimentoContainer.style.display = 'none';  // Esconde o campo de data de vencimento
+            }
+        }
+    
+        // Garantir que o campo de data de vencimento esteja correto ao carregar a página
+        document.addEventListener('DOMContentLoaded', verificarFormaPagamento);
+    </script>
+    
+    <script> 
+        // Chama a função ao carregar a página para garantir que o campo seja mostrado ou escondido com base no valor inicial
+        document.addEventListener('DOMContentLoaded', verificarFormaPagamento);
+    
+        function atualizarTotal() {
+            let total = 0;
+            document.querySelectorAll(".quantidade").forEach(input => {
+                let preco = parseFloat(input.closest("tr").querySelector(".preco").textContent.replace("R$", "").trim());
+                let quantidade = parseInt(input.value);
+                total += preco * quantidade;
+            });
+    
+            let desconto = parseFloat(document.getElementById("desconto").value) || 0;
+            let acrescimo = parseFloat(document.getElementById("acrescimo").value) || 0;
+    
+            let totalFinal = total - desconto + acrescimo;
+            if (totalFinal < 0) {
+                totalFinal = 0;
+            }
+    
+            document.getElementById("total_venda").textContent = "R$ " + totalFinal.toFixed(2);
+        }
+    
+        function aplicarDesconto() {
+            atualizarTotal();
+        }
+    
+        function aplicarAcrescimo() {
+            atualizarTotal();
+        }
+    
+        document.getElementById("adicionar_produto").addEventListener("click", function() {
+            let selectProduto = document.getElementById("produto_selecionado");
+            let produtoId = selectProduto.value;
+            
+            // Verifica se algum produto foi selecionado
+            if (!produtoId) {
+                alert("Erro: Nenhum produto selecionado.");
+                return;
+            }
+    
+            let descricao = selectProduto.options[selectProduto.selectedIndex].getAttribute("data-descricao");
+            let preco = parseFloat(selectProduto.options[selectProduto.selectedIndex].getAttribute("data-preco")).toFixed(2);
+            let unidade = selectProduto.options[selectProduto.selectedIndex].getAttribute("data-unidade");
+    
+            let tabela = document.getElementById("tabela_produtos");
+            let novaLinha = tabela.insertRow();
+            
+            novaLinha.innerHTML = `
+                <td>${descricao}</td>
+                <td class="preco">R$ ${preco}</td>
+                <td>${unidade}</td>
+                <td><input type="number" class="quantidade" value="1" min="1" data-produto-id="${produtoId}" onchange="atualizarTotal(); atualizarInputs();"></td>
+                <td><button type="button" onclick="removerProduto(this)">Remover</button></td>
+            `;
+    
+            atualizarTotal();
+            atualizarInputs();
+        });
+    
+        function removerProduto(botao) {
+            botao.parentNode.parentNode.remove();
+            atualizarTotal();
+            atualizarInputs();
+        }
+    
+        function atualizarInputs() {
+            let produtos = [];
+            let quantidades = [];
+    
+            document.querySelectorAll(".quantidade").forEach(input => {
+                produtos.push(input.getAttribute("data-produto-id"));
+                quantidades.push(input.value);
+            });
+    
+            document.getElementById("produtos_input").value = JSON.stringify(produtos);
+            document.getElementById("quantidades_input").value = JSON.stringify(quantidades);
+        }
+    </script>
+        
+    </div>
+        
+</body>
+</html>

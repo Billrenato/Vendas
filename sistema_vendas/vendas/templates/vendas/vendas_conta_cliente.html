@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contas Clientes</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script>
+        function calcularTotal() {
+            let total = 0;
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            let vendaIds = [];
+    
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.value !== "on") { // Evita considerar o checkbox "Selecionar todas"
+                    let vendaId = checkbox.value;
+                    vendaIds.push(vendaId);
+                    let totalVendaElement = document.getElementById('total_' + vendaId);
+                    
+                    if (totalVendaElement) {
+                        let totalVenda = parseFloat(totalVendaElement.innerText.replace(",", "."));
+                        if (!isNaN(totalVenda)) {
+                            total += totalVenda;
+                        }
+                    }
+                }
+            });
+    
+            document.getElementById('total_sum').innerText = 'Total: ' + total.toFixed(2);
+            document.getElementById('venda_ids').value = vendaIds.join(',');
+        }
+    
+        function selecionarTodas() {
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#selecionar_todas)');
+            let selecionarTodasCheckbox = document.getElementById('selecionar_todas');
+            
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selecionarTodasCheckbox.checked;
+            });
+    
+            calcularTotal();
+        }
+    
+        function imprimirPdf() {
+            document.querySelector('form[method="get"]').submit();
+        }
+    </script>
+</head>    
+    <body>
+        <nav class="sidebar">
+            <ul>
+               <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+               <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+               <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+               <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+               <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+               <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+               <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+               <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+               <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+               <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            
+            </ul>
+        </nav>
+        <div class="main-content">
+            <div class="nav-padrao">
+                CONTAS A RECEBER
+            </div>
+            
+    <form method="get">
+        <label>Data de vencimento:</label>
+        <input type="date" name="data_vencimento" value="{{ request.GET.data_vencimento }}">
+        <br>
+        <label>Nome do cliente:</label>
+        <input type="text" name="nome_cliente" value="{{ request.GET.nome_cliente }}">
+        <br>
+        <label>Código do cliente:</label>
+        <input type="text" name="codigo_cliente" value="{{ request.GET.codigo_cliente }}">
+        <br>
+        <label>Pago:</label>
+        <select name="pago">
+            <option value="">Todos</option>
+            <option value="True" {% if request.GET.pago == "True" %}selected{% endif %}>Pagas</option>
+            <option value="False" {% if request.GET.pago == "False" %}selected{% endif %}>Não Pagas</option>
+        </select>
+        <br>
+    
+        <button type="submit">Pesquisar</button>
+        
+        <button type="submit" name="imprimir" value="imprimir">Imprimir/Salvar como PDF</button>
+        <input type="hidden" name="venda_ids" value="" id="venda_ids">
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table_prod">
+            <thead>
+                <tr><th><input type="checkbox" id="selecionar_todas" onclick="selecionarTodas()"></th>
+                    <th>ID Venda</th>
+                    <th>Cliente</th>
+                    <th>Data de Venda</th>
+                    <th>Data de Vencimento</th>
+                    <th>Total</th>
+                    <th>Pago</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for venda in vendas %}
+                    <tr>
+                        <td><input type="checkbox" name="venda_{{ venda.id }}" value="{{ venda.id }}" onclick="calcularTotal()"></td>
+                        <td>{{ venda.id}}</td>
+                        <td>{{ venda.cliente.nome }}</td>
+                        <td>{{ venda.data_venda }}</td>
+                        <td>{{ venda.data_vencimento }}</td>
+                        <td id="total_{{ venda.id }}">{{ venda.total }}</td>
+                        <td>
+                            {% if venda.pago %}
+                                <span style="color: green;">Sim</span>
+                            {% else %}
+                                <span style="color: red;">Não</span>
+                            {% endif %}
+                        </td>
+                        
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="10">Nenhuma venda encontrada.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+         
+        <button class="pago" type="submit" name="marcar_pago">Marcar como pago</button>
+        <button class="nao_pago" type="submit" name="marcar_nao_pago" value="1">Marcar como não pago</button>
+        <p id="total_sum">Total: 0</p>
+    </form>
+            
+        </div>
+<body>
+    
+</body>
+</html>

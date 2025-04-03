@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html> 
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="body_login">
+    <div class="container_login">
+        <h2 class="h2_login">Login</h2>
+        <form class="from_login" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="button_login" type="submit">Entrar</button>
+        </form>
+        <a class="a_login" href="{% url 'register' %}">Criar uma conta</a>
+    </div>
+</body>
+</html>
+
+
+

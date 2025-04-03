@@ -1,0 +1,126 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Editar cliente</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <style>
+            /* Adicione estilos para o popup aqui */
+            .popup {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #fff;
+                padding: 20px;
+                border: 1px solid #ddd;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            }
+        </style>
+        
+    </head>
+    
+
+    <body>
+        <nav class="sidebar">
+            <ul>
+                <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+                <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+                <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+                <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+                <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+                <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+                <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+                <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+                <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+                <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            
+            </ul>
+        </nav>
+        {% load custom_filters %}
+        <div class="main-content">
+            <div class="nav-padrao">
+                CLIENTES
+            </div>
+            <div >
+                
+                <form class="form_prod" method="post" enctype="multipart/form-data">
+                    <span class="h1_prod">Editar cliente</span>
+                    {% csrf_token %}
+            
+                    <div class="form-container2">
+                        <label  for="id_nome">Nome:</label>
+                        {{ form.nome|add_class:"form-descricao" }}
+                        
+                    </div>
+                    <div class="form-container">
+                        <div class="input-group">
+                            <label for="id_cnpj">CNPJ:</label>
+                            {{ form.cnpj|add_class:"form-medio" }}
+                        </div>
+                        <div class="input-group">
+                            <label for="id_inscricao_estadual">IE:</label>
+                            {{ form.inscricao_estadual|add_class:"form-medio" }}
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="form-container">
+                        <div class="input-group">
+                            <label for="id_cpf">CPF:</label>
+                            {{ form.cpf|add_class:"form-medio" }}
+                        </div>
+                        <div class="input-group">
+                            <label for="id_rg">RG:</label>
+                            {{ form.rg|add_class:"form-medio" }}
+                        </div>
+                        
+                    </div>
+                    <div class="form-container2">
+                        <label  for="id_endereco">Rua:</label>
+                        {{ form.endereco|add_class:"form-descricao" }}
+                        
+                    </div>
+                    <div class="form-container">
+                        <div class="input-group">
+                            <label for="id_numero">Numero:</label>
+                            {{ form.numero|add_class:"form-medio" }}
+                        </div>
+                        <div class="input-group">
+                            <label for="id_bairro">Bairro:</label>
+                            {{ form.bairro|add_class:"form-medio" }}
+                        </div>
+                        <div class="input-group">
+                            <label for="id_cep">CEP:</label>
+                            {{ form.cep|add_class:"form-medio" }}
+                        </div>
+                        
+                    </div>
+                    <div class="form-container">
+                        <div class="input-group">
+                            <label for="id_telefone">Telefone:</label>
+                            {{ form.telefone|add_class:"form-medio" }}
+                        </div>
+                        <div class="input-group">
+                            <label for="id_email">E-mail:</label>
+                            {{ form.email|add_class:"form-medio" }}
+                        </div>
+                        
+                    </div>
+                    <div class="button_container">
+                        <form  method="post">
+                            <button class="button_edit" type="submit">Salvar</button>
+                            <button class="button_delete" type="button" onclick="location.href='/cadastrar_cliente/'">Cancelar</button>
+                            
+                    </div>
+
+                    
+                </form>
+            </div>
+            
+        </div>
+</body>
+</html>

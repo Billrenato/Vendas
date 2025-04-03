@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="body_register">
+    <div>
+        <h2 class="h2_register">Cadastrar Usuário</h2>
+        <form class="form_register" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="button_register" type="submit">Cadastrar</button>
+        </form>
+        <a  class="a_register" href="{% url 'login' %}">Já tem uma conta? Faça login</a>
+    </div>
+</body>
+</html>
+
+
+

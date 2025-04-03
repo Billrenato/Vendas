@@ -1,0 +1,74 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+<body>
+    
+    <nav class="sidebar">
+        <ul>  
+            {% if request.user.is_authenticated %}
+            <li class="nome-usuario">
+                Olá, {{ user.username }}!
+            </li>
+    
+           {% endif %}
+                                        
+            <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+            <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+            <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+            <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+            <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+            <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+            <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+            <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            {% if user.is_authenticated %}
+            <li>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class='' type="submit">Sair</button>
+                </form>
+            </li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+            
+           
+        </ul>
+    </nav>
+
+    
+
+    <div class="main-content">
+        <div class="nav-padrao">
+            DASHBOARD
+        </div>
+        
+
+    <div id="grafico1"></div>
+    <div id="grafico2"></div>
+    <div id="grafico3"></div>
+
+    <script>
+        var graph1 = JSON.parse('{{ graph_json1|escapejs }}');
+        var graph2 = JSON.parse('{{ graph_json2|escapejs }}');
+        var graph3 = JSON.parse('{{ graph_json3|escapejs }}');
+
+        Plotly.newPlot('grafico1', graph1.data, graph1.layout);
+        Plotly.newPlot('grafico2', graph2.data, graph2.layout);
+        Plotly.newPlot('grafico3', graph3.data, graph3.layout);
+    </script>
+        
+    
+    
+    
+</body>
+</html>

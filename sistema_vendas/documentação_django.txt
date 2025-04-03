@@ -1,0 +1,66 @@
+
+rodar os aplicativo
+
+ python manage.py runserver
+
+
+
+
+
+
+Para executar as migrações do Django, você precisa executar os seguintes comandos no terminal:
+
+1. python manage.py makemigrations --database=utf8
+2. python manage.py migrate
+
+O primeiro comando (makemigrations) cria os arquivos de migração necessários para criar as tabelas no banco de dados.
+
+O segundo comando (migrate) executa as migrações e cria as tabelas no banco de dados.
+
+
+
+
+criar super usuario
+
+python manage.py createsuperuser
+
+
+
+criar app
+
+python manage.py startapp nome_do_app
+
+super usuário : supervisor	
+
+
+senha: billskate1
+
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'sistema_vendas',
+        'USER': 'postgres',
+        'PASSWORD': '010203',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        
+       
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

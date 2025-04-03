@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo de vendas</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script>
+        // Função para calcular o total das vendas selecionadas
+        function calcularTotal() {
+            let total = 0;
+            let checkboxes = document.querySelectorAll('input[name="venda_ids"]:checked');
+            let vendaIds = [];
+            checkboxes.forEach(function(checkbox) {
+                let vendaId = checkbox.value;
+                vendaIds.push(vendaId);
+                let totalVenda = parseFloat(document.getElementById('total_' + vendaId).innerText);
+                total += totalVenda;
+            });
+            console.log("IDs das vendas selecionadas:", vendaIds);
+            document.getElementById('total_sum').innerText = 'Total: ' + total.toFixed(2);
+            document.getElementById('venda_ids').value = vendaIds.join(',');
+            document.getElementById('total').value = total.toFixed(2);
+        }
+    
+        // Função para selecionar ou desmarcar todas as checkboxes
+        function selecionarTodas(source) {
+            let checkboxes = document.querySelectorAll('input[name="venda_ids"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = source.checked;
+            });
+            calcularTotal(); // Atualiza o total após selecionar/deselecionar as vendas
+        }
+    
+        // Atualiza o checkbox "Selecionar todas" dependendo das seleções
+        document.querySelectorAll('input[name="venda_ids"]').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                let allChecked = document.querySelectorAll('input[name="venda_ids"]:checked').length === document.querySelectorAll('input[name="venda_ids"]').length;
+                document.getElementById('selecionar_todas').checked = allChecked;
+                calcularTotal(); // Atualiza o total após selecionar/deselecionar
+            });
+        });
+    </script>
+</head>
+<body>
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+            <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+            <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+            <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+            <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+            <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+            <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+            <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="nav-padrao">
+            RESUMO DE VENDAS
+        </div>
+
+
+        {% block content %}
+        
+        <form method="get">
+            <label>Pesquisar por cliente ou ID de venda:</label>
+            <input type="text" name="pesquisa" placeholder="Nome do cliente ou ID da venda">
+            <br>
+            <label>Data da Venda:</label>
+            <input type="date" name="data_venda">
+            <br>
+            <label>Forma de Pagamento:</label>
+            <input type="text" name="forma_pagamento" placeholder="Forma de pagamento">
+            <br>
+            <button type="submit">Filtrar</button>
+            <!-- Botão para gerar PDF com as vendas selecionadas -->
+            <button type="submit" name="imprimir" value="imprimir">Gerar PDF (selecionadas)</button>
+            <input type="hidden" name="venda_ids" value="" id="venda_ids"> 
+            <input type="hidden" name="total" id="total" value="">
+            <!-- Checkbox para selecionar todas as vendas -->
+            
+            <label for="selecionar_todas">Selecionar todas</label>
+        </form>
+
+        <h2> <span id="total_sum">0</span></h2>
+        
+        <form method="get">
+            {% csrf_token %}
+            <table class="table_prod">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selecionar_todas" onclick="selecionarTodas(this)"></th>
+                        <th>ID Venda</th>
+                        <th>Cliente</th>
+                        <th>Data Venda</th>
+                        <th>Forma de Pagamento</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venda in vendas %}
+                    <tr>
+                        <td><input type="checkbox" name="venda_ids" value="{{ venda.id }}" id="checkbox_{{ venda.id }}" onclick="calcularTotal()"></td>
+                        <td>{{ venda.id }}</td>
+                        <td>{{ venda.cliente.nome }}</td>
+                        <td>{{ venda.data_venda }}</td>
+                        <td>{{ venda.forma_pagamento }}</td>
+                        <td id="total_{{ venda.id }}">{{ venda.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <p id="total_sum">Total: {{ total }}</p>
+        </form>
+        {% endblock %}
+    </div>
+</body>
+</html>

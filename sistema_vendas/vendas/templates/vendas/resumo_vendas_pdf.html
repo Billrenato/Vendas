@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resumo de Vendas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        table td {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resumo das Vendas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID Venda</th>
+                <th>Cliente</th>
+                <th>Data Venda</th>
+                <th>Quantidade</th>
+                <th>Forma de Pagamento</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venda in vendas %}
+                <tr>
+                    <td>{{ venda.id }}</td>
+                    <td>{{ venda.cliente.nome }}</td>
+                    <td>{{ venda.data_venda }}</td>
+                    <td>{{ venda.forma_pagamento }}</td>
+                    <td>{{ venda.total }}</td>
+                    
+                </tr>
+                
+            {% endfor %}
+
+
+            <div>
+                <h2>Total: {{ total }}</h2> 
+            </div>
+
+
+            
+        </tbody>
+    </table>
+</body>
+</html>
+</html>

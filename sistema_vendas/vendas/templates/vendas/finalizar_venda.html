@@ -1,0 +1,68 @@
+{% load static %} 
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Venda Finalizada</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <nav class="sidebar">
+            <ul>
+                <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+                <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+                <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+                <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+                <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+                <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+                <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+                <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+                <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+                <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            </ul>
+        </nav>
+        <div class="main-content">
+            <h1>Venda Finalizada</h1>
+
+            <h2>Venda #{{ venda.id }}</h2>
+            <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
+            <p><strong>Vendedor:</strong> {{ venda.vendedor.nome_vendedor }}</p>
+            <p><strong>Forma de Pagamento:</strong> {{ venda.forma_pagamento }}</p>
+            <p><strong>Desconto:</strong> R$ {{ venda.desconto }}</p>
+            <p><strong>Total:</strong> R$ {{ venda.total }}</p>
+
+            <h2>Itens da Venda</h2>
+            <table border="1">
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Preço Unitário</th>
+                    <th>Subtotal</th>
+                </tr>
+                {% for item in itens %}
+                <tr>
+                    <td>{{ item.produto.nome }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>R$ {{ item.preco_unitario }}</td>
+                    <td>R$ {{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <br>
+
+            <a href="{% url 'gerar_pdf_venda' venda.id %}" class="button">Gerar PDF</a>
+            <form action="{% url 'limpar_campos_venda' venda.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Limpar Campos</button>
+            </form>
+
+            <!-- Botões para NFC-e -->
+            <br><br>
+            <a href="{% url 'visualizar_nfce' venda.id %}" class="button">Visualizar NFC-e</a>
+            <a href="{% url 'emitir_nfce' venda.id %}" class="button">Emitir NFC-e</a>
+            
+        </div>
+    </body>
+</html>

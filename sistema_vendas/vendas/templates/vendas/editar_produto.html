@@ -1,0 +1,264 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Produto</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Estilização do popup */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .imagem-produto {
+            width: 100px;
+            height: auto;
+            margin: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+    <script>
+        function previewImagem(event) {
+            var input = event.target;
+            var preview = document.getElementById('preview');
+        
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block"; // Exibe a imagem
+                };
+        
+                reader.readAsDataURL(input.files[0]); // Lê o arquivo como URL
+            }
+        }
+        </script>
+
+
+</head>
+<body>
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+            <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+            <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+            <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+            <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+            <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+            <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+            <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            
+        </ul>
+    </nav>
+    
+
+    {% load custom_filters %}
+    <div class="main-content">
+        <div class="nav-padrao">
+            EDITAR PRODUTO
+        </div>
+
+        <form class="form_prod" method="post" enctype="multipart/form-data" action="{% url 'editar_produto' produto.id %}">
+            <span class="h1_prod">Editar Produto</span>
+            {% csrf_token %}
+            
+            <div class="form-field">
+                <img id="preview" src="" alt="Pré-visualização da imagem" style="max-width: 200px; display: none; margin-top: 10px;">
+                <br>
+                <label for="imagens">Imagens do Produto:</label>
+                <input type="file" id="imagensInput" name="imagens" multiple accept="image/*" onchange="previewImagem(event)">
+                <br>
+                <br>
+                <h3>Imagens do Produto</h3>
+                <div class="image-container">
+                    {% for imagem in imagens %}
+                        <div class="image-box">
+                            <img src="{{ imagem.imagem.url }}" class="imagem-produto">
+                            <br>
+                            <a class="button_delete" href="{% url 'excluir_imagem_produto' imagem.id %}" onclick="return confirm('Tem certeza que deseja excluir esta imagem?')">Excluir</a>
+                        </div>
+                    {% empty %}
+                        <p>Sem imagens cadastradas.</p>
+                    {% endfor %}
+                </div>
+            
+            </div>
+            
+            
+            
+
+            
+
+
+            <div class="form-container">
+                <div class="input-group">
+                    <label for="id_codigo_produto">Código do Produto:</label>
+                    {{ form.codigo_produto|add_class:"form-medio" }}
+                </div>
+                <div class="input-group">
+                    <label for="id_codigo_barras">Código de Barras:</label>
+                    {{ form.codigo_barras|add_class:"form-medio" }}
+                </div>
+            </div>
+            
+            <div class="form-container2">
+                <label  for="id_descricao">Descrição:</label>
+                {{ form.descricao|add_class:"form-descricao" }}
+            </div>
+
+            <div class="form-container">
+                <div class="input-group">
+                    <label for="id_grupo">Grupo:</label>
+                    {{ form.grupo|add_class:"form-medio" }}
+                </div>
+                <div class="input-group">
+                    <label for="id_marca">Marca:</label>
+                    {{ form.marca|add_class:"form-medio" }}
+                </div>
+                <div class="input-group">
+                    <label for="id_unidade_medida">Unidade de Medida:</label>
+                    {{ form.unidade_medida|add_class:"form-pequeno" }}
+                    
+                </div>
+            </div>
+        
+            <div class="form-container">
+                <div class="input-group">
+                    <label for="id_custo">Custo:</label>
+                    {{ form.custo|add_class:"form-medio" }}
+                
+                </div>
+                <div class="input-group">
+                    <label for="id_preco">Preço:</label>
+                    {{ form.preco|add_class:"form-medio" }}
+                    
+                </div>
+            </div>
+        
+            <div class="form-container2">
+                <label for="id_quantidade">Quantidade:</label>
+                {{ form.quantidade|add_class:"form-medio" }}
+                
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <details>
+                
+                <summary><h1 class="h1-ml">Mercado livre</h1></summary>
+                
+                
+
+                <div>
+                    <div class="form-container">
+                        <div class="input-group">
+                            <label for="id_status">Status:</label>
+                            {{ form.status}}
+                            
+                        </div>
+                        <div class="input-group">
+                            <label for="id_condicao">Condição:</label>
+                            {{ form.condicao }}
+                                 
+                        </div>
+                    </div>
+
+
+                    <div class="form-container">
+                        <div class="input-group">
+                            <label for="id_largura">Largura:</label>
+                            {{ form.largura|add_class:"form-medio" }}
+                            
+                        </div>
+                        <div class="input-group">
+                            <label for="id_altura">Altura:</label>
+                            {{ form.altura|add_class:"form-medio" }}
+                            
+                        </div>
+                        <div class="input-group">
+                            <label for="id_profundidade">Profundidade:</label>
+                            {{ form.profundidade|add_class:"form-medio" }}
+                            
+                        </div>
+                        <div class="input-group">
+                            <label for="id_peso">Peso:</label>
+                            {{ form.peso|add_class:"form-medio" }}
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-container">
+                        <div class="input-group">
+                            <label for="id_prod_cor">Cor do Produto:</label>
+                            {{ form.prod_cor|add_class:"form-medio" }}
+                            
+                        </div>
+                        <div class="input-group">
+                            <label for="id_object_type">Tipo de Objeto:</label>
+                            {{ form.prod_cor|add_class:"form-medio" }}
+                            
+                        </div>
+                        <div class="input-group">
+                            <label for="id_material">Material:</label>
+                            {{ form.material|add_class:"form-medio" }}
+                        </div>
+                    </div>
+
+                    
+                    <div class="form-container">
+                        <label for="id_tipo_envio">Tipo de Envio:</label>
+                        {{ form.tipo_envio }}
+                        
+                    </div>
+                    <div class="form-container">
+                        <div class="input-group">
+                            <label for="id_cep_origem">CEP de origem:</label>
+                            {{ form.cep_origem |add_class:"form-medio" }}
+                            
+                        </div>
+                        <div class="input-group">
+                            <label for="id_cobertura_frete">Cobertura de Frete:</label>
+                            {{ form.cobertura_frete|add_class:"form-medio" }}
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="form-container">
+                        <label for="id_envio_gratis">Envio Grátis:</label>
+                        {{ form.envio_gratis }}
+                    </div>
+                
+                    <div>
+                        <label for="id_metodos_envio_proprio">Métodos de Envio Próprio:</label>
+                        {{ form.metodos_envio_proprio }}
+                    </div>
+                </div>
+            </details>
+    
+            
+            <div class="button_container">
+            <form  method="post">
+            <button class="button_edit" type="submit">Salvar</button>
+            <button class="button_delete" type="button" onclick="location.href='/cadastrar_produto/'">Cancelar</button>
+            </div>
+
+        </form>
+        
+    </div>
+</body>
+</html>

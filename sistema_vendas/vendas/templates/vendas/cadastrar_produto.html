@@ -1,0 +1,363 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <script>
+        
+        function previewImagem(event) {
+            var input = event.target;
+            var preview = document.getElementById('preview');
+        
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block"; // Exibe a imagem
+                };
+        
+                reader.readAsDataURL(input.files[0]); // Lê o arquivo como URL
+            }
+        }
+        </script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastro Produto</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        
+    </head>
+<body>
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+            <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+            <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+            <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+            <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+            <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+            <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+            <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            
+        </ul>
+    </nav>
+    
+    na
+    {% load custom_filters %}
+    <div class="main-content">
+        <div class="nav-padrao">
+            PRODUTOS
+        </div>
+        
+        
+    
+        <form class="form_prod" method="post" enctype="multipart/form-data">
+            <details>
+                <summary><span class="h1_prod">Cadastrar Produto +</span></summary>
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+    
+            {% csrf_token %}
+            <div class="form-field">
+                <img id="preview" src="" alt="Pré-visualização da imagem" style="max-width: 200px; display: none; margin-top: 10px;">
+                <br>
+                <label for="imagens">Imagens do Produto:</label>
+                <input type="file" id="imagensInput" name="imagens" multiple accept="image/*" onchange="previewImagem(event)">
+                
+                
+            </div>
+    
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+            
+                <div>
+                    <label for="id_imagem"></label>
+                    {{ form.imagem }}
+                </div>
+            
+                <div class="form-container">
+                    <div class="input-group">
+                        <label for="id_codigo_produto">Código do Produto:</label>
+                        {{ form.codigo_produto|add_class:"form-medio" }}
+                    </div>
+                    <div class="input-group">
+                        <label for="id_codigo_barras">Código de Barras:</label>
+                        {{ form.codigo_barras|add_class:"form-medio" }}
+                    </div>
+                </div>
+                
+                <div class="form-container2">
+                    <label  for="id_descricao">Descrição:</label>
+                    {{ form.descricao|add_class:"form-descricao" }}
+                </div>
+    
+                <div class="form-container">
+                    <div class="input-group">
+                        <label for="id_grupo">Grupo:</label>
+                        {{ form.grupo|add_class:"form-medio" }}
+                    </div>
+                    <div class="input-group">
+                        <label for="id_marca">Marca:</label>
+                        {{ form.marca|add_class:"form-medio" }}
+                    </div>
+                    <div class="input-group">
+                        <label for="id_unidade_medida">Unidade de Medida:</label>
+                        {{ form.unidade_medida|add_class:"form-pequeno" }}
+                        
+                    </div>
+                </div>
+            
+                <div class="form-container">
+                    <div class="input-group">
+                        <label for="id_custo">Custo:</label>
+                        {{ form.custo|add_class:"form-medio" }}
+                    
+                    </div>
+                    <div class="input-group">
+                        <label for="id_preco">Preço:</label>
+                        {{ form.preco|add_class:"form-medio" }}
+                        
+                    </div>
+                    <div class="input-group">
+                        <label for="id_quantidade">Quantidade:</label>
+                    {{ form.quantidade|add_class:"form-medio" }}
+                        
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <details>
+                    
+                    <summary><span class="h1-ml">Mercado livre</span></summary>
+                    
+                    
+    
+                    <div>
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_status">Status:</label>
+                                {{ form.status}}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_condicao">Condição:</label>
+                                {{ form.condicao }}
+                                     
+                            </div>
+                        </div>
+    
+    
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_largura">Largura:</label>
+                                {{ form.largura|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_altura">Altura:</label>
+                                {{ form.altura|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_profundidade">Profundidade:</label>
+                                {{ form.profundidade|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_peso">Peso:</label>
+                                {{ form.peso|add_class:"form-medio" }}
+                            </div>
+                        </div>
+    
+    
+    
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_prod_cor">Cor do Produto:</label>
+                                {{ form.prod_cor|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_object_type">Tipo de Objeto:</label>
+                                {{ form.prod_cor|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_material">Material:</label>
+                                {{ form.material|add_class:"form-medio" }}
+                            </div>
+                        </div>
+    
+                        
+                        <div class="form-container">
+                            <label for="id_tipo_envio">Tipo de Envio:</label>
+                            {{ form.tipo_envio }}
+                            
+                        </div>
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_cep_origem">CEP de origem:</label>
+                                {{ form.cep_origem |add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_cobertura_frete">Cobertura de Frete:</label>
+                                {{ form.cobertura_frete|add_class:"form-medio" }}
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="form-container">
+                            <label for="id_envio_gratis">Envio Grátis:</label>
+                            {{ form.envio_gratis }}
+                        </div>
+                    
+                        <div>
+                            <label for="id_metodos_envio_proprio">Métodos de Envio Próprio:</label>
+                            {{ form.metodos_envio_proprio }}
+                        </div>
+                    </div>
+                </details>
+
+                <button class="button_prod" type="submit">Salvar</button>
+            </details>
+    
+                
+                
+            
+                
+            </form>
+    
+        </form>
+    
+        
+        <form method="get" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); display: flex; margin-top: 20px; padding:10px">
+            <button type="submit" style="margin-left: 10px;">Pesquisar</button>
+            <input type="text" style="width: 100%;" name="q" placeholder="Pesquisar pelo nome...">
+            
+        </form>
+        <!-- Modifique a tabela para exibir os resultados da pesquisa -->
+        <ul class="produto-lista">
+            {% for produto in produtos %}
+            <li>
+                <div class="produto-info">
+                    <div class="campo-codigo">
+                        <h2>Código # {{ produto.id }}</h2>
+                    </div>
+                    <div class="campo">
+                      <span>Descrição:</span>
+                      <p>{{ produto.descricao }}</p>
+                    </div>
+                    <div class="campo">
+                      <span>Preço:</span>
+                      <p style="color:green;">R$ {{ produto.preco }}</p>
+                    </div>
+                    <div class="campo">
+                      <span>Unidade:</span>
+                      <p>{{ produto.unidade_medida }}</p>
+                    </div>
+                    <div class="campo">
+                        <span>Quantidade:</span>
+                        <p class="campo-quantidade">{{ produto.quantidade }}</p>
+                      </div>
+                    <div class="campo">
+                      <span>Código de barras:</span>
+                      <p>{{ produto.codigo_barras }}</p>
+                    </div>
+                </div>
+              
+              
+              <details>
+                <summary class="produto-acoes">
+                  <p>Detalhes+</p>
+                </summary>
+                <div class="produto-detalhes-container">
+                  <div class="produto-imagem">
+                    <img src="{{ produto.imagens.first.imagem.url }}" alt="Imagem do produto">
+                  </div>
+                  <div class="produto-detalhes">
+                    <table class="table_prod1">
+                        <tr>
+                            <th>Código fornecedor:</th>
+                            <td>{{ produto.codigo_produto }}</td>
+                          </tr>
+                      <tr>
+                        <th>Mercado Livre:</th>
+                        <td>{{ produto.mercado_livre_id }}</td>
+                      </tr>
+                      <tr>
+                        <th>Descrição:</th>
+                        <td>{{ produto.descricao }}</td>
+                      </tr>
+                      <tr>
+                        <th>Marca:</th>
+                        <td>{{ produto.marca }}</td>
+                      </tr>
+                      <tr>
+                        <th>Unidade:</th>
+                        <td>{{ produto.unidade_medida }}</td>
+                      </tr>
+                      <tr>
+                        <th>Custo:</th>
+                        <td>R$ {{ produto.custo }}</td>
+                      </tr>
+                      <tr>
+                        <th>Preço:</th>
+                        <td>R$ {{ produto.preco }}</td>
+                      </tr>
+                      <tr>
+                        <th>Quantidade:</th>
+                        <td>{{ produto.quantidade }}</td>
+                      </tr>
+                    </table>
+                    <div class="produto-acoes-detalhes">
+                        <form class="form-botao" style="padding:0px; box-shadow:0px;" method="get" action="{% url 'editar_produto' produto.id %}">
+                          <button class="button_edit" type="submit">Editar</button>
+                        </form>
+                        <form class="form-botao" style="padding:0px;" method="post" action="{% url 'excluir_produto' produto.id %}">
+                          {% csrf_token %}
+                          <button class="button_delete" type="submit" onclick="return confirm('Tem certeza que deseja excluir este produto?')">Excluir</button>
+                        </form>
+                      </div>
+                  </div>
+                  
+                </div>
+              </details>
+              
+            </li>
+            {% endfor %}
+          </ul>
+          
+          
+          
+        
+        
+    </div>
+
+
+    
+</body>
+
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,144 @@
+MERCADO_LIVRE_ACCESS_TOKEN = settings.MERCADO_LIVRE_ACCESS_TOKEN  # Agora está globalizado
+
+MERCADO_LIVRE_API_URL = "https://api.mercadolibre.com"
+
+def obter_categoria(descricao):
+    """Busca a melhor categoria para um produto com base na descrição."""
+    url = f"{MERCADO_LIVRE_API_URL}/sites/MLB/domain_discovery/search?q={descricao}"
+    headers = {"Authorization": f"Bearer {MERCADO_LIVRE_ACCESS_TOKEN}"}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        categorias = response.json()
+        if categorias:
+            return categorias[0]["category_id"]
+    return None
+
+def obter_atributos_obrigatorios(category_id):
+    """Obtém os atributos obrigatórios para uma categoria no Mercado Livre."""
+    url = f"{MERCADO_LIVRE_API_URL}/categories/{category_id}/attributes"
+    headers = {"Authorization": f"Bearer {MERCADO_LIVRE_ACCESS_TOKEN}"}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        atributos = response.json()
+        return [attr for attr in atributos if "required" in attr.get("tags", [])]
+    return []
+
+def publicar_no_mercado_livre(produto_id):
+    """Publica o produto no Mercado Livre."""
+    try:
+        produto = Produto.objects.get(id=produto_id)
+
+        # 1️⃣ Buscar a categoria do produto
+        category_id = obter_categoria(produto.descricao)
+        if not category_id:
+            return {"erro": "Categoria não encontrada"}
+
+        # 2️⃣ Obter atributos obrigatórios da categoria
+        atributos_obrigatorios = obter_atributos_obrigatorios(category_id)
+
+        # 3️⃣ Montar os atributos com base no banco de dados
+        atributos = []
+        for atributo in atributos_obrigatorios:
+            if atributo["id"] == "BRAND":
+                atributos.append({"id": "BRAND", "value_name": produto.marca})
+            elif atributo["id"] == "MODEL":
+                atributos.append({"id": "MODEL", "value_name": produto.descricao})
+            elif atributo["id"] == "COLOR" and produto.tamanho:
+                atributos.append({"id": "COLOR", "value_name": produto.tamanho})
+            elif atributo["id"] == "MATERIAL":
+                atributos.append({"id": "MATERIAL", "value_name": produto.material})
+            elif atributo["id"] == "OBJECT_TYPE":
+                atributos.append({"id": "OBJECT_TYPE", "value_name": produto.object_type})   
+            # Verifique se o atributo GTIN está entre os obrigatórios
+        if any(attr["id"] == "GTIN" for attr in atributos_obrigatorios):
+            if produto.codigo_barras:
+                atributos.append({"id": "GTIN", "value_name": produto.codigo_barras})
+            else:
+                print("GTIN não encontrado para o produto.")
+                return {"erro": "GTIN é obrigatório para esta categoria, mas o código de barras está ausente"}
+        
+
+        imagens = produto.imagens.all()
+        if imagens:
+            pictures = [{"source": imagem.imagem.url} for imagem in imagens]
+        else:
+            pictures = []
+
+        if produto.codigo_barras:
+           atributos.append({"id": "GTIN", "value_name": produto.codigo_barras})
+
+
+
+        # 4️⃣ Montar os dados do produto
+        dados_produto = {
+            "title": produto.descricao,
+            "category_id": category_id,
+            "price": float(produto.preco),  
+            "currency_id": "BRL",
+            "available_quantity": produto.quantidade,
+            "buying_mode": "buy_it_now",
+            "listing_type_id": "gold_special",
+            "condition": "new" if produto.condicao == "novo" else "used" if produto.condicao == "usado" else "not_specified",
+            "pictures": pictures,
+            "attributes": atributos,
+            "shipping": {
+                "mode": "me2" if produto.tipo_envio == "mercado_envios" else "custom",
+                "local_pick_up": True if produto.tipo_envio == "retirada" else False,
+                "free_shipping": produto.envio_gratis,
+                "dimensions": f"{int(produto.altura*100)}x{int(produto.largura*100)}x{int(produto.profundidade*100)},{int(produto.peso*100)}",
+                 }
+            }
+        
+    
+    
+
+        # Print do JSON enviado para o Mercado Livre
+        print("JSON gerado para envio ao Mercado Livre:")
+        print(json.dumps(dados_produto, indent=4))
+
+        # 5️⃣ Enviar para o Mercado Livre
+        url = f"{MERCADO_LIVRE_API_URL}/items"
+        headers = {
+            "Authorization": f"Bearer {MERCADO_LIVRE_ACCESS_TOKEN}",
+            "Content-Type": "application/json"
+        }
+        response = requests.post(url, headers=headers, data=json.dumps(dados_produto))
+
+        # 6️⃣ Verificar resposta
+        if response.status_code == 201:
+            resposta_ml = response.json()
+            produto.mercado_livre_id = resposta_ml["id"]
+            produto.link_mercado_livre = resposta_ml["permalink"]
+            produto.save()
+            return resposta_ml
+        else:
+            resposta_ml = response.json()
+            erro_msg = resposta_ml.get('message', 'Erro desconhecido')
+            detalhes_erro = resposta_ml.get('cause', [])
+            print("Erro ao publicar produto no Mercado Livre:")
+            print(f"Mensagem de erro: {erro_msg}")
+            print(f"Detalhes do erro: {detalhes_erro}")
+            return {"erro": f"Validation error: {erro_msg}"}
+
+    except Produto.DoesNotExist:
+        print("Erro: Produto não encontrado")
+        return {"erro": "Produto não encontrado"}
+    except Exception as e:
+        print(f"Erro inesperado: {e}")
+        return {"erro": f"Erro inesperado: {str(e)}"}
+
+
+def excluir_do_mercado_livre(ml_product_id):
+    """Exclui um produto do Mercado Livre via API."""
+    url = f"https://api.mercadolibre.com/items/{ml_product_id}"
+    headers = {
+        'Authorization': f'Bearer {MERCADO_LIVRE_ACCESS_TOKEN}'
+    }
+    try:
+        response = requests.delete(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return {"success": False, "message": f"Erro ao excluir produto: {e}"}

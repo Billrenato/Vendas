@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despesas</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <script>
+        function toggleSelectAll(source) {
+            let checkboxes = document.getElementsByName('despesas');
+            for (let i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+            calculateSum();
+        }
+
+        function calculateSum() {
+            let checkboxes = document.getElementsByName('despesas');
+            let total = 0;
+            checkboxes.forEach((checkbox) => {
+                if (checkbox.checked) {
+                    total += parseFloat(checkbox.getAttribute('data-valor'));
+                }
+            });
+            document.getElementById('totalSelecionado').innerText = total.toFixed(2);
+        }
+
+        function confirmDelete() {
+            return confirm('Tem certeza que deseja excluir as despesas selecionadas?');
+        }
+    </script>
+</head>
+<body>
+    
+    <nav class="sidebar">
+        <ul>
+            <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
+            <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
+            <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
+            <li><a href="{% url 'cadastrar_cliente' %}"><img class="icon" src="{% static 'img/cliente.png' %}" alt="">CLIENTES</a></li>
+            <li><a href="{% url 'cadastrar_vendedor' %}"><img class="icon" src="{% static 'img/vendedores.png' %}" alt="">VENDEDORES</a></li>
+            <li><a href="{% url 'despesas' %}"><img class="icon" src="{% static 'img/despesas.png' %}" alt="">DESPESAS</a></li>
+            <li><a href="{% url 'resumo_vendas' %}"><img class="icon" src="{% static 'img/resumo.png' %}" alt="">VENDAS</a></li>
+            <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
+            <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
+            <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            
+        </ul>
+    </nav>
+
+
+    <div class="main-content">
+        <div class="nav-padrao">
+            DESPESAS
+        </div>
+
+        
+        <!-- Formulário para adicionar despesa -->
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+
+    <form method="get">
+        <label>Pesquisar por data:</label>
+        <input type="date" name="data_vencimento" value="{{ data_vencimento_filtro }}">
+    
+        <label>Pesquisar por descrição:</label>
+        <input type="text" name="descricao" value="{{ descricao_filtro }}">
+    
+        <label>Filtrar por status:</label>
+        <select name="status">
+            <option value="nenhuma" {% if filtro_pagamento == "nenhuma" %}selected{% endif %}>Nenhuma</option>
+            <option value="pagas" {% if filtro_pagamento == "pagas" %}selected{% endif %}>Pagas</option>
+            <option value="nao_pagas" {% if filtro_pagamento == "nao_pagas" %}selected{% endif %}>Não Pagas</option>
+        </select>
+    
+        <!-- Apenas um botão para enviar todos os filtros -->
+        <button type="submit">Pesquisar</button>
+    </form>
+
+    <!-- Tabela de despesas -->
+    <form method="post" onsubmit="return confirmDelete();">
+        {% csrf_token %}
+        <table class="table_prod">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onclick="toggleSelectAll(this)"></th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Data Vencimento</th>
+                    <th>Pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for despesa in despesas %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="despesas" value="{{ despesa.pk }}" 
+                               data-valor="{{ despesa.valor }}" onclick="calculateSum()">
+                    </td>
+                    <td>{{ despesa.descricao }}</td>
+                    <td>{{ despesa.valor }}</td>
+                    <td>{{ despesa.data_vencimento }}</td>
+                    <td>
+                        {% if despesa.pago %}
+                        <span style="color: green;">Sim</span>
+                        {% else %}
+                        <span style="color: red;">Não</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <button class="pago" type="submit" name="marcar_pago">Marcar como pago</button>
+        <button class="nao_pago" type="submit" name="marcar_nao_pago">Marcar como não pago</button>
+        <button class="button_delete" type="submit" name="excluir" style="background-color: red; color: white;">Excluir selecionadas</button>
+
+        <p>Total das despesas selecionadas: <span id="totalSelecionado">0.00</span></p>
+        <p>Soma total das despesas: {{ soma_despesas }}</p>
+    </form>
+        
+        
+    </div>
+    
+</body>
+</html>
