@@ -56,6 +56,8 @@
         <form class="form_prod" method="post" enctype="multipart/form-data">
             <details>
                 <summary><span class="h1_prod">Cadastrar Produto +</span></summary>
+                <br>
+                <br>
             {% if messages %}
             <ul>
                 {% for message in messages %}
@@ -75,7 +77,9 @@
             </div>
     
             <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
+
+                <div>
+                    {% csrf_token %}
             
                 <div>
                     <label for="id_imagem"></label>
@@ -131,15 +135,20 @@
                         
                     </div>
                 </div>
+
+                </div>
+                
                 <br>
                 <br>
                 <br>
                 <br>
-                <details>
+                
                     
-                    <summary><span class="h1-ml">Mercado livre</span></summary>
+                    <span class="h1-ml">Mercado livre</span>
                     
-                    
+                    <br>
+                    <br>
+                    <br>
     
                     <div>
                         <div class="form-container">
@@ -195,14 +204,15 @@
                                 <label for="id_material">Material:</label>
                                 {{ form.material|add_class:"form-medio" }}
                             </div>
+                            <div class="input-group">
+                                <label for="id_tipo_envio">Tipo de Envio:</label>
+                                {{ form.tipo_envio }}
+                                
+                            </div>
                         </div>
     
                         
-                        <div class="form-container">
-                            <label for="id_tipo_envio">Tipo de Envio:</label>
-                            {{ form.tipo_envio }}
-                            
-                        </div>
+                        
                         <div class="form-container">
                             <div class="input-group">
                                 <label for="id_cep_origem">CEP de origem:</label>
@@ -214,21 +224,30 @@
                                 {{ form.cobertura_frete|add_class:"form-medio" }}
                                 
                             </div>
+                            <div class="input-group">
+                                <label for="id_envio_gratis">Envio Grátis:</label>
+                                {{ form.envio_gratis }}
+                                
+                            </div>
                         </div>
                         
                         <div class="form-container">
-                            <label for="id_envio_gratis">Envio Grátis:</label>
-                            {{ form.envio_gratis }}
+                           
+                            <div class="input-group">
+                                <label for="id_metodos_envio_proprio">Métodos de Envio Próprio:</label>
+                                {{ form.metodos_envio_proprio|add_class:"envio" }}
+                                
+                            </div>
                         </div>
                     
-                        <div>
-                            <label for="id_metodos_envio_proprio">Métodos de Envio Próprio:</label>
-                            {{ form.metodos_envio_proprio }}
-                        </div>
+                        
                     </div>
-                </details>
+                
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <button class="button_edit" type="submit">Salvar</button>
+            </div>
 
-                <button class="button_prod" type="submit">Salvar</button>
+                
             </details>
     
                 
@@ -271,7 +290,7 @@
                       </div>
                     <div class="campo">
                       <span>Código de barras:</span>
-                      <p>{{ produto.codigo_barras }}</p>
+                      <p style="color:#f39c12;">{{ produto.codigo_barras }}</p>
                     </div>
                 </div>
               

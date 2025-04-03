@@ -294,9 +294,9 @@ button:hover {
 .form_prod {
     display: flex;
     flex-direction: column;
-    background-color: #d1d1d1;
+    background-color: #e6e6e6;
     padding: 60px;
-    
+    align-items: center;
 }
 
 /* Organiza os campos lado a lado */
@@ -337,7 +337,7 @@ button:hover {
 }
 
 .form-descricao{
-    width: 60%;
+    width: 100%;
     padding: 7px;
     margin-top: 5px;
     border-color: rgba(255, 255, 255, 0);
@@ -750,6 +750,7 @@ details summary::before {
     display: flex;
   flex-direction: row;
   justify-content: space-between;
+  
   }
 
 
@@ -760,15 +761,15 @@ details summary::before {
     margin-bottom: 5px;
     padding: 5px;
     color:white ;
-    background-color:#7e7e7d ;
+    background-color:#434242 ;
+    border-radius: 60px;
     
   }
   .produto-detalhes-container2 p:hover {
-    font-size: 14px;
     margin-bottom: 5px;
     padding: 5px;
     color:white ;
-    background-color: #434242;
+    background-color: #5c5b5b;
     
   }
   
@@ -807,3 +808,8 @@ details summary::before {
     width: 500px;
   }
   
+
+  .envio{
+    width: 100%; 
+    
+  }
