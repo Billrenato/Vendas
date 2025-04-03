@@ -86,7 +86,7 @@
     <form style="background-color: #d1d1d1; padding:60px;" method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
 
         
-        <h1 class="h1_prod">{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</h1>
+        <h1 >{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</h1>
         {% csrf_token %}
 
        
@@ -113,7 +113,7 @@
         
         
 
-        
+        <label for="cliente">Produtos:</label>
         <select id="produto_selecionado" class="produto-select">
             
             <option value="" disabled selected>Selecione um produto</option>
@@ -127,7 +127,7 @@
             {% endfor %}
         </select>
     
-        <button  class="button" type="button" id="adicionar_produto" disabled>Adicionar</button>
+        <button  class="button_edit" type="button" id="adicionar_produto" disabled>Adicionar</button>
 
         <label for="vendedor">Vendedor:</label>
         <select name="vendedor" id="vendedor" required>
@@ -190,7 +190,7 @@
                 <td>R$ {{ item.preco_unitario|floatformat:2 }}</td>
                 <td>{{ item.produto.unidade_medida }}</td>
                 <td><input type="number" class="quantidade" value="{{ item.quantidade }}" min="1" data-produto-id="{{ item.produto.id }}"></td>
-                <td><button class="button_delete" type="button" onclick="removerProduto(this)">Remover</button></td>
+                <td><button class="button_delete" onclick="removerProduto(this)">Remover</button></td>
             </tr>
             {% endfor %}
         </table>
