@@ -34,79 +34,83 @@
         <div class="nav-padrao">
             CLIENTES
         </div>
-        <form class="form_prod" method="post" enctype="multipart/form-data">
-            <details>
-            <summary><span class="h1_prod">Cadastrar cliente +</span></summary>
-            {% csrf_token %}
-            <div class="form-container2">
-                <label  for="id_nome">Nome:</label>
-                {{ form.nome|add_class:"form-descricao" }}
-                
-            </div>
-            <div class="form-container">
-                <div class="input-group">
-                    <label for="id_cnpj">CNPJ:</label>
-                    {{ form.cnpj|add_class:"form-medio" }}
+        <div >
+            <form class="form_prod" method="post" enctype="multipart/form-data">
+                <details style="width:70%;">
+                <summary><span class="h1_prod">Cadastrar cliente +</span></summary>
+                <br>
+                <br>
+                {% csrf_token %}
+                <div class="form-container2">
+                    <label  for="id_nome">Nome:</label>
+                    {{ form.nome|add_class:"form-descricao" }}
+                    
                 </div>
-                <div class="input-group">
-                    <label for="id_inscricao_estadual">IE:</label>
-                    {{ form.inscricao_estadual|add_class:"form-medio" }}
-                </div>
-                
-            </div>
-            
-            <div class="form-container">
-                <div class="input-group">
-                    <label for="id_cpf">CPF:</label>
-                    {{ form.cpf|add_class:"form-medio" }}
-                </div>
-                <div class="input-group">
-                    <label for="id_rg">RG:</label>
-                    {{ form.rg|add_class:"form-medio" }}
+                <div class="form-container">
+                    <div class="input-group">
+                        <label for="id_cnpj">CNPJ:</label>
+                        {{ form.cnpj|add_class:"form-medio" }}
+                    </div>
+                    <div class="input-group">
+                        <label for="id_inscricao_estadual">IE:</label>
+                        {{ form.inscricao_estadual|add_class:"form-medio" }}
+                    </div>
+                    
                 </div>
                 
-            </div>
-            <div class="form-container2">
-                <label  for="id_endereco">Rua:</label>
-                {{ form.endereco|add_class:"form-descricao" }}
+                <div class="form-container">
+                    <div class="input-group">
+                        <label for="id_cpf">CPF:</label>
+                        {{ form.cpf|add_class:"form-medio" }}
+                    </div>
+                    <div class="input-group">
+                        <label for="id_rg">RG:</label>
+                        {{ form.rg|add_class:"form-medio" }}
+                    </div>
+                    
+                </div>
+                <div class="form-container2">
+                    <label  for="id_endereco">Rua:</label>
+                    {{ form.endereco|add_class:"form-descricao" }}
+                    
+                </div>
+                <div class="form-container">
+                    <div class="input-group">
+                        <label for="id_numero">Numero:</label>
+                        {{ form.numero|add_class:"form-medio" }}
+                    </div>
+                    <div class="input-group">
+                        <label for="id_bairro">Bairro:</label>
+                        {{ form.bairro|add_class:"form-medio" }}
+                    </div>
+                    <div class="input-group">
+                        <label for="id_cep">CEP:</label>
+                        {{ form.cep|add_class:"form-medio" }}
+                    </div>
+                    
+                </div>
+                <div class="form-container">
+                    <div class="input-group">
+                        <label for="id_telefone">Telefone:</label>
+                        {{ form.telefone|add_class:"form-medio" }}
+                    </div>
+                    <div class="input-group">
+                        <label for="id_email">E-mail:</label>
+                        {{ form.email|add_class:"form-medio" }}
+                    </div>
+                    
+                </div>
+                <div style="display: flex; justify-content: center; margin-top: 20px;">
+                    <button class="button_edit" type="submit">Salvar</button>
+                </div>
+    
                 
-            </div>
-            <div class="form-container">
-                <div class="input-group">
-                    <label for="id_numero">Numero:</label>
-                    {{ form.numero|add_class:"form-medio" }}
-                </div>
-                <div class="input-group">
-                    <label for="id_bairro">Bairro:</label>
-                    {{ form.bairro|add_class:"form-medio" }}
-                </div>
-                <div class="input-group">
-                    <label for="id_cep">CEP:</label>
-                    {{ form.cep|add_class:"form-medio" }}
-                </div>
+    
+                </details>
                 
-            </div>
-            <div class="form-container">
-                <div class="input-group">
-                    <label for="id_telefone">Telefone:</label>
-                    {{ form.telefone|add_class:"form-medio" }}
-                </div>
-                <div class="input-group">
-                    <label for="id_email">E-mail:</label>
-                    {{ form.email|add_class:"form-medio" }}
-                </div>
-                
-            </div>
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <button class="button_edit" type="submit">Salvar</button>
-            </div>
-
-            
-
-            </details>
-            
-
-        </form>    
+    
+            </form>    
+        </div >
     
     
         <form method="get" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); display: flex; margin-top: 20px; padding:10px">

@@ -70,208 +70,316 @@
             EDITAR PRODUTO
         </div>
 
-        <form class="form_prod" method="post" enctype="multipart/form-data" action="{% url 'editar_produto' produto.id %}">
-            <span class="h1_prod">Editar Produto</span>
-            {% csrf_token %}
-
-
-
-            
-            <br>
-            <br>
-            <br>
-            <div>
-                <h3>Imagens do Produto</h3>
-                <div class="image-container">
-                    {% for imagem in imagens %}
-                        <div class="image-box">
-                            <img src="{{ imagem.imagem.url }}" class="imagem-produto">
-                            <br>
-                            <a class="button_delete" href="{% url 'excluir_imagem_produto' imagem.id %}" onclick="return confirm('Tem certeza que deseja excluir esta imagem?')">Excluir</a>
-                        </div>
-                    {% empty %}
-                        <p>Sem imagens cadastradas.</p>
-                    {% endfor %}
-                </div>
-            </div>
-            
-
-            <br>
-            <br>
-                
-
-                <div>
-                    <div class="form-field">
-                        <img id="preview" src="" alt="Pré-visualização da imagem" style="max-width: 200px; display: none; margin-top: 10px;">
-                        <br>
-                        <label for="imagens">Imagens do Produto:</label>
-                        <input type="file" id="imagensInput" name="imagens" multiple accept="image/*" onchange="previewImagem(event)">
-                        <br>
-                        <br>
-                    </div>
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_codigo_produto">Código do Produto:</label>
-                            {{ form.codigo_produto|add_class:"form-medio" }}
-                        </div>
-                        <div class="input-group">
-                            <label for="id_codigo_barras">Código de Barras:</label>
-                            {{ form.codigo_barras|add_class:"form-medio" }}
-                        </div>
-                    </div>
-                    
-                    <div class="form-container2">
-                        <label  for="id_descricao">Descrição:</label>
-                        {{ form.descricao|add_class:"form-descricao" }}
-                    </div>
-        
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_grupo">Grupo:</label>
-                            {{ form.grupo|add_class:"form-medio" }}
-                        </div>
-                        <div class="input-group">
-                            <label for="id_marca">Marca:</label>
-                            {{ form.marca|add_class:"form-medio" }}
-                        </div>
-                        <div class="input-group">
-                            <label for="id_unidade_medida">Unidade de Medida:</label>
-                            {{ form.unidade_medida|add_class:"form-pequeno" }}
-                            
-                        </div>
-                    </div>
-                
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_custo">Custo:</label>
-                            {{ form.custo|add_class:"form-medio" }}
-                        
-                        </div>
-                        <div class="input-group">
-                            <label for="id_preco">Preço:</label>
-                            {{ form.preco|add_class:"form-medio" }}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_quantidade">Quantidade:</label>
-                            {{ form.quantidade|add_class:"form-medio" }}
-                            
-                        </div>
-                    </div>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    
-                    <span class="h1-ml">Mercado livre</span>
-
-                <br>
-                <br>
-                <br>
-
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_status">Status:</label>
-                            {{ form.status}}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_condicao">Condição:</label>
-                            {{ form.condicao }}
-                                 
-                        </div>
-                    </div>
-
-
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_largura">Largura:</label>
-                            {{ form.largura|add_class:"form-medio" }}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_altura">Altura:</label>
-                            {{ form.altura|add_class:"form-medio" }}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_profundidade">Profundidade:</label>
-                            {{ form.profundidade|add_class:"form-medio" }}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_peso">Peso:</label>
-                            {{ form.peso|add_class:"form-medio" }}
-                        </div>
-                    </div>
-
-
-
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_prod_cor">Cor do Produto:</label>
-                            {{ form.prod_cor|add_class:"form-medio" }}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_object_type">Tipo de Objeto:</label>
-                            {{ form.prod_cor|add_class:"form-medio" }}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_material">Material:</label>
-                            {{ form.material|add_class:"form-medio" }}
-                        </div>
-                        <div class="input-group">
-                            <label for="id_tipo_envio">Tipo de Envio:</label>
-                            {{ form.tipo_envio }}
-                            
-                        </div>
-                    </div>
-
-                    
-                    
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_cep_origem">CEP de origem:</label>
-                            {{ form.cep_origem |add_class:"form-medio" }}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_cobertura_frete">Cobertura de Frete:</label>
-                            {{ form.cobertura_frete|add_class:"form-medio" }}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_envio_gratis">Envio Grátis:</label>
-                            {{ form.envio_gratis }}
-                            
-                        </div>
-                    </div>
-                    
-                    <div class="form-container">
-                       
-                        <div class="input-group">
-                            <label for="id_metodos_envio_proprio">Métodos de Envio Próprio:</label>
-                            {{ form.metodos_envio_proprio }}
-                            
-                        </div>
-                    </div>
-                </div>
-            
+        <div >
+            <form class="form_prod" method="post" enctype="multipart/form-data" action="{% url 'editar_produto' produto.id %}">
+                <span class="h1_prod">Editar Produto</span>
+                {% csrf_token %}
     
+    
+    
+                
+                <br>
+                <br>
+                <br>
+                <div>
+                    <h3>Imagens do Produto</h3>
+                    <div class="image-container">
+                        {% for imagem in imagens %}
+                            <div class="image-box">
+                                <img src="{{ imagem.imagem.url }}" class="imagem-produto">
+                                <br>
+                                <a class="button_delete" href="{% url 'excluir_imagem_produto' imagem.id %}" onclick="return confirm('Tem certeza que deseja excluir esta imagem?')">Excluir</a>
+                            </div>
+                        {% empty %}
+                            <p>Sem imagens cadastradas.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+    
+                <br>
+                <br>
+                    
+    
+                    <div style="width:70%;">
+                        <div class="form-field">
+                            <img id="preview" src="" alt="Pré-visualização da imagem" style="max-width: 200px; display: none; margin-top: 10px;">
+                            <br>
+                            <label for="imagens">Imagens do Produto:</label>
+                            <input type="file" id="imagensInput" name="imagens" multiple accept="image/*" onchange="previewImagem(event)">
+                            <br>
+                            <br>
+                        </div>
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_codigo_produto">Código do Produto:</label>
+                                {{ form.codigo_produto|add_class:"form-medio" }}
+                            </div>
+                            <div class="input-group">
+                                <label for="id_codigo_barras">Código de Barras:</label>
+                                {{ form.codigo_barras|add_class:"form-medio" }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-container2">
+                            <label  for="id_descricao">Descrição:</label>
+                            {{ form.descricao|add_class:"form-descricao" }}
+                        </div>
             
-            <div class="button_container">
-            <form  method="post">
-                <div style="margin:5px;"><button class="button_edit" type="submit">Salvar</button></div>
-                <div style="margin:5px;"><button class="button_delete" type="button" onclick="location.href='/cadastrar_produto/'">Cancelar</button></div>
-            
-            
-            
-            </div>
-
-        </form>
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_grupo">Grupo:</label>
+                                {{ form.grupo|add_class:"form-medio" }}
+                            </div>
+                            <div class="input-group">
+                                <label for="id_marca">Marca:</label>
+                                {{ form.marca|add_class:"form-medio" }}
+                            </div>
+                            <div class="input-group">
+                                <label for="id_unidade_medida">Unidade de Medida:</label>
+                                {{ form.unidade_medida|add_class:"form-pequeno" }}
+                                
+                            </div>
+                        </div>
+                    
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_custo">Custo:</label>
+                                {{ form.custo|add_class:"form-medio" }}
+                            
+                            </div>
+                            <div class="input-group">
+                                <label for="id_preco">Preço:</label>
+                                {{ form.preco|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_quantidade">Quantidade:</label>
+                                {{ form.quantidade|add_class:"form-medio" }}
+                                
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        
+                        <span class="h1-ml">Mercado livre</span>
+    
+                    <br>
+                    <br>
+                    <br>
+    
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_status">Status:</label>
+                                {{ form.status}}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_condicao">Condição:</label>
+                                {{ form.condicao }}
+                                     
+                            </div>
+                        </div>
+    
+    
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_largura">Largura:</label>
+                                {{ form.largura|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_altura">Altura:</label>
+                                {{ form.altura|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_profundidade">Profundidade:</label>
+                                {{ form.profundidade|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_peso">Peso:</label>
+                                {{ form.peso|add_class:"form-medio" }}
+                            </div>
+                        </div>
+    
+    
+    
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_prod_cor">Cor do Produto:</label>
+                                {{ form.prod_cor|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_object_type">Tipo de Objeto:</label>
+                                {{ form.prod_cor|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_material">Material:</label>
+                                {{ form.material|add_class:"form-medio" }}
+                            </div>
+                            <div class="input-group">
+                                <label for="id_tipo_envio">Tipo de Envio:</label>
+                                {{ form.tipo_envio }}
+                                
+                            </div>
+                        </div>
+    
+                        
+                        
+                        <div class="form-container">
+                            <div class="input-group">
+                                <label for="id_cep_origem">CEP de origem:</label>
+                                {{ form.cep_origem |add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_cobertura_frete">Cobertura de Frete:</label>
+                                {{ form.cobertura_frete|add_class:"form-medio" }}
+                                
+                            </div>
+                            <div class="input-group">
+                                <label for="id_envio_gratis">Envio Grátis:</label>
+                                {{ form.envio_gratis }}
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="form-container">
+                           
+                            <div class="input-group">
+                                <label for="id_metodos_envio_proprio">Métodos de Envio Próprio:</label>
+                                {{ form.metodos_envio_proprio }}
+                                
+                            </div>
+                        </div>
+                    </div>
+                
+        
+                
+                <div class="button_container">
+                <form  method="post">
+                    <div style="margin:5px;"><button class="button_edit" type="submit">Salvar</button></div>
+                    <div style="margin:5px;"><button class="button_delete" type="button" onclick="location.href='/cadastrar_produto/'">Cancelar</button></div>
+                
+                
+                
+                </div>
+    
+            </form>
+        </div >
         
     </div>
+
+
+
+     
+    <form method="get" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); display: flex; margin-top: 20px; padding:10px">
+        <button type="submit" style="margin-left: 10px;">Pesquisar</button>
+        <input type="text" style="width: 100%;" name="q" placeholder="Pesquisar pelo nome...">
+        
+    </form>
+    <!-- Modifique a tabela para exibir os resultados da pesquisa -->
+    <ul class="produto-lista">
+        {% for produto in produtos %}
+        <li>
+            <div class="produto-info">
+                <div class="campo-codigo">
+                    <h2>Código # {{ produto.id }}</h2>
+                </div>
+                <div class="campo">
+                  <span>Descrição:</span>
+                  <p>{{ produto.descricao }}</p>
+                </div>
+                <div class="campo">
+                  <span>Preço:</span>
+                  <p style="color:green;">R$ {{ produto.preco }}</p>
+                </div>
+                <div class="campo">
+                  <span>Unidade:</span>
+                  <p>{{ produto.unidade_medida }}</p>
+                </div>
+                <div class="campo">
+                    <span>Quantidade:</span>
+                    <p class="campo-quantidade">{{ produto.quantidade }}</p>
+                  </div>
+                <div class="campo">
+                  <span>Código de barras:</span>
+                  <p style="color:#f39c12;">{{ produto.codigo_barras }}</p>
+                </div>
+            </div>
+          
+          
+          <details>
+            <summary class="produto-acoes">
+              <p>Detalhes+</p>
+            </summary>
+            <div class="produto-detalhes-container">
+              <div class="produto-imagem">
+                <img src="{{ produto.imagens.first.imagem.url }}" alt="Imagem do produto">
+              </div>
+              <div class="produto-detalhes">
+                <table class="table_prod1">
+                    <tr>
+                        <th>Código fornecedor:</th>
+                        <td>{{ produto.codigo_produto }}</td>
+                      </tr>
+                  <tr>
+                    <th>Mercado Livre:</th>
+                    <td>{{ produto.mercado_livre_id }}</td>
+                  </tr>
+                  <tr>
+                    <th>Descrição:</th>
+                    <td>{{ produto.descricao }}</td>
+                  </tr>
+                  <tr>
+                    <th>Marca:</th>
+                    <td>{{ produto.marca }}</td>
+                  </tr>
+                  <tr>
+                    <th>Unidade:</th>
+                    <td>{{ produto.unidade_medida }}</td>
+                  </tr>
+                  <tr>
+                    <th>Custo:</th>
+                    <td>R$ {{ produto.custo }}</td>
+                  </tr>
+                  <tr>
+                    <th>Preço:</th>
+                    <td>R$ {{ produto.preco }}</td>
+                  </tr>
+                  <tr>
+                    <th>Quantidade:</th>
+                    <td>{{ produto.quantidade }}</td>
+                  </tr>
+                </table>
+                <div class="produto-acoes-detalhes">
+                    <form class="form-botao" style="padding:0px; box-shadow:0px;" method="get" action="{% url 'editar_produto' produto.id %}">
+                      <button class="button_edit" type="submit">Editar</button>
+                    </form>
+                    <form class="form-botao" style="padding:0px;" method="post" action="{% url 'excluir_produto' produto.id %}">
+                      {% csrf_token %}
+                      <button class="button_delete" type="submit" onclick="return confirm('Tem certeza que deseja excluir este produto?')">Excluir</button>
+                    </form>
+                  </div>
+              </div>
+              
+            </div>
+          </details>
+          
+        </li>
+        {% endfor %}
+      </ul>
+      
+      
+      
+    
+    
+</div>
 </body>
 </html>
