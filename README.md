@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 # Sistema de Vendas 🚀
 
+=======
+ # Sistema de Vendas 🚀
+>>>>>>> 857c7ca29ed8023c612c7159eb7ea6c008b627e0
 Este é um sistema de vendas desenvolvido com Django e PostgreSQL , oferecendo funcionalidades completas para cadastro e gerenciamento de produtos, clientes e vendas.
 
 Além disso, o sistema é integrado à API do Mercado Livre , permitindo a publicação, edição e exclusão de produtos diretamente na plataforma .
