@@ -33,36 +33,40 @@
             INFORMÇÕES DA EMPRESA
         </div>
     {% if empresa %}
-        <h2>Empresa Cadastrada</h2>
-        <p>Nome Fantasia: {{ empresa.nome_fantasia }}</p>
-        <p>Razão Social: {{ empresa.razao_social }}</p>
-        <p>Endereço: {{ empresa.endereco }}</p>
-        <p>Número: {{ empresa.numero }}</p>
-        <p>Bairro: {{ empresa.bairro }}</p>
-        <p>UF: {{ empresa.uf }}</p>
-        <p>Cidade: {{ empresa.cidade }}</p>
-        <p>Complemento: {{ empresa.complemento }}</p>
-        <p>Contato: {{ empresa.contato }}</p>
-        <p>Inscrição Estadual: {{ empresa.inscricao_estadual }}</p>
-        <p>CNPJ: {{ empresa.cnpj }}</p>
-        <p>Inscrição Municipal: {{ empresa.inscricao_municipal }}</p>
-        <p>CEP: {{ empresa.cep }}</p>
-        <p>Regime Tributário: {{ empresa.regime_tributario }}</p>
-        <p>Dados Sintegra: {{ empresa.dados_sintegra }}</p>
-        <p>Telefone: {{ empresa.telefone }}</p>
-        <p>IBGE Município: {{ empresa.ibge_municipio }}</p>
-        <p>IBGE Estado: {{ empresa.ibge_estado }}</p>
-        <button id="botao-editar">Editar</button>
+        <div class="form_prod">
+            <h2>Empresa Cadastrada</h2>
+            <p>Nome Fantasia: {{ empresa.nome_fantasia }}</p>
+            <p>Razão Social: {{ empresa.razao_social }}</p>
+            <p>Endereço: {{ empresa.endereco }}</p>
+            <p>Número: {{ empresa.numero }}</p>
+            <p>Bairro: {{ empresa.bairro }}</p>
+            <p>UF: {{ empresa.uf }}</p>
+            <p>Cidade: {{ empresa.cidade }}</p>
+           <p>Complemento: {{ empresa.complemento }}</p>
+           <p>Contato: {{ empresa.contato }}</p>
+           <p>Inscrição Estadual: {{ empresa.inscricao_estadual }}</p>
+           <p>CNPJ: {{ empresa.cnpj }}</p>
+           <p>Inscrição Municipal: {{ empresa.inscricao_municipal }}</p>
+           <p>CEP: {{ empresa.cep }}</p>
+           <p>Regime Tributário: {{ empresa.regime_tributario }}</p>
+           <p>Dados Sintegra: {{ empresa.dados_sintegra }}</p>
+           <p>Telefone: {{ empresa.telefone }}</p>
+           <p>IBGE Município: {{ empresa.ibge_municipio }}</p>
+           <p>IBGE Estado: {{ empresa.ibge_estado }}</p>
+           <button id="botao-editar">Editar</button>
+        
+        </div>
         <div id="formulario-editar" style="display: none;">
-            <form method="post">
+            <form class="form_prod"  method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">Salvar</button>
             </form>
         </div>
     {% else %}
-        <h2>Cadastrar Empresa</h2>
-        <form method="post">
+        
+        <form  class="form_prod"  method="post">
+            <h2 class="h1_prod">Cadastrar Empresa</h2>
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Cadastrar</button>

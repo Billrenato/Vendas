@@ -404,18 +404,10 @@ input{
 
 
 
-.table_prod {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-}
+
 .table_prod1 {
     width: 100%;
-    border-collapse: collapse;
+    
     
     
     overflow: hidden;
@@ -437,7 +429,7 @@ input{
     padding: 8px;
     text-align: center;
     border-bottom: 1px solid #ddd;
-    font-size: 11px;
+    font-size: 15px;
 }
 
 .table_prod th {
@@ -531,9 +523,10 @@ input{
 }
 
 .table_prod {
+    align-items: center;
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px;
     background: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -544,13 +537,13 @@ input{
     padding: 5px;
     text-align: left;
     border-bottom: 1px solid #ddd;
-    font-size: 12px;
+    font-size: 20px;
     text-align: center;
     
 }
 
 .table_prod th {
-    background-color: #2c3e50;
+    background-color: #3b3b3b;
     color: white;
 }
 
@@ -813,3 +806,9 @@ details summary::before {
     width: 100%; 
     
   }
+
+  .total_vendas{
+   font-size:25px;
+    color:green;
+  }
+  

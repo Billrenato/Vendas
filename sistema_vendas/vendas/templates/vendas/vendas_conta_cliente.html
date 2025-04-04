@@ -28,7 +28,7 @@
                 }
             });
     
-            document.getElementById('total_sum').innerText = 'Total: ' + total.toFixed(2);
+            document.getElementById('total_sum').innerText =  total.toFixed(2);
             document.getElementById('venda_ids').value = vendaIds.join(',');
         }
     
@@ -69,16 +69,32 @@
                 CONTAS A RECEBER
             </div>
             
-    <form method="get">
-        <label>Data de vencimento:</label>
-        <input type="date" name="data_vencimento" value="{{ request.GET.data_vencimento }}">
+    <form  class="form_prod" method="get">
+
+        <span class="h1_prod" >PESQUISAR RECEBIMENTOS</span>
         <br>
+        <br>
+        
+
+
+        
         <label>Nome do cliente:</label>
-        <input type="text" name="nome_cliente" value="{{ request.GET.nome_cliente }}">
-        <br>
-        <label>Código do cliente:</label>
-        <input type="text" name="codigo_cliente" value="{{ request.GET.codigo_cliente }}">
-        <br>
+        <input style="width:70%;"type="text" name="nome_cliente" value="{{ request.GET.nome_cliente }}">
+        
+
+
+        <div class="form-container">
+            <div class="input-group">
+                <label>Código do cliente:</label>
+                <input type="text" name="codigo_cliente" value="{{ request.GET.codigo_cliente }}">
+                
+            </div>
+            <div class="input-group">
+                <label>Data de vencimento:</label>
+                <input type="date" name="data_vencimento" value="{{ request.GET.data_vencimento }}">
+
+            </div>
+        </div>    
         <label>Pago:</label>
         <select name="pago">
             <option value="">Todos</option>
@@ -87,10 +103,9 @@
         </select>
         <br>
     
-        <button type="submit">Pesquisar</button>
+        <button class="button_edit" type="submit">Pesquisar</button>
         
-        <button type="submit" name="imprimir" value="imprimir">Imprimir/Salvar como PDF</button>
-        <input type="hidden" name="venda_ids" value="" id="venda_ids">
+        
     </form>
     <form method="post">
         {% csrf_token %}
@@ -129,12 +144,23 @@
                         <td colspan="10">Nenhuma venda encontrada.</td>
                     </tr>
                 {% endfor %}
+                
             </tbody>
         </table>
-         
-        <button class="pago" type="submit" name="marcar_pago">Marcar como pago</button>
-        <button class="nao_pago" type="submit" name="marcar_nao_pago" value="1">Marcar como não pago</button>
-        <p id="total_sum">Total: 0</p>
+        <div class="produto-acoes-detalhes">
+            <button class="pago" type="submit" name="marcar_pago">Marcar como pago</button>
+            <button class="nao_pago" type="submit" name="marcar_nao_pago" value="1">Marcar como não pago</button>
+            <button class="button_edit" type="submit" name="imprimir" value="imprimir">Imprimir/Salvar como PDF</button>
+            <input type="hidden" name="venda_ids" value="" id="venda_ids">
+        </div>
+        <br>
+        <br>
+        <br>
+        
+        <p style="font-size:25px;">Total:<span style="font-size:25px; color:green;" id="total_sum"></span></p>
+        <br>
+        <p></p>
+        
     </form>
             
         </div>

@@ -10,6 +10,7 @@
     </head>
     
     <body>
+
         <nav class="sidebar">
             <ul>
                 <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
@@ -25,6 +26,7 @@
             
             </ul>
         </nav>
+        
         <div class="main-content">
             <div class="nav-padrao">
                 VENDEDORES
@@ -36,40 +38,95 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Salvar</button>
-    </form>
+
+    {% load custom_filters %}
+    <div >
+        <form class="form_prod" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <span class="h1_prod">Cadastrar vendedores +</span>
+    
+            <br>
+            <br>
+    
+            <div class="form-container">
+                <div class="input-group">
+                    <label for="id_nome_vendedor">Nome do vendedor:</label>
+                    {{ form.nome_vendedor|add_class:"form-descricao" }}
+                </div>
+                <div class="input-group">
+                    <label for="id_codigo_vendedor">Codigo do vendedor:</label>
+                    {{ form.codigo_vendedor|add_class:"form-medio" }}
+                </div>
+            </div>
+
+            <br>
+            <br>
+
+
+            <button class="button_edit" type="submit">Salvar</button>
+    
+     
+            
+        </form>
+
+        
+    </div>
+
+
+ 
+    
     <h2>Vendedores cadastrados:</h2>
-    <form method="get">
-        <input type="text" name="q" placeholder="Pesquisar pelo nome do vendedor...">
-        <button type="submit">Pesquisar</button>
-    </form>
-    <table class="table_prod">
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Código Vendedor</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
+    
+
+        <form method="get" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); display: flex; margin-top: 20px; padding:10px">
+            <button type="submit" style="margin-left: 10px;">Pesquisar</button>
+            <input type="text" style="width: 100%;" name="q" placeholder="Pesquisar pelo nome...">
+            
+        </form>
+        <ul class="produto-lista">
             {% for vendedor in vendedores %}
-                <tr>
-                    <td>{{ vendedor.nome_vendedor }}</td>
-                    <td>{{ vendedor.codigo_vendedor }}</td>
-                    <td>
-                        
-                        <button class="button_edit" type="button" onclick="window.location.href='{% url 'editar_vendedor' vendedor.id %}'">
-                            Editar
-                        </button>
-                        <button class="button_delete" type="button" onclick="if (confirm('Tem certeza que deseja excluir este vendedor?')) { window.location.href='{% url 'excluir_vendedor' vendedor.id %}'; }">Excluir</button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>       
-        </div>
+            <li>
+                <div class="produto-info">
+                    <div class="campo-codigo">
+                        <h2 style="color: #e4a909;" >Vendedor # {{ vendedor.id }}</h2>
+                    </div>
+                    <div class="campo">
+                      <span  >Nome:</span>
+                      <p style="color:rgb(63, 113, 221);" >{{ vendedor.nome_vendedor }}</p>
+                    </div>
+                    <div class="campo">
+                      <span>Codigo:</span>
+                      <p style="color:#2879c9;">{{ vendedor.codigo_vendedor }}</p>
+                    </div>
+                    
+                </div> 
+                <details>
+                    <summary class="produto-acoes"><p>Detalhes+</p></summary>
+                    
+                    <div class="produto-acoes-detalhes">
+                        <form method="get" action="{% url  'editar_vendedor' vendedor.id %}">
+                            <button class="button_edit" type="submit">Editar</button>
+                        </form>
+                        <form method="post" action="{% url 'excluir_vendedor' vendedor.id %}">
+                            {% csrf_token %}
+                            <button class="button_delete" type="submit" onclick="return confirm('Tem certeza que deseja excluir este cliente')">Excluir</button>
+                        </form>
+                    </div>
+                    
+                     
+                            
+                </details>   
+
+
+
+
+            </li>
+            {% endfor %}    
+        </ul>    
+
+
+
+
+
 </body>
 </html>
