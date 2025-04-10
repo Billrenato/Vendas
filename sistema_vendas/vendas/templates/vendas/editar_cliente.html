@@ -40,194 +40,33 @@
             
             </ul>
         </nav>
-        {% load custom_filters %}
+
         <div class="main-content">
             <div class="nav-padrao">
                 CLIENTES
             </div>
-            <div  >
+            <div >
                 
                 <form class="form_prod" method="post" enctype="multipart/form-data">
-                    <span class="h1_prod">Editar cliente</span>
-                    <br>
-                    <br>
                     {% csrf_token %}
-                    <div style="width:70%;">
-                        <div class="form-container2">
-                            <label  for="id_nome">Nome:</label>
-                            {{ form.nome|add_class:"form-descricao" }}
-                            
-                        </div>
-                        <div class="form-container">
-                            <div class="input-group">
-                                <label for="id_cnpj">CNPJ:</label>
-                                {{ form.cnpj|add_class:"form-medio" }}
-                            </div>
-                            <div class="input-group">
-                                <label for="id_inscricao_estadual">IE:</label>
-                                {{ form.inscricao_estadual|add_class:"form-medio" }}
-                            </div>
-                            
-                        </div>
-                        
-                        <div class="form-container">
-                            <div class="input-group">
-                                <label for="id_cpf">CPF:</label>
-                                {{ form.cpf|add_class:"form-medio" }}
-                            </div>
-                            <div class="input-group">
-                                <label for="id_rg">RG:</label>
-                                {{ form.rg|add_class:"form-medio" }}
-                            </div>
-                            
-                        </div>
-                        <div class="form-container2">
-                            <label  for="id_endereco">Rua:</label>
-                            {{ form.endereco|add_class:"form-descricao" }}
-                            
-                        </div>
-                        <div class="form-container">
-                            <div class="input-group">
-                                <label for="id_numero">Numero:</label>
-                                {{ form.numero|add_class:"form-medio" }}
-                            </div>
-                            <div class="input-group">
-                                <label for="id_bairro">Bairro:</label>
-                                {{ form.bairro|add_class:"form-medio" }}
-                            </div>
-                            <div class="input-group">
-                                <label for="id_cep">CEP:</label>
-                                {{ form.cep|add_class:"form-medio" }}
-                            </div>
-                            
-                        </div>
-                        <div class="form-container">
-                            <div class="input-group">
-                                <label for="id_telefone">Telefone:</label>
-                                {{ form.telefone|add_class:"form-medio" }}
-                            </div>
-                            <div class="input-group">
-                                <label for="id_email">E-mail:</label>
-                                {{ form.email|add_class:"form-medio" }}
-                            </div>
-                            
-                        </div>
-                        <div class="button_container">
-                            <form  method="post">
-                                <button style="margin:5px;" class="button_edit" type="submit">Salvar</button>
-                                <button style="margin:5px;" class="button_delete" type="button" onclick="location.href='/cadastrar_cliente/'">Cancelar</button>
-                                
-                        </div>
-                    </div>
             
-                    
-
-                    
+                    <div class="form-container">
+                        {% for field in form %}
+                            <div class="form-field">
+                                {{ field.label_tag }}
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="button_container">
+                        <form  method="post">
+                            <button style="margin:5px;" class="button_edit" type="submit">Salvar</button>
+                            <button style="margin:5px;" class="button_delete" type="button" onclick="location.href='/cadastrar_cliente/'">Cancelar</button>
+                            
+                    </div>
                 </form>
             </div>
             
         </div>
-        <form method="get" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); display: flex; margin-top: 20px; padding:10px">
-            <button type="submit" style="margin-left: 10px;">Pesquisar</button>
-            <input type="text" style="width: 100%;" name="q" placeholder="Pesquisar pelo nome...">
-            
-        </form>
-        <ul class="produto-lista">
-            {% for cliente in clientes %}
-            <li>
-                <div class="produto-info">
-                    <div class="campo-codigo">
-                        <h2 class="h2-cliente">Cliente # {{ cliente.id }}</h2>
-                    </div>
-                    <div class="campo">
-                      <span  >Nome:</span>
-                      <p style="color: #e4a909;" >{{ cliente.nome }}</p>
-                    </div>
-                    <div class="campo">
-                      <span>Telefone:</span>
-                      <p style="color:#2879c9;">{{ cliente.telefone }}</p>
-                    </div>
-                    <div class="campo">
-                      <span>E-mail:</span>
-                      <p><td>{{ cliente.email }}</td></p>
-                    </div>
-                </div> 
-                <details>
-                    <summary class="produto-acoes"><p>Detalhes+</p></summary>
-                    <div class="produto-detalhes-container2">
-                        <details>
-                            <summary><p>Fiscal +</p></summary>
-                            <div class="produto-detalhes">
-                                <table class="table_prod1">
-                                  <tr>
-                                    <th>CNPJ:</th>
-                                    <td>{{ cliente.cnpj }}</td>
-                                  </tr>
-                                  <tr>
-                                    <th>IE:</th>
-                                    <td>{{ cliente.inscricao_estadual }}</td>
-                                  </tr>
-                                  <tr>
-                                    <th>CPF:</th>
-                                    <td>{{ cliente.cpf }}</td>
-                                  </tr>
-                                  <tr>
-                                    <th>RG:</th>
-                                    <td>{{ cliente.rg }}</td>
-                                  </tr>
-                                </table>
-                              </div>
-                        </details>
-                        <details>
-                            <summary ><p>Endereço +</p></summary>
-                            <div class="produto-detalhes">
-                                <table class="table_prod1">
-                                  <tr>
-                                    <th>Endereço:</th>
-                                    <td>{{ cliente.endereco }}</td>
-                                  </tr>
-                                  <tr>
-                                    <th>Numero:</th>
-                                    <td>{{ cliente.numero }}</td>
-                                  </tr>
-                                  <tr>
-                                    <th>Bairro:</th>
-                                    <td>{{ cliente.bairro }}</td>
-                                  </tr>
-                                  <tr>
-                                    <th>CEP:</th>
-                                    <td>{{ cliente.cep }}</td>
-                                  </tr>
-                                </table>
-                              </div>
-
-                        </details>
-                        
-                    </div>  
-                    <div class="produto-acoes-detalhes">
-                        <form method="get" action="{% url  'editar_cliente' cliente.id %}">
-                            <button class="button_edit" type="submit">Editar</button>
-                        </form>
-                        <form method="post" action="{% url 'excluir_cliente' cliente.id %}">
-                            {% csrf_token %}
-                            <button class="button_delete" type="submit" onclick="return confirm('Tem certeza que deseja excluir este cliente')">Excluir</button>
-                        </form>
-                    </div>
-                     
-                            
-                </details>   
-
-
-
-
-            </li>
-            {% endfor %}    
-        </ul>    
-                
-            
-        </div>
-            
-                    
-    </div>
 </body>
 </html>

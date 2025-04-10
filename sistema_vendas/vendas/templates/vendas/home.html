@@ -2,24 +2,25 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    </head>
-<body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
+</head>
+<body>
     <nav class="sidebar">
-        <ul>  
+        <ul>   
+            
             {% if request.user.is_authenticated %}
             <li class="nome-usuario">
                 Olá, {{ user.username }}!
             </li>
     
            {% endif %}
-                                        
+
+
             <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
             <li><a href="{% url 'cadastrar_venda' %}"><img class="icon" src="{% static 'img/vendas.png' %}" alt="">VENDER</a></li>
             <li><a href="{% url 'cadastrar_produto' %}"><img class="icon" src="{% static 'img/produto.png' %}" alt="">PRODUTOS</a></li>
@@ -30,6 +31,7 @@
             <li><a href="{% url 'vendas_conta_cliente' %}"><img class="icon" src="{% static 'img/contas.png' %}" alt="">RECEBIMENTOS</a></li>
             <li><a href="{% url 'cadastrar_empresa' %}"><img class="icon" src="{% static 'img/info.png' %}" alt="">INFORMAÇÕES</a></li>
             <li><a href="{% url 'gerar_nfe' %}"><img class="icon" src="{% static 'img/NFE.png' %}" alt="">NFE</a></li>
+            
             {% if user.is_authenticated %}
             <li>
                 <form action="{% url 'logout' %}" method="post">
@@ -40,12 +42,8 @@
             {% else %}
                 <li><a href="{% url 'login' %}">Login</a></li>
             {% endif %}
-            
-           
         </ul>
     </nav>
-
-    
 
     <div class="main-content">
         <div class="nav-padrao">
@@ -66,9 +64,6 @@
         Plotly.newPlot('grafico2', graph2.data, graph2.layout);
         Plotly.newPlot('grafico3', graph3.data, graph3.layout);
     </script>
-        
-    
-    
     
 </body>
 </html>

@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os 
 
-MERCADO_LIVRE_ACCESS_TOKEN = 'APP_USR-3644311625640045-031916-acae25b4a082471d616a39549af2ee31-162093607'
+MERCADO_LIVRE_ACCESS_TOKEN = 'APP_USR-3644311625640045-030808-cdc2d59343174f3e22662cf0eb2c4d40-162093607'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'vendas',
-    
 ]
 
 MIDDLEWARE = [

@@ -52,65 +52,56 @@
 
 
     <div class="main-content">
+
         <div class="nav-padrao">
             DESPESAS
         </div>
-
-        
         <!-- Formulário para adicionar despesa -->
-        <form  class="form_prod" method="post">
-            
-            <span class="h1_prod">Cadastrar despesas +</span>
-            <br>
-            <br>
-            <br>
-            <div class="form-container">
-                {% csrf_token %}
-    
-                
-                {{ form.as_p }}
-    
-            </div>
-            <br>
-            <br>
-            
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
             <button class="button_edit" type="submit">Salvar</button>
-        </form>
+        </div>
+        <br>
+        <br>
+    </form>
+    
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="nav-padrao">
+        PESQUISAR DESPESAS
+    </div>
 
-    <form  class="form_prod" method="get">
-        <span style="font-size:25px; color:green;" >PESQUISAR DESPESAS</span>
-        <br>
-        <br>
-        
+    <form method="get">
+        <label>Pesquisar por data:</label>
+        <input type="date" name="data_vencimento" value="{{ data_vencimento_filtro }}">
     
         <label>Pesquisar por descrição:</label>
-        <input style="width:70%;" type="text" name="descricao" value="{{ descricao_filtro }}">
-
-        <div class="form-container">
-            <div class="input-group">
-               <label>Pesquisar por data:</label>
-               <input type="date" name="data_vencimento" value="{{ data_vencimento_filtro }}">
-            </div>
-            <div class="input-group">    
-                <label>Filtrar por status:</label>
-                <select name="status">
-                    <option value="nenhuma" {% if filtro_pagamento == "nenhuma" %}selected{% endif %}>Nenhuma</option>
-                    <option value="pagas" {% if filtro_pagamento == "pagas" %}selected{% endif %}>Pagas</option>
-                    <option value="nao_pagas" {% if filtro_pagamento == "nao_pagas" %}selected{% endif %}>Não Pagas</option>
-                </select>
-            </div>
-        </div>
+        <input type="text" name="descricao" value="{{ descricao_filtro }}">
     
-        <br>
-        <br>
-        <br>
+        <label>Filtrar por status:</label>
+        <select name="status">
+            <option value="nenhuma" {% if filtro_pagamento == "nenhuma" %}selected{% endif %}>Nenhuma</option>
+            <option value="pagas" {% if filtro_pagamento == "pagas" %}selected{% endif %}>Pagas</option>
+            <option value="nao_pagas" {% if filtro_pagamento == "nao_pagas" %}selected{% endif %}>Não Pagas</option>
+        </select>
     
         <!-- Apenas um botão para enviar todos os filtros -->
-        <button  class="button_edit" type="submit">Pesquisar</button>
+        <div class="produto-acoes-detalhes">
+            <button type="submit">Filtrar</button>
+        </div>
+        
     </form>
+
+    <br>
+    <br>
 
     <!-- Tabela de despesas -->
     <form method="post" onsubmit="return confirmDelete();">
+        
         {% csrf_token %}
         <table class="table_prod">
             <thead>

@@ -13,37 +13,31 @@ h1 {
 }
 
 /* Estilização de formulários */
-
+form {
+    
+    
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
 label {
     display: block;
-    font-size: 14px;
     margin-top: 10px;
-
+    font-weight: bold;
     text-align: left;
 }
 
- select, button {
-    
-    padding: 7px;
+input, select, button {
+    width: 100%;
+    padding: 10px;
     margin-top: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
 
-button {
-    background: #4b8d5a;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    width: 100px;
-    transition: background 0.3s;
-}
 
-button:hover {
-    background: #218838;
-}
+
+
 
 /* Estilização da tabela de produtos */
 #tabela_produtos {
@@ -58,22 +52,31 @@ button:hover {
     padding: 10px;
     border: 1px solid #ddd;
     text-align: center;
-    
 }
 
 #tabela_produtos th {
-    background: #3b3b3b;
+    background: #333;
     color: white;
 }
 
 /* Responsividade */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    .main-content {
+        margin-left: 220px;
+    }
+}
+
+
 
 
 
 .sidebar {
     width: 180px;
     height: 100vh;
-    background-color: #3b3b3b;
+    background-color: #4e5b69;
     position: fixed;
     left: 0;
     top: 0;
@@ -130,10 +133,6 @@ button:hover {
     transition: margin-left 0.3s;
 }
 
-.main-content.expanded {
-    margin-left: 70px;
-}
-
 
 /*   ------------------  tela de login  ------------------- */
 
@@ -161,7 +160,11 @@ button:hover {
     color: #333;
 }
 
-
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 35px;
+}
 
 .button_login {
     background-color: #007bff;
@@ -238,7 +241,6 @@ button:hover {
     margin-top: 15px;
     color: #007bff;
     text-decoration: none;
-    
 }
 
 .a_register:hover {
@@ -248,195 +250,76 @@ button:hover {
 
 /*   ------------------  produto  ------------------- */
 
-.h1-ml{
-    font-size: 12px;
-    background-color:#4b8d5a;
-    color: #ffffff;
-    width: 100%;
-    padding: 6px;
-    border-radius: 60px;
-    text-align: center;
-
-    
-    
-    
-
-}
-.h1-ml:hover{
-
-    color: #ffffff;
-    background-color: #61886a;
-
-}
-
 
 
 
 .h1_prod, .h2_prod {
-    font-size: 20px;
-    color: #ffffff;
-    background-color: #4b8d5a;
-    width: 100%;
-    padding: 6px;
-    border-radius: 60px;
-    text-align: center;
-    
-    
-    
-}
-.h1_prod:hover{
-    
-    background-color: #69836f;
-
+    color: #333;
 }
 
 /* Ajuste do formulário */
 .form_prod {
     display: flex;
     flex-direction: column;
-    background-color: #e6e6e6;
-    padding: 60px;
-    align-items: center;
+    gap: 15px;
 }
 
 /* Organiza os campos lado a lado */
 .form-container {
-    margin: 10px;
     display: flex;
-    gap: 15px; /* Espaçamento entre os campos */
-    align-items: flex-end; 
-      
-}
-
-
-.form-container2 {
-    margin: 10px;
-     
-    
-}
-
-.form-container3 {
-    
-    display: flex;
-    
-    align-items: flex-end; 
-      
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
 }
 
 /* Cada campo ocupa metade da largura */
 .form-field {
-    margin-bottom: 0px;
-    display: inline-block;
-    vertical-align: top;
-    font-size: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 48%;
 }
 
-.form-descricao{
-    width: 100%;
-    padding: 7px;
-    margin-top: 5px;
-    border-color: rgba(255, 255, 255, 0);
-    border-radius: 8px;
-    
-}
-.form-medio{
-    border-color: rgba(255, 255, 255, 0);
-    padding: 7px;
-    margin-top: 5px;
-    border-radius: 8px;
-    width: 100%;
-    
-}
-.form-pequeno{
-    border-color: rgba(255, 255, 255, 0);
-    width: 28%;
-    padding: 7px;
-    margin-top: 5px;
-    border-radius: 8px;
-    
-}
-
-input{
-    border-color: rgba(153, 143, 143, 0);
-    padding: 7px;
-    margin-top: 5px;
-    border-radius: 8px;
-    text-align: center;
-   
-
-}
+/* Ajuste para os inputs */
 
 
 /* Botão centralizado */
 .button_prod {
-    background-color: #4b8d5a;
+    background-color: #27ae60;
     color: white;
-    margin: 20px;
     padding: 10px;
     border: none;
     width: 200px;
     cursor: pointer;
-    border-radius: 60px;
+    border-radius: 4px;
     font-size: 14px;
     align-self: center;
-
 }
 
 .button_prod:hover {
     background-color: #2ecc71;
 }
-.cliente-select {
+
+
+.table_prod {
     width: 100%;
-
-}
-
-.produto-select {
-    margin-top: 10px;
-    width: 50%;
-}
-
-
-
-
-
-
-.table_prod1 {
-    width: 100%;
-    
-    
-    
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
     overflow: hidden;
-}
-.table_prod1 th, .table_prod td {
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    padding: 8px;
-    font-size: 12px;
-    
-
-}
-.table_prod1 tr{
-    border-radius: 20px;
-    padding: 5px;
 }
 
 .table_prod th, .table_prod td {
     padding: 8px;
-    text-align: center;
+    text-align: left;
     border-bottom: 1px solid #ddd;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .table_prod th {
     background-color: #2c3e50;
     color: white;
-    text-align: center;
-
 }
 
 /* Imagens na tabela */
@@ -513,20 +396,11 @@ input{
 .button_delete:hover {
     background-color: #c0392b;
 }
-.button_container{
-    width: 100%;
-    margin: 20px;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-
-}
 
 .table_prod {
-    align-items: center;
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    margin-top: 20px;
     background: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -537,13 +411,11 @@ input{
     padding: 5px;
     text-align: left;
     border-bottom: 1px solid #ddd;
-    font-size: 20px;
-    text-align: center;
-    
+    font-size: 14px;
 }
 
 .table_prod th {
-    background-color: #3b3b3b;
+    background-color: #2c3e50;
     color: white;
 }
 
@@ -583,10 +455,7 @@ input{
 
 
 
-.image-container{
-    display: flex;
 
-}
 
 
 
@@ -605,46 +474,15 @@ p {
   }
 
 
-  .nome-usuario {
-    color: #fff;
-    font-size: 15px;
-
-    margin-right: 10px;
-}
-
-details summary {
-    cursor: pointer;
-    font-size: 18px;
-
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Espaço entre o ícone e o texto */
-    list-style: none; /* Remove a seta padrão */
-}
-
-details summary::before {
-    content: ""; /* Ícone de expandir */
-    font-size: 18px;
-    color: #007bff;
-    transition: transform 0.3s ease-in-out;
-}
-
-.total-container{
-    
-    display: flex;
-    font-size: 45px;
-    justify-content: space-between;
-    color: #333;
-    
-}
-.total{
-    flex-grow: 1;
-    text-align: right;
-
-}
+  .nav-padrao{
+    background-color: #3b3b3b;
+    font-size: 25px;
+    color: white;
+    padding: 6px;
+  }
 
 
-.produto-lista {
+  .produto-lista {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -662,9 +500,8 @@ details summary::before {
 
     
   }
-  
 
-  
+
   .produto-info {
     display: flex;
     flex-direction: row;
@@ -672,9 +509,7 @@ details summary::before {
     justify-content: space-between;
     gap: 20px;
   }
-  
 
-  
   .campo {
     display: flex;
     flex-direction: column;
@@ -790,25 +625,48 @@ details summary::before {
     
   }
   
+  .button_container{
+    width: 100%;
+    margin: 20px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 
-  .nav-padrao{
-    background-color: #3b3b3b;
-    font-size: 25px;
-    color: white;
-    padding: 6px;
-  }
-  .item_produto td{
-    width: 500px;
-  }
-  
-
-  .envio{
-    width: 100%; 
+}
+.table_prod1 th, .table_prod td {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+    font-size: 12px;
     
-  }
 
-  .total_vendas{
-   font-size:25px;
-    color:green;
-  }
+}
+.table_prod1 tr{
+    border-radius: 20px;
+    padding: 5px;
+}
+
+
+.table_prod th, .table_prod td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+}
+
+.table_prod th {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+
+}
+
+.nome-usuario {
+    color: #fff;
+    font-size: 15px;
+
+    margin: 20;
+
+    margin-right: 20px;
+}
   

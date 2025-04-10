@@ -43,227 +43,58 @@
             
         </ul>
     </nav>
+
+<div class="main-content">
+    <div class="nav-padrao">
+        PRODUTOS
+    </div>
+        
     
-    na
-    {% load custom_filters %}
-    <div class="main-content">
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    
+        <form class="form_prod" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+    
+            <div class="form-container">
+                {% for field in form %}
+                    <div class="form-field">
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-field">
+                <img id="preview" src="" alt="Pré-visualização da imagem" style="max-width: 200px; display: none; margin-top: 10px;">
+                <br>
+                <label for="imagens">Imagens do Produto:</label>
+                <input type="file" id="imagensInput" name="imagens" multiple accept="image/*" onchange="previewImagem(event)">
+                
+                
+            </div>
+    
+           
+    
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <button class="button_edit" type="submit">Salvar</button>
+            </div>
+        </form>
+    
+    
         <div class="nav-padrao">
-            PRODUTOS
+          PESQUIASR PRODUTOS
         </div>
-        
-        <div>
-            <form class="form_prod"  method="post" enctype="multipart/form-data">
-                <details style="width:70%;">
-                    <summary><span class="h1_prod">Cadastrar Produto +</span></summary>
-                    <br>
-                    <br>
-                {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-        
-                {% csrf_token %}
-                <div class="form-field">
-                    <img id="preview" src="" alt="Pré-visualização da imagem" style="max-width: 200px; display: none; margin-top: 10px;">
-                    <br>
-                    <label for="imagens">Imagens do Produto:</label>
-                    <input type="file" id="imagensInput" name="imagens" multiple accept="image/*" onchange="previewImagem(event)">
-                    
-                    
-                </div>
-        
-                <form method="post" enctype="multipart/form-data">
-    
-                    <div>
-                        {% csrf_token %}
-                
-                    <div>
-                        <label for="id_imagem"></label>
-                        {{ form.imagem }}
-                    </div>
-                
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_codigo_produto">Código do Produto:</label>
-                            {{ form.codigo_produto|add_class:"form-medio" }}
-                        </div>
-                        <div class="input-group">
-                            <label for="id_codigo_barras">Código de Barras:</label>
-                            {{ form.codigo_barras|add_class:"form-medio" }}
-                        </div>
-                    </div>
-                    
-                    <div class="form-container2">
-                        <label  for="id_descricao">Descrição:</label>
-                        {{ form.descricao|add_class:"form-descricao" }}
-                    </div>
-        
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_grupo">Grupo:</label>
-                            {{ form.grupo|add_class:"form-medio" }}
-                        </div>
-                        <div class="input-group">
-                            <label for="id_marca">Marca:</label>
-                            {{ form.marca|add_class:"form-medio" }}
-                        </div>
-                        <div class="input-group">
-                            <label for="id_unidade_medida">Unidade de Medida:</label>
-                            {{ form.unidade_medida|add_class:"form-pequeno" }}
-                            
-                        </div>
-                    </div>
-                
-                    <div class="form-container">
-                        <div class="input-group">
-                            <label for="id_custo">Custo:</label>
-                            {{ form.custo|add_class:"form-medio" }}
-                        
-                        </div>
-                        <div class="input-group">
-                            <label for="id_preco">Preço:</label>
-                            {{ form.preco|add_class:"form-medio" }}
-                            
-                        </div>
-                        <div class="input-group">
-                            <label for="id_quantidade">Quantidade:</label>
-                        {{ form.quantidade|add_class:"form-medio" }}
-                            
-                        </div>
-                    </div>
-    
-                    </div>
-                    
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    
-                        
-                        <span class="h1-ml">Mercado livre</span>
-                        
-                        <br>
-                        <br>
-                        <br>
-        
-                        <div>
-                            <div class="form-container">
-                                <div class="input-group">
-                                    <label for="id_status">Status:</label>
-                                    {{ form.status}}
-                                    
-                                </div>
-                                <div class="input-group">
-                                    <label for="id_condicao">Condição:</label>
-                                    {{ form.condicao }}
-                                         
-                                </div>
-                            </div>
-        
-        
-                            <div class="form-container">
-                                <div class="input-group">
-                                    <label for="id_largura">Largura:</label>
-                                    {{ form.largura|add_class:"form-medio" }}
-                                    
-                                </div>
-                                <div class="input-group">
-                                    <label for="id_altura">Altura:</label>
-                                    {{ form.altura|add_class:"form-medio" }}
-                                    
-                                </div>
-                                <div class="input-group">
-                                    <label for="id_profundidade">Profundidade:</label>
-                                    {{ form.profundidade|add_class:"form-medio" }}
-                                    
-                                </div>
-                                <div class="input-group">
-                                    <label for="id_peso">Peso:</label>
-                                    {{ form.peso|add_class:"form-medio" }}
-                                </div>
-                            </div>
-        
-        
-        
-                            <div class="form-container">
-                                <div class="input-group">
-                                    <label for="id_prod_cor">Cor do Produto:</label>
-                                    {{ form.prod_cor|add_class:"form-medio" }}
-                                    
-                                </div>
-                                <div class="input-group">
-                                    <label for="id_object_type">Tipo de Objeto:</label>
-                                    {{ form.prod_cor|add_class:"form-medio" }}
-                                    
-                                </div>
-                                <div class="input-group">
-                                    <label for="id_material">Material:</label>
-                                    {{ form.material|add_class:"form-medio" }}
-                                </div>
-                                <div class="input-group">
-                                    <label for="id_tipo_envio">Tipo de Envio:</label>
-                                    {{ form.tipo_envio }}
-                                    
-                                </div>
-                            </div>
-        
-                            
-                            
-                            <div class="form-container">
-                                <div class="input-group">
-                                    <label for="id_cep_origem">CEP de origem:</label>
-                                    {{ form.cep_origem |add_class:"form-medio" }}
-                                    
-                                </div>
-                                <div class="input-group">
-                                    <label for="id_cobertura_frete">Cobertura de Frete:</label>
-                                    {{ form.cobertura_frete|add_class:"form-medio" }}
-                                    
-                                </div>
-                                <div class="input-group">
-                                    <label for="id_envio_gratis">Envio Grátis:</label>
-                                    {{ form.envio_gratis }}
-                                    
-                                </div>
-                            </div>
-                            
-                            <div class="form-container">
-                               
-                                <div class="input-group">
-                                    <label for="id_metodos_envio_proprio">Métodos de Envio Próprio:</label>
-                                    {{ form.metodos_envio_proprio|add_class:"envio" }}
-                                    
-                                </div>
-                            </div>
-                        
-                            
-                        </div>
-                    
-                <div style="display: flex; justify-content: center; margin-top: 20px;">
-                    <button class="button_edit" type="submit">Salvar</button>
-                </div>
-    
-                    
-                </details>
-        
-                    
-                    
-                
-                    
-                </form>
-        
-            </form>
-        </div>
-    
-        
-    
-        
         <form method="get" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); display: flex; margin-top: 20px; padding:10px">
-            <button type="submit" style="margin-left: 10px;">Pesquisar</button>
+            
             <input type="text" style="width: 100%;" name="q" placeholder="Pesquisar pelo nome...">
+            <div class="produto-acoes-detalhes">
+              <button type="submit" style="margin-left: 10px;">Pesquisar</button>
+            </div>
             
         </form>
         <!-- Modifique a tabela para exibir os resultados da pesquisa -->
@@ -299,7 +130,7 @@
               
               <details>
                 <summary class="produto-acoes">
-                  <p>Detalhes+</p>
+                  <p style="color:black;">Detalhes+</p>
                 </summary>
                 <div class="produto-detalhes-container">
                   <div class="produto-imagem">
@@ -358,18 +189,12 @@
             {% endfor %}
           </ul>
           
-          
-          
-        
         
     </div>
 
 
     
 </body>
-
-
-
 </html>
 
 

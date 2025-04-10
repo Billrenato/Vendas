@@ -20,7 +20,7 @@
                 total += totalVenda;
             });
             console.log("IDs das vendas selecionadas:", vendaIds);
-            document.getElementById('total_sum').innerText =  total.toFixed(2);
+            document.getElementById('total_sum').innerText = total.toFixed(2);
             document.getElementById('venda_ids').value = vendaIds.join(',');
             document.getElementById('total').value = total.toFixed(2);
         }
@@ -63,49 +63,33 @@
 
     <div class="main-content">
         <div class="nav-padrao">
-           VENDAS
-        </div>
-
-
+           RESUMO DE VENDAS
+         </div>
         {% block content %}
         
-        <form class="form_prod" method="get">
+        <form method="get">
+            <label>Pesquisar por cliente ou ID de venda:</label>
+            <input type="text" name="pesquisa" placeholder="Nome do cliente ou ID da venda">
+            <br>
+            <label>Data da Venda:</label>
+            <input type="date" name="data_venda">
+            <br>
+            <label>Forma de Pagamento:</label>
+            <input type="text" name="forma_pagamento" placeholder="Forma de pagamento">
+            <br>
             
-            <span class="h1_prod">Resumo de vendas</span>
+            
+            <div class="produto-acoes-detalhes">
+                <button type="submit">Filtrar</button>
+            </div>
             <br>
             <br>
-           
-            <label>Pesquisar por cliente ou ID:</label>
-            <input style="width:70%;"type="text" name="pesquisa" placeholder="Nome do cliente ou ID da venda">
+            <br>
             
-           <div class="form-container">
-            <div class="input-group">
-                <label>Data da Venda:</label>
-                <input type="date" name="data_venda">
-                <br>
-            </div>
-           
-            <div class="input-group">    
-                <label>Forma de Pagamento:</label>
-                <input type="text" name="forma_pagamento" placeholder="Forma de pagamento">
-                <br>
-            </div>
-           </div>
-           <div class="produto-acoes-detalhes">
-           <button class="button_edit" type="submit">Filtrar</button>
-           
-            
-            
-            
-           
-           </div>
-           
-          
         </form>
+        <br>
+        <br>
 
-
-        
-        
         <form method="get">
             {% csrf_token %}
             <table class="table_prod">
@@ -136,7 +120,7 @@
             <br>
             <br>
             
-            <p style="font-size:25px;"> Total selecionados:<span id="total_sum" style="font-size:25px; color:green;" id="totalSelecionado"></span></p>
+            <p style="font-size:25px;"> Total selecionados: R$<span id="total_sum" style="font-size:25px; color:green;" id="totalSelecionado"></span></p>
             <p><button class="button_edit" type="submit" name="imprimir" value="imprimir">Gerar PDF (selecionadas)</button>
                 <input type="hidden" name="venda_ids" value="" id="venda_ids"> 
                 <input type="hidden" name="total" id="total" value=""> 

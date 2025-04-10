@@ -15,29 +15,26 @@ class EmpresaForm(forms.ModelForm):
 class ProdutoForm(forms.ModelForm):
     class Meta:
         model = Produto
-        fields = [
-            'imagem','codigo_produto','codigo_barras', 'descricao', 'grupo', 'marca', 'unidade_medida',
+        fields = (
+            'codigo_produto','codigo_barras', 'descricao', 'grupo', 'marca', 'unidade_medida',
             'custo', 'preco', 'quantidade',
             'peso', 'largura', 'altura', 'profundidade',  
             'condicao', 'status', 'tipo_envio',  
-            'tamanho','object_type','material','prod_cor',
+            'imagem','tamanho','object_type','material','prod_cor',
             'cep_origem', 
-            'cobertura_frete','envio_gratis', 'metodos_envio_proprio'
-        ]
-        
+            'cobertura_frete','envio_gratis',
+        )
 
 class ProdutoFormComImagens(forms.ModelForm):
     class Meta:
         model = Produto
         fields = [
-            'codigo_produto','codigo_barras','descricao', 'grupo', 'marca', 'unidade_medida', 
-            'custo', 'preco', 
-             'quantidade',
-            'condicao', 'status', 
+            'descricao', 'grupo', 'marca', 'unidade_medida', 'custo', 'preco', 
+            'codigo_produto','codigo_barras', 'quantidade',
             'peso', 'largura', 'altura', 'profundidade', 
-            'tipo_envio','tamanho','object_type','material',
+            'condicao', 'status', 'tipo_envio','tamanho','object_type','material',
             'prod_cor','cep_origem',
-            'cobertura_frete', 'envio_gratis','metodos_envio_proprio'
+            'cobertura_frete', 'envio_gratis'
         ]
 
 class ImagemProdutoForm(forms.ModelForm):

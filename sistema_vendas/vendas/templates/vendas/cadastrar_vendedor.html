@@ -10,7 +10,6 @@
     </head>
     
     <body>
-
         <nav class="sidebar">
             <ul>
                 <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
@@ -26,7 +25,6 @@
             
             </ul>
         </nav>
-        
         <div class="main-content">
             <div class="nav-padrao">
                 VENDEDORES
@@ -38,43 +36,15 @@
             {% endfor %}
         </ul>
     {% endif %}
-
-    {% load custom_filters %}
-    <div >
-        <form class="form_prod" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <span class="h1_prod">Cadastrar vendedores +</span>
-    
-            <br>
-            <br>
-    
-            <div class="form-container">
-                <div class="input-group">
-                    <label for="id_nome_vendedor">Nome do vendedor:</label>
-                    {{ form.nome_vendedor|add_class:"form-descricao" }}
-                </div>
-                <div class="input-group">
-                    <label for="id_codigo_vendedor">Codigo do vendedor:</label>
-                    {{ form.codigo_vendedor|add_class:"form-medio" }}
-                </div>
-            </div>
-
-            <br>
-            <br>
-
-
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
             <button class="button_edit" type="submit">Salvar</button>
-    
-     
-            
-        </form>
-
-        
-    </div>
-
-
- 
-    
+        </div>
+        <br>
+        <br>
+    </form>
     <h2>Vendedores cadastrados:</h2>
     
 
@@ -122,11 +92,7 @@
 
             </li>
             {% endfor %}    
-        </ul>    
-
-
-
-
-
+        </ul>     
+        </div>
 </body>
 </html>
