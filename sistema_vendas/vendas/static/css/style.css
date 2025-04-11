@@ -74,7 +74,7 @@ input, select, button {
 
 
 .sidebar {
-    width: 180px;
+    width: 250px;
     height: 100vh;
     background-color: #4e5b69;
     position: fixed;
@@ -102,11 +102,10 @@ input, select, button {
 .sidebar ul li button {
     text-decoration: none;
     color: white;
-    font-size: 10px;
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 15px;
+    padding: 8px;
     border: none;
     background: none;
     width: 100%;
@@ -121,14 +120,14 @@ input, select, button {
 
 
 .sidebar img.icon {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
 }
 
 
 
 .main-content {
-    margin-left: 180px;
+    margin-left: 250px;
     padding: 15px;
     transition: margin-left 0.3s;
 }
@@ -479,6 +478,13 @@ p {
     font-size: 25px;
     color: white;
     padding: 6px;
+  }
+  .nav-padrao:hover{
+    background-color: #727272;
+  }
+
+  summary {
+    list-style: none;
   }
 
 

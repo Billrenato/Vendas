@@ -28,6 +28,12 @@
     </style>
 </head>
 <body>
+    <style>
+        .required-label::after {
+            content: " *";
+            color: red;
+        }
+      </style>
     <nav class="sidebar">
         <ul>
             <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
@@ -54,12 +60,19 @@
     
             <div class="form-container">
                 {% for field in form %}
-                    <div class="form-field">
-                        {{ field.label_tag }}
-                        {{ field }}
-                    </div>
+                <div class="form-field">
+                    <label 
+                        for="{{ field.id_for_label }}" 
+                        class="{% if field.field.required %}required-label{% endif %}">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
                 {% endfor %}
-            </div>
+              </div>
     
             <h3>Imagens do Produto</h3>
             <div class="image-container">

@@ -13,6 +13,12 @@
 
         
 <body>
+  <style>
+    .required-label::after {
+        content: " *";
+        color: red;
+    }
+  </style>
     <nav class="sidebar">
         <ul>
             <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
@@ -30,19 +36,31 @@
             
     </nav>
     <div class="main-content">
-        <div class="nav-padrao">
-            CLIENTES
-        </div>
-        <form class="form_prod" method="post" enctype="multipart/form-data">
+        
+          
+          <details>
+            <summary>
+              <div class="nav-padrao">
+                CLIENTES <span style="float: right;  font-weight: bold;">+</span>
+              </div>
+            </summary>
+          <form class="form_prod" method="post" enctype="multipart/form-data">
             {% csrf_token %}
     
             <div class="form-container">
-                {% for field in form %}
-                    <div class="form-field">
-                        {{ field.label_tag }}
-                        {{ field }}
-                    </div>
-                {% endfor %}
+              {% for field in form %}
+              <div class="form-field">
+                  <label 
+                      for="{{ field.id_for_label }}" 
+                      class="{% if field.field.required %}required-label{% endif %}">
+                      {{ field.label }}
+                  </label>
+                  {{ field }}
+                  {% if field.errors %}
+                      <div class="text-danger">{{ field.errors }}</div>
+                  {% endif %}
+              </div>
+              {% endfor %}
             </div>
     <form  method="post">
         
@@ -50,11 +68,11 @@
             <button class="button_edit" type="submit">Salvar</button>
         </div>
     </form>
+
+        </details>
     <br>
     <br>
-    <div class="nav-padrao">
-     PESQUISAR CLIENTES
-  </div>
+    
     <form method="get" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); display: flex; margin-top: 20px; padding:10px">
         
         <input type="text" style="width: 100%;" name="q" placeholder="Pesquisar pelo nome...">

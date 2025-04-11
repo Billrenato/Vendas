@@ -33,6 +33,12 @@
     </script>
 </head>
 <body>
+    <style>
+        .required-label::after {
+            content: " *";
+            color: red;
+        }
+      </style>
     
     <nav class="sidebar">
         <ul>
@@ -59,11 +65,23 @@
         <!-- Formulário para adicionar despesa -->
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {% for field in form %}
+            <div>
+                <label 
+                    for="{{ field.id_for_label }}" 
+                    class="{% if field.field.required %}required-label{% endif %}">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
         <div style="display: flex; justify-content: center; margin-top: 20px;">
             <button class="button_edit" type="submit">Salvar</button>
         </div>
-        <br>
+       
         <br>
     </form>
     

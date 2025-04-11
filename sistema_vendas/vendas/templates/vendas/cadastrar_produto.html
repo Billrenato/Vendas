@@ -2,7 +2,9 @@
 
 <!DOCTYPE html>
 <html>
+
     <script>
+      
         
         function previewImagem(event) {
             var input = event.target;
@@ -28,6 +30,12 @@
         
     </head>
 <body>
+  <style>
+    .required-label::after {
+        content: " *";
+        color: red;
+    }
+  </style>
     <nav class="sidebar">
         <ul>
             <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
@@ -45,50 +53,62 @@
     </nav>
 
 <div class="main-content">
+  <details>
+  <summary>
     <div class="nav-padrao">
-        PRODUTOS
+      PRODUTOS <span style="float: right;  font-weight: bold;">+</span>
     </div>
-        
+  </summary>
     
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    
-        <form class="form_prod" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-    
-            <div class="form-container">
-                {% for field in form %}
-                    <div class="form-field">
-                        {{ field.label_tag }}
-                        {{ field }}
-                    </div>
-                {% endfor %}
-            </div>
+      
+  
+      {% if messages %}
+          <ul>
+              {% for message in messages %}
+                  <li>{{ message }}</li>
+              {% endfor %}
+          </ul>
+      {% endif %}
+  
+      <form class="form_prod" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+  
+          <div class="form-container">
+            {% for field in form %}
             <div class="form-field">
-                <img id="preview" src="" alt="Pré-visualização da imagem" style="max-width: 200px; display: none; margin-top: 10px;">
-                <br>
-                <label for="imagens">Imagens do Produto:</label>
-                <input type="file" id="imagensInput" name="imagens" multiple accept="image/*" onchange="previewImagem(event)">
-                
-                
+                <label 
+                    for="{{ field.id_for_label }}" 
+                    class="{% if field.field.required %}required-label{% endif %}">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger">{{ field.errors }}</div>
+                {% endif %}
             </div>
+            {% endfor %}
+          </div>
+          <div class="form-field">
+              <img id="preview" src="" alt="Pré-visualização da imagem" style="max-width: 200px; display: none; margin-top: 10px;">
+              <br>
+              <label for="imagens">Imagens do Produto:</label>
+              <input type="file" id="imagensInput" name="imagens" multiple accept="image/*" onchange="previewImagem(event)">
+              
+              
+          </div>
+  
+         
+  
+          <div style="display: flex; justify-content: center; margin-top: 20px;">
+              <button class="button_edit" type="submit">Salvar</button>
+          </div>
+      </form>
+
+  </details>
     
-           
-    
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <button class="button_edit" type="submit">Salvar</button>
-            </div>
-        </form>
     
     
-        <div class="nav-padrao">
-          PESQUIASR PRODUTOS
-        </div>
+        
         <form method="get" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); display: flex; margin-top: 20px; padding:10px">
             
             <input type="text" style="width: 100%;" name="q" placeholder="Pesquisar pelo nome...">
