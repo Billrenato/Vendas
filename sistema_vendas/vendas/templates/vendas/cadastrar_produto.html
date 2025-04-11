@@ -36,6 +36,17 @@
         color: red;
     }
   </style>
+  <nav class="navbar-horizontal">
+    <div class="nome-usuario">
+      Olá, {{ user.username }}!
+    </div>
+    <div class="botao-sair">
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button class='button_sair' type="submit">Sair</button>
+      </form>
+    </div>
+  </nav>
     <nav class="sidebar">
         <ul>
             <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
@@ -123,8 +134,9 @@
             <li>
                 <div class="produto-info">
                     <div class="campo-codigo">
-                        <h2>Código # {{ produto.id }}</h2>
+                        <h2>Produto # {{ produto.id }}</h2>
                     </div>
+                    
                     <div class="campo">
                       <span>Descrição:</span>
                       <p>{{ produto.descricao }}</p>

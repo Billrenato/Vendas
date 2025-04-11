@@ -17,7 +17,7 @@ form {
     
     
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
 }
 
 label {
@@ -57,6 +57,7 @@ input, select, button {
 #tabela_produtos th {
     background: #333;
     color: white;
+    font-size: 10px;
 }
 
 /* Responsividade */
@@ -74,15 +75,16 @@ input, select, button {
 
 
 .sidebar {
-    width: 250px;
+    width: 80px;
     height: 100vh;
-    background-color: #4e5b69;
+    background-color: #3b3b3b;
     position: fixed;
     left: 0;
     top: 0;
     padding-top: 18px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     transition: width 0.3s;
+    
 }
 
 .sidebar ul {
@@ -100,17 +102,19 @@ input, select, button {
 
 .sidebar ul li a, 
 .sidebar ul li button {
+    font-size: 7px;
     text-decoration: none;
     color: white;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
+    display: grid;
+    text-align: center;
+    
+    padding: 5px;
     border: none;
     background: none;
     width: 100%;
     cursor: pointer;
     transition: background 0.3s;
+    
 }
 
 .sidebar ul li a:hover, 
@@ -120,18 +124,47 @@ input, select, button {
 
 
 .sidebar img.icon {
-    width: 40px;
-    height: 40px;
+    width: 28px;
+    height: 28px;
+    margin: 0 auto;
+    display: block;
 }
 
+img {
+    align-items: center;
 
+}
 
 .main-content {
-    margin-left: 250px;
+    margin-left: 80px;
     padding: 15px;
     transition: margin-left 0.3s;
 }
 
+
+.navbar-horizontal {
+    margin-left: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #3b3b3b;
+    
+  }
+  
+  .nome-usuario {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ddd;
+  }
+  
+  .botao-sair {
+    margin-left: 20px;
+  }
+  .button_sair{
+    background-color: #3b3b3b;
+    color: #fffefe;
+  }
 
 /*   ------------------  tela de login  ------------------- */
 
@@ -162,7 +195,7 @@ input, select, button {
 form {
     display: flex;
     flex-direction: column;
-    padding: 35px;
+    
 }
 
 .button_login {
@@ -261,6 +294,8 @@ form {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding: 35px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)
 }
 
 /* Organiza os campos lado a lado */
@@ -406,12 +441,19 @@ form {
     overflow: hidden;
 }
 
-.table_prod th, table td {
+.table_prod th{
     padding: 5px;
     text-align: left;
     border-bottom: 1px solid #ddd;
     font-size: 14px;
 }
+table td {
+    padding: 5px;
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
 
 .table_prod th {
     background-color: #2c3e50;
@@ -474,17 +516,21 @@ p {
 
 
   .nav-padrao{
-    background-color: #3b3b3b;
+    background-color: #555555;
     font-size: 25px;
     color: white;
     padding: 6px;
   }
   .nav-padrao:hover{
-    background-color: #727272;
+    background-color: #a0a0a0;
   }
 
   summary {
     list-style: none;
+  }
+  summary::-webkit-details-marker {
+    content: "";
+    
   }
 
 
@@ -608,8 +654,9 @@ p {
   }
   
   .produto-imagem {
-    width: 30%;
-    height: 30%;
+    width: 50%;
+    height: 50%;
+    margin-top: 20px;
     margin-right: 20px;
   }
   
@@ -639,12 +686,26 @@ p {
    align-items: center;
 
 }
-.table_prod1 th, .table_prod td {
+.table_prod1 {
+    width: 100%;
+    
+    
+    
+    overflow: hidden;
+}
+.table_prod1 th {
     text-align: left;
     border-bottom: 1px solid #ddd;
     padding: 8px;
     font-size: 12px;
     
+
+}
+.table_prod td{
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+    font-size: 12px;
 
 }
 .table_prod1 tr{
@@ -667,12 +728,3 @@ p {
 
 }
 
-.nome-usuario {
-    color: #fff;
-    font-size: 15px;
-
-    margin: 20;
-
-    margin-right: 20px;
-}
-  

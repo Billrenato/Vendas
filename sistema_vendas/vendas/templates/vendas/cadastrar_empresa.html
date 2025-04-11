@@ -12,6 +12,17 @@
     </head>
     
 <body>
+    <nav class="navbar-horizontal">
+        <div class="nome-usuario">
+          Olá, {{ user.username }}!
+        </div>
+        <div class="botao-sair">
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button class='button_sair' type="submit">Sair</button>
+          </form>
+        </div>
+      </nav>
     <nav class="sidebar">
         <ul>
             <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
@@ -29,9 +40,13 @@
     </nav>
         
     <div class="main-content">
-        <h1>Cadastrar Empresa</h1>
+        <div class="nav-padrao">
+            DADOS DA EMPRESA
+        </div>
+        <br>
+        <br>
     {% if empresa %}
-        <h2>Empresa Cadastrada</h2>
+        
         <p>Nome Fantasia: {{ empresa.nome_fantasia }}</p>
         <p>Razão Social: {{ empresa.razao_social }}</p>
         <p>Endereço: {{ empresa.endereco }}</p>

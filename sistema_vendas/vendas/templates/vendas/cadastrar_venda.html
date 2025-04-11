@@ -10,6 +10,17 @@
     </head>
     
 <body>
+    <nav class="navbar-horizontal">
+        <div class="nome-usuario">
+          Olá, {{ user.username }}!
+        </div>
+        <div class="botao-sair">
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button class='button_sair' type="submit">Sair</button>
+          </form>
+        </div>
+      </nav>
     <nav class="sidebar">
         <ul>
             <li><a href="{% url 'home' %}"><img class="icon" src="{% static 'img/home.png' %}" alt=""> HOME</a></li>
@@ -28,7 +39,7 @@
 
     <div class="main-content">
         <div class="nav-padrao">
-            VENDAS
+            VENDER
         </div>
         <title c>{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
@@ -43,7 +54,7 @@
 <body>
 
     <!-- Formulário de cadastro/edição de venda -->
-    <form style=" padding:35px;" method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
+    <form class="form_prod" style=" padding:35px;" method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
 
         
         <h1 >{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</h1>
@@ -320,7 +331,7 @@
     <div class="nav-padrao">
       PESQUISAR VENDAS
     </div>
-    <form style="align-items: center; justify-content: center; padding:20px;background-color: #d1d1d1;" method="post" action="{% url 'pesquisar_venda' %}">
+    <form style="align-items: center; justify-content: center; padding:20px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)" method="post" action="{% url 'pesquisar_venda' %}">
         
 
         {% csrf_token %}
