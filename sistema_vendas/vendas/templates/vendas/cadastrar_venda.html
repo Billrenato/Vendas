@@ -296,7 +296,7 @@
                 <td class="preco">R$ ${preco}</td>
                 <td>${unidade}</td>
                 <td><input type="number" class="quantidade" value="1" min="1" data-produto-id="${produtoId}" onchange="atualizarTotal(); atualizarInputs();"></td>
-                <td><button type="button" onclick="removerProduto(this)">Remover</button></td>
+                <td><button class="button_delete" type="button" onclick="removerProduto(this)">Remover</button></td>
             `;
     
             atualizarTotal();

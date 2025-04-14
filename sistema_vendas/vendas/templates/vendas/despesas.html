@@ -68,42 +68,45 @@
 
 
     <div class="main-content">
+        <details>
+            <summary>
+                <div class="nav-padrao">
+                    DESPESAS <span style="float: right;  font-weight: bold;">+</span>
+                </div>
+            </summary>
+            <form class="form_prod" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div>
+                        <label 
+                            for="{{ field.id_for_label }}" 
+                            class="{% if field.field.required %}required-label{% endif %}">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                <div style="display: flex; justify-content: center; margin-top: 20px;">
+                    <button class="button_edit" type="submit">Salvar</button>
+                </div>
+               
+                <br>
+            </form>
+        </details>
+            
 
-        <div class="nav-padrao">
-            DESPESAS
-        </div>
+        
         <!-- Formulário para adicionar despesa -->
-    <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-            <div>
-                <label 
-                    for="{{ field.id_for_label }}" 
-                    class="{% if field.field.required %}required-label{% endif %}">
-                    {{ field.label }}
-                </label>
-                {{ field }}
-                {% if field.errors %}
-                    <div class="text-danger">{{ field.errors }}</div>
-                {% endif %}
-            </div>
-            {% endfor %}
-        <div style="display: flex; justify-content: center; margin-top: 20px;">
-            <button class="button_edit" type="submit">Salvar</button>
-        </div>
-       
-        <br>
-    </form>
+    
     
     <br>
     <br>
-    <br>
-    <br>
-    <div class="nav-padrao">
-        PESQUISAR DESPESAS
-    </div>
+    
 
-    <form method="get">
+    <form class="form_prod" method="get">
         <label>Pesquisar por data:</label>
         <input type="date" name="data_vencimento" value="{{ data_vencimento_filtro }}">
     

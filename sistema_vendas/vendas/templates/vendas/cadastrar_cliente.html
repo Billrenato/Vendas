@@ -100,62 +100,62 @@
                     <h2 class="h2-cliente">Cliente # {{ cliente.id }}</h2>
                 </div>
                 <div class="campo">
-                  <span  >Nome:</span>
-                  <p style="color: #e4a909;" >{{ cliente.nome }}</p>
+                  <span style="color: #707070" >Nome:</span>
+                  <p >{{ cliente.nome }}</p>
                 </div>
                 <div class="campo">
-                  <span>Telefone:</span>
-                  <p style="color:#2879c9;">{{ cliente.telefone }}</p>
+                  <span style="color: #707070" >Telefone:</span>
+                  <p>{{ cliente.telefone }}</p>
                 </div>
                 <div class="campo">
-                  <span>E-mail:</span>
+                  <span style="color: #707070" >E-mail:</span>
                   <p><td>{{ cliente.email }}</td></p>
                 </div>
             </div> 
             <details>
-                <summary class="produto-acoes"><p>Detalhes+</p></summary>
+                <summary class="produto-acoes"><p>+ detalhes</p></summary>
                 <div class="produto-detalhes-container2">
                     <details>
-                        <summary><p>Fiscal +</p></summary>
+                        <summary><p >Informações</p></summary>
                         <div class="produto-detalhes">
                             <table class="table_prod1">
                               <tr>
-                                <th>CNPJ:</th>
+                                <th style="color: #707070" >CNPJ:</th>
                                 <td>{{ cliente.cnpj }}</td>
                               </tr>
                               <tr>
-                                <th>IE:</th>
+                                <th style="color: #707070" >IE:</th>
                                 <td>{{ cliente.inscricao_estadual }}</td>
                               </tr>
                               <tr>
-                                <th>CPF:</th>
+                                <th style="color: #707070" >CPF:</th>
                                 <td>{{ cliente.cpf }}</td>
                               </tr>
                               <tr>
-                                <th>RG:</th>
+                                <th style="color: #707070" >RG:</th>
                                 <td>{{ cliente.rg }}</td>
                               </tr>
                             </table>
                           </div>
                     </details>
                     <details>
-                        <summary ><p>Endereço +</p></summary>
+                        <summary ><p >Endereço</p></summary>
                         <div class="produto-detalhes">
                             <table class="table_prod1">
                               <tr>
-                                <th>Endereço:</th>
+                                <th style="color: #707070" >Endereço:</th>
                                 <td>{{ cliente.endereco }}</td>
                               </tr>
                               <tr>
-                                <th>Numero:</th>
+                                <th style="color: #707070" >Numero:</th>
                                 <td>{{ cliente.numero }}</td>
                               </tr>
                               <tr>
-                                <th>Bairro:</th>
+                                <th style="color: #707070" >Bairro:</th>
                                 <td>{{ cliente.bairro }}</td>
                               </tr>
                               <tr>
-                                <th>CEP:</th>
+                                <th style="color: #707070" >CEP:</th>
                                 <td>{{ cliente.cep }}</td>
                               </tr>
                             </table>

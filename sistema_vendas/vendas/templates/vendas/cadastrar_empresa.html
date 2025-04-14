@@ -43,42 +43,78 @@
         <div class="nav-padrao">
             DADOS DA EMPRESA
         </div>
-        <br>
-        <br>
-    {% if empresa %}
         
-        <p>Nome Fantasia: {{ empresa.nome_fantasia }}</p>
-        <p>Razão Social: {{ empresa.razao_social }}</p>
-        <p>Endereço: {{ empresa.endereco }}</p>
-        <p>Número: {{ empresa.numero }}</p>
-        <p>Bairro: {{ empresa.bairro }}</p>
-        <p>UF: {{ empresa.uf }}</p>
-        <p>Cidade: {{ empresa.cidade }}</p>
-        <p>Complemento: {{ empresa.complemento }}</p>
-        <p>Contato: {{ empresa.contato }}</p>
-        <p>Inscrição Estadual: {{ empresa.inscricao_estadual }}</p>
-        <p>CNPJ: {{ empresa.cnpj }}</p>
-        <p>Inscrição Municipal: {{ empresa.inscricao_municipal }}</p>
-        <p>CEP: {{ empresa.cep }}</p>
-        <p>Regime Tributário: {{ empresa.regime_tributario }}</p>
-        <p>Dados Sintegra: {{ empresa.dados_sintegra }}</p>
-        <p>Telefone: {{ empresa.telefone }}</p>
-        <p>IBGE Município: {{ empresa.ibge_municipio }}</p>
-        <p>IBGE Estado: {{ empresa.ibge_estado }}</p>
-        <button id="botao-editar">Editar</button>
+    {% if empresa %}
+        <div class="form_prod">
+
+            <p>Nome Fantasia: {{ empresa.nome_fantasia }}</p>
+            <p>Razão Social: {{ empresa.razao_social }}</p>
+            <p>Endereço: {{ empresa.endereco }}</p>
+            <p>Número: {{ empresa.numero }}</p>
+            <p>Bairro: {{ empresa.bairro }}</p>
+            <p>UF: {{ empresa.uf }}</p>
+            <p>Cidade: {{ empresa.cidade }}</p>
+            <p>Complemento: {{ empresa.complemento }}</p>
+            <p>Contato: {{ empresa.contato }}</p>
+            <p>Inscrição Estadual: {{ empresa.inscricao_estadual }}</p>
+            <p>CNPJ: {{ empresa.cnpj }}</p>
+            <p>Inscrição Municipal: {{ empresa.inscricao_municipal }}</p>
+            <p>CEP: {{ empresa.cep }}</p>
+            <p>Regime Tributário: {{ empresa.regime_tributario }}</p>
+            <p>Dados Sintegra: {{ empresa.dados_sintegra }}</p>
+            <p>Telefone: {{ empresa.telefone }}</p>
+            <p>IBGE Município: {{ empresa.ibge_municipio }}</p>
+            <p>IBGE Estado: {{ empresa.ibge_estado }}</p>
+            <button id="botao-editar">Editar</button> 
+        </div>
+        <br>
+        <br>
+
         <div id="formulario-editar" style="display: none;">
-            <form method="post">
+            <form class="form_prod" method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Salvar</button>
+                {% for field in form %}
+                    <div>
+                        <label 
+                            for="{{ field.id_for_label }}" 
+                            class="{% if field.field.required %}required-label{% endif %}">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                <div style="display: flex; justify-content: center; margin-top: 20px;">
+                    <button class="button_edit" type="submit">Salvar</button>
+                </div>
+               
+                <br>
             </form>
         </div>
     {% else %}
         <h2>Cadastrar Empresa</h2>
-        <form method="post">
+        <form class="form_prod" method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Cadastrar</button>
+            {% for field in form %}
+                <div>
+                    <label 
+                        for="{{ field.id_for_label }}" 
+                        class="{% if field.field.required %}required-label{% endif %}">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <button class="button_edit" type="submit">Salvar</button>
+            </div>
+           
+            <br>
         </form>
     {% endif %}
     <script>

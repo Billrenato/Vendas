@@ -600,6 +600,10 @@ p {
     
    }
 
+  .quantidade{
+    align-items: center;
+    justify-content: center;
+   }
 
   .campo-quantidade{
     color: #2879c9;
@@ -641,7 +645,7 @@ p {
     margin-bottom: 5px;
     padding: 5px;
     color:white ;
-    background-color:#434242 ;
+    background-color:#8d8d8d ;
     border-radius: 60px;
     
   }
