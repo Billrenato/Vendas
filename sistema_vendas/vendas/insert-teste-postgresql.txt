@@ -1,0 +1,47 @@
+INSERT INTO vendas_cliente (
+    nome, cnpj, inscricao_estadual, cpf, rg, telefone,
+    endereco, cep, numero, bairro, email, codigo_cliente
+) VALUES
+('João Silva', '12.345.678/0001-91', '123456789', '123.456.789-00', '12.345.678-9', '(11) 91234-5678', 'Rua das Flores', '01001-000', '100', 'Centro', 'joao.silva@email.com', 'CLI001'),
+('Maria Oliveira', '98.765.432/0001-10', '987654321', '987.654.321-00', '98.765.432-1', '(21) 99876-5432', 'Avenida Brasil', '20031-050', '2000', 'Copacabana', 'maria.oliveira@email.com', 'CLI002'),
+('Pedro Santos', '23.456.789/0001-32', '234567890', '234.567.890-11', '23.456.789-0', '(31) 93456-7890', 'Rua das Palmeiras', '30140-071', '55', 'Savassi', 'pedro.santos@email.com', 'CLI003'),
+('Ana Costa', '11.222.333/0001-44', '112233445', '111.222.333-44', '11.222.333-4', '(41) 91122-3344', 'Rua Curitiba', '80210-170', '300', 'Batel', 'ana.costa@email.com', 'CLI004'),
+('Carlos Lima', '77.888.999/0001-55', '778899001', '777.888.999-55', '77.888.999-5', '(51) 97788-8999', 'Avenida Ipiranga', '90610-000', '1234', 'Centro Histórico', 'carlos.lima@email.com', 'CLI005'),
+('Fernanda Rocha', '55.666.777/0001-66', '556677889', '555.666.777-66', '55.666.777-6', '(61) 95566-7788', 'SHN Quadra 2', '70702-000', '10', 'Asa Norte', 'fernanda.rocha@email.com', 'CLI006'),
+('Ricardo Melo', '44.555.666/0001-77', '445566778', '444.555.666-77', '44.555.666-7', '(62) 94455-6677', 'Rua 10', '74003-010', '20', 'Setor Central', 'ricardo.melo@email.com', 'CLI007'),
+('Juliana Alves', '33.444.555/0001-88', '334455667', '333.444.555-88', '33.444.555-8', '(71) 93344-5566', 'Ladeira da Barra', '40140-650', '99', 'Barra', 'juliana.alves@email.com', 'CLI008'),
+('Bruno Teixeira', '22.333.444/0001-99', '223344556', '222.333.444-99', '22.333.444-9', '(81) 92233-4455', 'Rua da Aurora', '50050-000', '111', 'Boa Vista', 'bruno.teixeira@email.com', 'CLI009'),
+('Patrícia Gomes', '66.777.888/0001-11', '667788990', '666.777.888-11', '66.777.888-1', '(85) 96677-8899', 'Av. Beira Mar', '60165-121', '888', 'Meireles', 'patricia.gomes@email.com', 'CLI010');
+
+
+
+
+
+INSERT INTO vendas_produto (
+    descricao, grupo, marca, unidade_medida, custo, preco,
+    codigo_produto, codigo_barras, quantidade, quantidade_minima_venda, tamanho,
+    condicao, status, tipo_envio,
+    peso, altura, profundidade,
+    link_mercado_livre, mercado_livre_id,
+    envio_gratis, cobertura_frete, cep_origem, metodos_envio_proprio
+) VALUES
+('Camisa Polo Azul', 'Roupas', 'Marca X', 'un', 25.50, 49.90, NULL, NULL, 100, 1, 'M', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Camisa Polo Branca', 'Roupas', 'Marca X', 'un', 25.50, 49.90, NULL, NULL, 120, 1, 'G', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Calça Jeans Slim', 'Roupas', 'Marca Y', 'un', 40.00, 89.90, NULL, NULL, 80, 1, '42', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Tênis Corrida', 'Calçados', 'Marca Z', 'par', 75.00, 159.90, NULL, NULL, 60, 1, '40', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Tênis Casual', 'Calçados', 'Marca Z', 'par', 70.00, 149.90, NULL, NULL, 50, 1, '41', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Jaqueta Corta Vento', 'Roupas', 'Marca X', 'un', 60.00, 129.90, NULL, NULL, 40, 1, 'M', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Camiseta Estampada', 'Roupas', 'Marca Y', 'un', 15.00, 39.90, NULL, NULL, 150, 1, 'P', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Short Moletom', 'Roupas', 'Marca W', 'un', 18.00, 44.90, NULL, NULL, 90, 1, 'M', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Vestido Longo', 'Roupas Femininas', 'Marca F', 'un', 55.00, 119.90, NULL, NULL, 30, 1, 'G', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Saia Jeans', 'Roupas Femininas', 'Marca F', 'un', 35.00, 79.90, NULL, NULL, 45, 1, 'M', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Blusa de Frio', 'Roupas', 'Marca Y', 'un', 65.00, 139.90, NULL, NULL, 35, 1, 'G', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Meia Cano Alto', 'Acessórios', 'Marca K', 'par', 5.00, 12.90, NULL, NULL, 200, 1, 'U', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Boné Aba Reta', 'Acessórios', 'Marca K', 'un', 10.00, 24.90, NULL, NULL, 75, 1, 'U', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Camisa Social', 'Roupas', 'Marca Z', 'un', 30.00, 69.90, NULL, NULL, 65, 1, 'M', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Calça Jogger', 'Roupas', 'Marca W', 'un', 38.00, 84.90, NULL, NULL, 70, 1, 'G', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Tênis Skate', 'Calçados', 'Marca S', 'par', 80.00, 169.90, NULL, NULL, 45, 1, '42', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Regata Básica', 'Roupas', 'Marca Y', 'un', 12.00, 29.90, NULL, NULL, 100, 1, 'M', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Blazer Masculino', 'Roupas', 'Marca Z', 'un', 95.00, 199.90, NULL, NULL, 25, 1, 'G', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Camisa Estilo Havaiana', 'Roupas', 'Marca X', 'un', 22.00, 54.90, NULL, NULL, 85, 1, 'M', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL),
+('Calça Alfaiataria', 'Roupas', 'Marca Y', 'un', 50.00, 109.90, NULL, NULL, 30, 1, 'G', 'novo', 'ativo', 'mercado_envios', NULL, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL);

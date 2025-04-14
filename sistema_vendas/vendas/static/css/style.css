@@ -613,7 +613,10 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: left;
+    
   }
+
+
 
   .produto-acoes p{
     color: #707070;

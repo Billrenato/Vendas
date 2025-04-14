@@ -26,6 +26,7 @@ import json
 from django.shortcuts import render
 from .models import Venda, Vendedor
 import plotly.utils
+import plotly.express as px
 
 @login_required
 def home(request):
@@ -37,14 +38,13 @@ def home(request):
 
         # Gráfico de barras do resumo de vendas dos últimos 6 meses
         df_vendas_meses = df_vendas.groupby(pd.Grouper(key='data_venda', freq='ME')).sum()
-        fig1 = go.Figure(data=[go.Bar(x=df_vendas_meses.index.astype(str), y=df_vendas_meses['total'])])
+        fig1 = go.Figure(data=[go.Line(x=df_vendas_meses.index.astype(str), y=df_vendas_meses['total'])])
         fig1.update_layout(title='Resumo de Vendas dos Últimos 6 Meses')
 
         # Indicador com o valor bruto de vendas do mês atual
         df_vendas_mes_atual = df_vendas[df_vendas['data_venda'].dt.month == pd.Timestamp.now().month]
         valor_bruto_mes_atual = df_vendas_mes_atual['total'].sum()
-        fig2 = go.Figure(data=[go.Indicator(mode="gauge+number", value=valor_bruto_mes_atual, title={'text': "Valor Bruto de Vendas do Mês Atual"})])
-
+        fig2 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_mes_atual,title={'text': "Valor Bruto de Vendas do Mês Atual"},number={'prefix': "R$", 'valueformat': ",.2f"})])
         # Rank de vendas por vendedores
         df_vendas_vendedores = df_vendas.groupby('vendedor_id')['total'].sum().reset_index()
         df_vendedores = pd.DataFrame(list(Vendedor.objects.all().values('id', 'nome_vendedor')))
@@ -52,8 +52,10 @@ def home(request):
         df_vendas_vendedores = df_vendas_vendedores.drop(['vendedor_id', 'id'], axis=1)
         df_vendas_vendedores = df_vendas_vendedores.rename(columns={'nome_vendedor': 'vendedor'})
         df_vendas_vendedores = df_vendas_vendedores.sort_values(by='total', ascending=False).head(10)
-        fig3 = go.Figure(data=[go.Bar(x=df_vendas_vendedores['vendedor'], y=df_vendas_vendedores['total'])])
+        fig3 = go.Figure(data=[go.Bar(x=df_vendas_vendedores['vendedor'],y=df_vendas_vendedores['total'],marker=dict(color=[px.colors.qualitative.Plotly[i % len(px.colors.qualitative.Plotly)] for i in range(len(df_vendas_vendedores))]))])
         fig3.update_layout(title='Rank de Vendas por Vendedores')
+        
+
 
         # Converter gráficos para JSON
         graph_json1 = json.dumps(fig1, cls=plotly.utils.PlotlyJSONEncoder)
@@ -950,6 +952,6 @@ def emitir_nfce(request, venda_id):
 
 
 
-
+#---------------------------------------------RELATORIOS-------------------------------------------------#
 
 

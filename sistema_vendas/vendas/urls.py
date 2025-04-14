@@ -34,6 +34,9 @@ urlpatterns = [
     path("cadastrar_venda/",  views.cadastrar_venda, name="cadastrar_venda"),
     
     path("finalizar_venda/<int:venda_id>/",  views.finalizar_venda, name="finalizar_venda"),
+
+    path('nfce/visualizar/<int:venda_id>/', views.visualizar_nfce, name='visualizar_nfce'),
+    path('nfce/emitir/<int:venda_id>/', views.emitir_nfce, name='emitir_nfce'),
     path("gerar_pdf/<int:venda_id>/",  views.gerar_pdf_venda, name="gerar_pdf_venda"),
     path("pesquisar_venda/", views.pesquisar_venda, name="pesquisar_venda"),
     path("editar_venda/<int:venda_id>/", views.editar_venda, name="editar_venda"),

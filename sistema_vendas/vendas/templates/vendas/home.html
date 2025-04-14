@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     
 </head>
 <body>
@@ -57,9 +58,9 @@
         </div>
         
 
-    <div id="grafico1"></div>
-    <div id="grafico2"></div>
-    <div id="grafico3"></div>
+    <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);" id="grafico1"></div>
+    <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);"  id="grafico2"></div>
+    <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);"  id="grafico3"></div>
 
     <script>
         var graph1 = JSON.parse('{{ graph_json1|escapejs }}');
