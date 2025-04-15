@@ -6,7 +6,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Venda Finalizada</title>
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        
+        <style>
+                
+                
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            table, th, td {
+                border: 1px solid black;
+            }
+            th, td {
+                padding: 10px;
+                text-align: left;
+            }
+            .total {
+                font-size: 18px;
+                font-weight: bold;
+                text-align: right;
+                margin-top: 20px;
+            }
+        </style>
     </head>
     <body>
         <nav class="navbar-horizontal">
@@ -36,41 +57,49 @@
             </ul>
         </nav>
         <div class="main-content">
-            <h1>Venda Finalizada</h1>
-
-            <h1>Venda #{{ venda.id }}</h1>
-    <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
-    <p><strong>Vendedor:</strong> {{ venda.vendedor.nome_vendedor }}</p>
-    <p><strong>Forma de Pagamento:</strong> {{ venda.forma_pagamento }}</p>
-    <p><strong>Desconto:</strong> R$ {{ venda.desconto }}</p>
-    <p><strong>Total:</strong> R$ {{ venda.total }}</p>
-
-    <h2>Itens da Venda</h2>
-    <table border="1">
-        <tr>
-            <th>Produto</th>
-            <th>Quantidade</th>
-            <th>Preço Unitário</th>
-            <th>Subtotal</th>
-        </tr>
-        {% for item in itens %}
-        <tr>
-            <td>{{ item.produto.nome }}</td>
-            <td>{{ item.quantidade }}</td>
-            <td>R$ {{ item.preco_unitario }}</td>
-            <td>R$ {{ item.subtotal }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <br>
-    <a href="{% url 'gerar_pdf_venda' venda.id %}">Gerar PDF</a>
-    <form action="{% url 'limpar_campos_venda' venda.pk %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Limpar Campos</button>
-    </form>
-    
+            <div class="nav-padrao">
+                Venda Finalizada 
+            </div>
+            <div class="form_prod">
+                <p style="color: green; font-size:40px;"><strong>Venda #</strong> {{ venda.id}}</p>
+                <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
+                <p><strong>Vendedor:</strong> {{ venda.vendedor.nome_vendedor }}</p>
+                <p><strong>Forma de Pagamento:</strong> {{ venda.forma_pagamento }}</p>
+                <p><strong>Total:</strong> R$ {{ venda.total|floatformat:2 }}</p>
+                <p><a href="{% url 'gerar_pdf_venda' venda.id %}" class="button_edit">Gerar PDF</a></p>
+            
+                <h2>Produtos</h2>
+                <table>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Preço</th>
+                        <th>Unidade</th>
+                        <th>Quantidade</th>
+                        <th>Total</th>
+                    </tr>
+            
+                    {% for item in itens %}
+                    <tr>
+                      <td>{{ item.produto.descricao }}</td>
+                      <td>R$ {{ item.produto.preco }}</td>
+                      <td>{{ item.produto.unidade_medida }}</td>
+                      <td>{{ item.quantidade }}</td>
+                      <td>R$ {{ item.subtotal }}</td>
+                    </tr>
+                  {% endfor %}
+                </table>
+            
+                 <br>
+                 <br>
+                 <br>
+               <form action="{% url 'limpar_campos_venda' venda.pk %}" method="post">
+                  {% csrf_token %}
+                  <button class="button_prod" type="submit">Voltar para vendas</button>
+                </form>
             
         </div>
+            
+    
+ 
 </body>
 </html>

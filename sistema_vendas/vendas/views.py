@@ -771,20 +771,28 @@ def editar_venda(request, venda_id):
 def finalizar_venda(request, venda_id):
     venda = get_object_or_404(Venda, id=venda_id)
     itens = ItemVenda.objects.filter(venda=venda)
+     # ou filtre por usuário/dono, se for multitenant
     
     venda.save()
 
     return render(request, "vendas/finalizar_venda.html", {
         "venda": venda,
-        "itens": itens
+        "itens": itens,
+        
     })
-
 
 
 def gerar_pdf_venda(request, venda_id):
     venda = get_object_or_404(Venda, id=venda_id)
-    html = render_to_string("vendas/pdf_venda.html", {"venda": venda})
-    
+    itens = ItemVenda.objects.filter(venda=venda)
+   
+
+    html = render_to_string("vendas/pdf_venda.html", {
+        "venda": venda,
+        "itens": itens,
+ 
+    })
+
     options = {
         "page-size": "A4",
         "encoding": "UTF-8",
@@ -794,9 +802,11 @@ def gerar_pdf_venda(request, venda_id):
     pdf = pdfkit.from_string(html, False, options=options)
 
     response = HttpResponse(pdf, content_type="application/pdf")
-    response["Content-Disposition"] = f'attachment; filename="venda_{venda.id_venda}.pdf"'
-    
+    response["Content-Disposition"] = f'attachment; filename="venda_{venda.id}.pdf"'
+
     return response
+
+
 def limpar_campos_venda(request, venda_id):
     venda = get_object_or_404(Venda, id=venda_id)
 

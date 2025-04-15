@@ -30,41 +30,55 @@
             text-align: right;
             margin-top: 20px;
         }
+        .empresa {
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Venda #{{ venda.id }}</h1>
-    <h2>Dados da Venda</h2>
+
+    
+
+    <h1 style="color: green; font-size:40px;">Venda #{{ venda.id }}</h1> 
+
     <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
-    <p><strong>Vendedor:</strong> {{ venda.vendedor.nome }}</p>
+    <p><strong>Telefone:</strong> {{ venda.cliente.telefone}}</p>
+    <p><strong>E-mail:</strong> {{ venda.cliente.email }}</p>
+    <p><strong>Vendedor:</strong> {{ venda.vendedor.nome_vendedor }}</p>
     <p><strong>Forma de Pagamento:</strong> {{ venda.get_forma_pagamento_display }}</p>
     {% if venda.forma_pagamento == "conta_cliente" %}
         <p><strong>Data de Vencimento:</strong> {{ venda.data_vencimento }}</p>
     {% endif %}
-    
+
     <h2>Produtos</h2>
     <table>
-        <tr>
-            <th>Descrição</th>
-            <th>Preço</th>
-            <th>Unidade</th>
-            <th>Quantidade</th>
-            <th>Total</th>
-        </tr>
-        <tr>
-            <td>{{ venda.produto.descricao }}</td>
-            <td>R$ {{ venda.produto.preco }}</td>
-            <td>{{ venda.produto.unidade_medida }}</td>
-            <td>{{ venda.quantidade }}</td>
-            <td>R$ {{ venda.total }}</td>
-        </tr>
-        
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Unidade</th>
+                <th>Quantidade</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in itens %}
+            <tr>
+                <td>{{ item.produto.descricao }}</td>
+                <td>R$ {{ item.produto.preco }}</td>
+                <td>{{ item.produto.unidade_medida }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>R$ {{ item.subtotal }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
     </table>
-    
+
     <div class="total">
         <p><strong>Desconto:</strong> R$ {{ venda.desconto }}</p>
         <p><strong>Total da Venda:</strong> R$ {{ venda.total }}</p>
     </div>
-    
+
 </body>
 </html>
