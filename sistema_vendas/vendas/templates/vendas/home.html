@@ -53,24 +53,44 @@
     </nav>
 
     <div class="main-content">
-        <div class="nav-padrao">
-            DASHBOARD
+        <div class="nav-padrao"> DASHBOARD </div>
+        <div style="display: flex; justify-content: flex-start;">
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico4"></div>
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico2"></div>
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico5"></div>
+        </div>
+        <div style="display: flex; justify-content: flex-start;">
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 50%; margin: 4px;" id="grafico6"></div>
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 50%; margin: 4px;" id="grafico7"></div>
+        </div>
+        <div style="display: flex; justify-content: flex-start;">
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);width: 100%; margin: 4px" id="grafico3"></div>
+        </div>
+        <div style="display: flex; justify-content: flex-start;">
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);width: 100%; margin: 4px" id="grafico1"></div>
         </div>
         
+        
+        
+        
+        
+        <script>
+            var graph1 = JSON.parse('{{ graph_json1|escapejs }}');
+            var graph2 = JSON.parse('{{ graph_json2|escapejs }}');
+            var graph3 = JSON.parse('{{ graph_json3|escapejs }}');
+            var graph4 = JSON.parse('{{ graph_json4|escapejs }}');
+            var graph5 = JSON.parse('{{ graph_json5|escapejs }}');
+            var graph6 = JSON.parse('{{ graph_json6|escapejs }}');
+            var graph7 = JSON.parse('{{ graph_json7|escapejs }}');
 
-    <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);" id="grafico1"></div>
-    <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);"  id="grafico2"></div>
-    <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);"  id="grafico3"></div>
-
-    <script>
-        var graph1 = JSON.parse('{{ graph_json1|escapejs }}');
-        var graph2 = JSON.parse('{{ graph_json2|escapejs }}');
-        var graph3 = JSON.parse('{{ graph_json3|escapejs }}');
-
-        Plotly.newPlot('grafico1', graph1.data, graph1.layout);
-        Plotly.newPlot('grafico2', graph2.data, graph2.layout);
-        Plotly.newPlot('grafico3', graph3.data, graph3.layout);
-    </script>
+            Plotly.newPlot('grafico1', graph1.data, graph1.layout);
+            Plotly.newPlot('grafico2', graph2.data, graph2.layout);
+            Plotly.newPlot('grafico3', graph3.data, graph3.layout);
+            Plotly.newPlot('grafico4', graph4.data, graph4.layout);
+            Plotly.newPlot('grafico5', graph5.data, graph5.layout);
+            Plotly.newPlot('grafico6', graph6.data, graph6.layout);
+            Plotly.newPlot('grafico7', graph7.data, graph7.layout);
+        </script>
     
 </body>
 </html>

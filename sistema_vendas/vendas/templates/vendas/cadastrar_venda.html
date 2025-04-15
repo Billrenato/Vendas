@@ -54,7 +54,7 @@
 <body>
 
     <!-- Formulário de cadastro/edição de venda -->
-    <form class="form_prod" style=" padding:35px;" method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
+    <form class="form_prod" style=" padding:35px; gap:15px;" method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
 
         
         <h1 >{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</h1>
@@ -98,7 +98,6 @@
             {% endfor %}
         </select>
 
-        <br>
     
         <button  class="button_edit" type="button" id="adicionar_produto" disabled>Adicionar</button>
 
@@ -160,9 +159,9 @@
             {% for item in itens %}
             <tr class="item_produto">
                 <td>{{ item.produto.descricao }}</td>
-                <td>R$ {{ item.preco_unitario|floatformat:2 }}</td>
+                <td class="preco">R$ {{ item.preco_unitario|floatformat:2 }}</td>
                 <td>{{ item.produto.unidade_medida }}</td>
-                <td><input type="number" class="quantidade" value="{{ item.quantidade }}" min="1" data-produto-id="{{ item.produto.id }}"></td>
+                <td style="text-align: center;"><input type="number" class="quantidade" value="{{ item.quantidade }}" min="1" data-produto-id="{{ item.produto.id }}" onchange="atualizarTotal(); atualizarInputs();" style="width: 50px; height: 30px; font-size: 16px;"></td>
                 <td><button class="button_delete" onclick="removerProduto(this)">Remover</button></td>
             </tr>
             {% endfor %}
@@ -195,17 +194,17 @@
         <div class="form-container">
             <div>
                 <label>Desconto:</label>
-            <input type="number" id="desconto" step="0.01" value="{% if venda %}{{ venda.desconto }}{% else %}0.00{% endif %}">
-            <button class="button_edit" type="button" onclick="aplicarDesconto()">Aplicar</button>
+                <input type="number" id="desconto" name="desconto" step="0.01"value="{% if venda %}{{ venda.desconto }}{% else %}0.00{% endif %}">
+                <button class="button_edit" type="button" onclick="aplicarDesconto()">Aplicar</button>
     
-            <label>Acréscimo:</label>
-            <input type="number" id="acrescimo" step="0.01" value="{% if venda %}{{ venda.acrescimo }}{% else %}0.00{% endif %}">
-            <button class="button_edit" type="button" onclick="aplicarAcrescimo()">Aplicar</button>
+                <label>Acréscimo:</label>
+                <input type="number" id="acrescimo" name="acrescimo" step="0.01" value="{% if venda %}{{ venda.acrescimo }}{% else %}0.00{% endif %}">
+                <button class="button_edit" type="button" onclick="aplicarAcrescimo()">Aplicar</button>
 
             </div>
             <div class="total">
                 <span>Total da Venda: R$</span> 
-                <h3 > <span style="font-size:50px;" id="total_venda">{% if venda %}{{ venda.total|floatformat:2 }}{% else %}0.00{% endif %}</span></h3>
+                <p > <span style="font-size:90px;" id="total_venda">{% if venda %}{{ venda.total|floatformat:2 }}{% else %}0.00{% endif %}</span></p>
                 {% if not venda or venda.status != "finalizada" %}
                     <button class="button_prod" type="submit" onclick="atualizarInputs();">
                 {% if venda %}Atualizar Venda{% else %}Finalizar Venda{% endif %}
@@ -244,6 +243,10 @@
     </script>
     
     <script> 
+
+        document.addEventListener('DOMContentLoaded', function () {
+            atualizarInputs();  // isso garante que os campos ocultos estejam preenchidos antes de enviar
+        });
         // Chama a função ao carregar a página para garantir que o campo seja mostrado ou escondido com base no valor inicial
         document.addEventListener('DOMContentLoaded', verificarFormaPagamento);
     
@@ -251,6 +254,7 @@
             let total = 0;
             document.querySelectorAll(".quantidade").forEach(input => {
                 let preco = parseFloat(input.closest("tr").querySelector(".preco").textContent.replace("R$", "").trim());
+                
                 let quantidade = parseInt(input.value);
                 total += preco * quantidade;
             });
@@ -292,11 +296,15 @@
             let novaLinha = tabela.insertRow();
             
             novaLinha.innerHTML = `
-                <td>${descricao}</td>
-                <td class="preco">R$ ${preco}</td>
-                <td>${unidade}</td>
-                <td><input type="number" class="quantidade" value="1" min="1" data-produto-id="${produtoId}" onchange="atualizarTotal(); atualizarInputs();"></td>
-                <td><button class="button_delete" type="button" onclick="removerProduto(this)">Remover</button></td>
+            <td style="text-align: center;">${descricao}</td>
+            <td style="text-align: center;" class="preco">R$ ${preco}</td>
+            <td style="text-align: center;">${unidade}</td>
+            <td style="text-align: center;">
+            <input type="number" class="quantidade" value="1" min="1" data-produto-id="${produtoId}" onchange="atualizarTotal(); atualizarInputs();" style="width: 50px; height: 30px; font-size: 16px; text-align: center;">
+            </td>
+            <td style="text-align: center;">
+            <button class="button_delete" type="button" onclick="removerProduto(this)">Remover</button>
+            </td>
             `;
     
             atualizarTotal();

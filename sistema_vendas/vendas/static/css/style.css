@@ -139,6 +139,7 @@ img {
     margin-left: 80px;
     padding: 15px;
     transition: margin-left 0.3s;
+    
 }
 
 
@@ -149,6 +150,7 @@ img {
     align-items: center;
     padding: 10px;
     background-color: #3b3b3b;
+
     
   }
   
@@ -287,13 +289,14 @@ form {
 
 .h1_prod, .h2_prod {
     color: #333;
+    
 }
 
 /* Ajuste do formulário */
 .form_prod {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+   
     padding: 35px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)
 }

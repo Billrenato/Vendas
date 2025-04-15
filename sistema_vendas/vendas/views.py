@@ -28,6 +28,7 @@ from .models import Venda, Vendedor
 import plotly.utils
 import plotly.express as px
 
+
 @login_required
 def home(request):
     vendas = Venda.objects.all()
@@ -38,13 +39,28 @@ def home(request):
 
         # Gráfico de barras do resumo de vendas dos últimos 6 meses
         df_vendas_meses = df_vendas.groupby(pd.Grouper(key='data_venda', freq='ME')).sum()
-        fig1 = go.Figure(data=[go.Line(x=df_vendas_meses.index.astype(str), y=df_vendas_meses['total'])])
-        fig1.update_layout(title='Resumo de Vendas dos Últimos 6 Meses')
+        fig1 = go.Figure(data=[go.Scatter(x=df_vendas_meses.index.strftime('%Y-%m-%d'), y=df_vendas_meses['total'], mode='lines')])
+        fig1.update_layout(
+        title='Resumo de Vendas dos Últimos 6 Meses',
+        height=400,  # altura do gráfico
+        autosize=True,  # ajusta automaticamente o tamanho do gráfico
+            xaxis=dict(
+            tickformat='%Y-%m-%d',  # formato da data no eixo x
+            tickangle=-45  # ângulo da data no eixo x
+            )
+        )
+        
 
         # Indicador com o valor bruto de vendas do mês atual
         df_vendas_mes_atual = df_vendas[df_vendas['data_venda'].dt.month == pd.Timestamp.now().month]
         valor_bruto_mes_atual = df_vendas_mes_atual['total'].sum()
-        fig2 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_mes_atual,title={'text': "Valor Bruto de Vendas do Mês Atual"},number={'prefix': "R$", 'valueformat': ",.2f"})])
+        fig2 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_mes_atual,title={'text': "Vendas do Mês Atual", 'font': {'size': 12}},number={'prefix': "R$", 'valueformat': ",.2f"})])
+        fig2.update_layout(
+        height=220,  # altura do gráfico
+        font=dict(size=16)  # tamanho da fonte
+        )
+
+
         # Rank de vendas por vendedores
         df_vendas_vendedores = df_vendas.groupby('vendedor_id')['total'].sum().reset_index()
         df_vendedores = pd.DataFrame(list(Vendedor.objects.all().values('id', 'nome_vendedor')))
@@ -54,6 +70,67 @@ def home(request):
         df_vendas_vendedores = df_vendas_vendedores.sort_values(by='total', ascending=False).head(10)
         fig3 = go.Figure(data=[go.Bar(x=df_vendas_vendedores['vendedor'],y=df_vendas_vendedores['total'],marker=dict(color=[px.colors.qualitative.Plotly[i % len(px.colors.qualitative.Plotly)] for i in range(len(df_vendas_vendedores))]))])
         fig3.update_layout(title='Rank de Vendas por Vendedores')
+       
+        df_vendas_dia_atual = df_vendas[df_vendas['data_venda'].dt.date == pd.Timestamp.now().date()]
+        valor_bruto_dia_atual = df_vendas_dia_atual['total'].sum()
+        fig4 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_dia_atual,title={'text': "Vendas do Dia Atual", 'font': {'size': 12}},number={'prefix': "R$", 'valueformat': ",.2f"})])
+        fig4.update_layout(
+        height=220,  # altura do gráfico
+        font=dict(size=16)  # tamanho da fonte
+        )
+        
+
+        # Vendas do ano atual
+        df_vendas_ano_atual = df_vendas[df_vendas['data_venda'].dt.year == pd.Timestamp.now().year]
+        valor_bruto_ano_atual = df_vendas_ano_atual['total'].sum()
+        fig5 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_ano_atual,title={'text': "Vendas do Ano Atual", 'font': {'size': 12}},number={'prefix': "R$", 'valueformat': ",.2f"})])
+        fig5.update_layout(
+        height=220,  # altura do gráfico
+        font=dict(size=16)  # tamanho da fonte
+        )
+
+
+        # Calcula a participação de cada produto nas vendas totais
+        itens_venda = ItemVenda.objects.all()
+        df_itens_venda = pd.DataFrame(list(itens_venda.values('produto_id', 'quantidade', 'preco_unitario', 'subtotal')))
+        df_produtos = pd.DataFrame(list(Produto.objects.all().values('id', 'descricao')))
+        df_itens_venda = df_itens_venda.merge(df_produtos, left_on='produto_id', right_on='id')
+        df_itens_venda = df_itens_venda.drop(['produto_id', 'id'], axis=1)
+        df_itens_venda = df_itens_venda.rename(columns={'descricao': 'produto'})
+
+# Calcula a participação de cada produto nas vendas totais
+        df_itens_venda['participacao'] = df_itens_venda['subtotal'] / df_itens_venda['subtotal'].sum()
+        df_itens_venda = df_itens_venda.sort_values(by='participacao', ascending=False)
+        df_itens_venda['acumulado'] = df_itens_venda['participacao'].cumsum()
+
+# Plota a curva ABC
+        fig6 = go.Figure(data=[go.Scatter(x=df_itens_venda.index, y=df_itens_venda['acumulado'], mode='lines')])
+        fig6.update_layout(
+            title='Curva ABC de Produtos',
+            xaxis_title='Produtos',
+            yaxis_title='Participação Acumulada'
+        )
+
+
+        
+        # Calcula os produtos mais vendidos
+        df_produtos_mais_vendidos = df_itens_venda.groupby('produto')['subtotal'].sum().reset_index()
+        df_produtos_mais_vendidos = df_produtos_mais_vendidos.sort_values(by='subtotal', ascending=False).head(10)
+
+        # Plota o gráfico de pizza
+        fig7 = go.Figure(data=[go.Pie(labels=df_produtos_mais_vendidos['produto'], values=df_produtos_mais_vendidos['subtotal'])])
+        fig7.update_layout(title='Produtos Mais Vendidos')
+
+
+
+        
+
+
+
+
+
+# Desabilitar o ModeBar
+
         
 
 
@@ -61,11 +138,19 @@ def home(request):
         graph_json1 = json.dumps(fig1, cls=plotly.utils.PlotlyJSONEncoder)
         graph_json2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
         graph_json3 = json.dumps(fig3, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json4 = json.dumps(fig4, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json5 = json.dumps(fig5, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json6 = json.dumps(fig6, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json7 = json.dumps(fig7, cls=plotly.utils.PlotlyJSONEncoder)
 
         context = {
             'graph_json1': graph_json1,
             'graph_json2': graph_json2,
             'graph_json3': graph_json3,
+            'graph_json4': graph_json4,
+            'graph_json5': graph_json5,
+            'graph_json6': graph_json6,
+            'graph_json7': graph_json7,
         }
         return render(request, 'vendas\home.html', context)
     else:

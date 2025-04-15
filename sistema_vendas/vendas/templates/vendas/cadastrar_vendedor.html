@@ -44,7 +44,7 @@
         </nav>
         <div class="main-content">
             <div class="nav-padrao">
-               CADASTRAR VENDEDORES
+               VENDEDORES
             </div>
     {% if messages %}
         <ul>
@@ -53,7 +53,7 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <form method="post">
+    <form  class="form_prod" method="post">
         {% csrf_token %}
         {% for field in form %}
             <div>
@@ -74,12 +74,6 @@
         <br>
         
     </form>
-
-    <div class="nav-padrao">
-        VENDEDORES 
-    </div>
-
-    
 
        
         <ul class="produto-lista">
