@@ -52,9 +52,52 @@
 </form>
 
 <body>
+    
+      <form style="align-items: center; justify-content: center; padding:20px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)" method="post" action="{% url 'pesquisar_venda' %}">
+          
+  
+          {% csrf_token %}
+          <label for="venda_id">Pesquisar Venda (ID):</label>
+          <input style="width:25%;" type="number" name="venda_id" id="venda_id">
+          <br>
+          <button class="button_edit" type="submit">Buscar</button>
+   
+          <br>
+          <br>
+          
+          {% if venda %}
+          <h3>Resultado da pesquisa:</h3>
+          <br>
+          <p style="color: green; font-size:40px;"><strong>Venda #</strong> {{ venda.id}}</p>
+          <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
+          <p><strong>Vendedor:</strong> {{ venda.vendedor.nome_vendedor }}</p>
+          <p><strong>Forma de Pagamento:</strong> {{ venda.forma_pagamento }}</p>
+          <p><strong>Total:</strong> R$ {{ venda.total|floatformat:2 }}</p>
+          <p><a href="{% url 'gerar_pdf_venda' venda.id %}" class="button_edit">Gerar PDF</a></p>
+  
+          
+          <table>
+              <tr>
+                  
+              </tr>
+              {% for item in itens %}
+              <tr>
+                  
+              </tr>
+              {% empty %}
+                  <tr>
+                      <td colspan="4">Nenhum item encontrado para esta venda.</td>
+                  </tr>
+              {% endfor %}
+          </table>
+      {% endif %}
+          
+      </form>
+      <br>
+      <br>
 
     <!-- Formulário de cadastro/edição de venda -->
-    <form class="form_prod" style=" padding:35px; gap:15px;" method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
+    <form class="form_prod" style=" padding:100px; gap:15px;" method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
 
         
         <h1 >{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</h1>
@@ -333,52 +376,5 @@
         
     </div>
 
-   <br>
-   <br>
-   <br>
-    <div class="nav-padrao">
-      PESQUISAR VENDAS
-    </div>
-    <form style="align-items: center; justify-content: center; padding:20px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)" method="post" action="{% url 'pesquisar_venda' %}">
-        
-
-        {% csrf_token %}
-        <label for="venda_id">Pesquisar Venda (ID):</label>
-        <input style="width:25%;" type="number" name="venda_id" id="venda_id">
-        <br>
-        <button class="button_edit" type="submit">Buscar</button>
- 
-        <br>
-        <br>
-        
-        {% if venda %}
-        <h3>Resultado da pesquisa:</h3>
-        <br>
-        <p style="color: green; font-size:40px;"><strong>Venda #</strong> {{ venda.id}}</p>
-        <p><strong>Cliente:</strong> {{ venda.cliente.nome }}</p>
-        <p><strong>Vendedor:</strong> {{ venda.vendedor.nome_vendedor }}</p>
-        <p><strong>Forma de Pagamento:</strong> {{ venda.forma_pagamento }}</p>
-        <p><strong>Total:</strong> R$ {{ venda.total|floatformat:2 }}</p>
-        <p><a href="{% url 'gerar_pdf_venda' venda.id %}" class="button_edit">Gerar PDF</a></p>
-
-        
-        <table>
-            <tr>
-                
-            </tr>
-            {% for item in itens %}
-            <tr>
-                
-            </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4">Nenhum item encontrado para esta venda.</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
-        
-    </form>
-        
 </body>
 </html>

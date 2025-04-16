@@ -79,17 +79,18 @@
             var graph2 = JSON.parse('{{ graph_json2|escapejs }}');
             var graph3 = JSON.parse('{{ graph_json3|escapejs }}');
             var graph4 = JSON.parse('{{ graph_json4|escapejs }}');
+            var config = JSON.parse('{{ config_json|escapejs }}');
             var graph5 = JSON.parse('{{ graph_json5|escapejs }}');
             var graph6 = JSON.parse('{{ graph_json6|escapejs }}');
             var graph7 = JSON.parse('{{ graph_json7|escapejs }}');
 
-            Plotly.newPlot('grafico1', graph1.data, graph1.layout);
-            Plotly.newPlot('grafico2', graph2.data, graph2.layout);
-            Plotly.newPlot('grafico3', graph3.data, graph3.layout);
-            Plotly.newPlot('grafico4', graph4.data, graph4.layout);
-            Plotly.newPlot('grafico5', graph5.data, graph5.layout);
-            Plotly.newPlot('grafico6', graph6.data, graph6.layout);
-            Plotly.newPlot('grafico7', graph7.data, graph7.layout);
+            Plotly.newPlot('grafico1', graph1.data, graph1.layout,config);
+            Plotly.newPlot('grafico2', graph2.data, graph2.layout,config);
+            Plotly.newPlot('grafico3', graph3.data, graph3.layout,config);
+            Plotly.newPlot('grafico4', graph4.data, graph4.layout,config);
+            Plotly.newPlot('grafico5', graph5.data, graph5.layout,config);
+            Plotly.newPlot('grafico6', graph6.data, graph6.layout,config);
+            Plotly.newPlot('grafico7', graph7.data, graph7.layout,config);
         </script>
     
 </body>

@@ -78,6 +78,8 @@ def home(request):
         height=220,  # altura do gráfico
         font=dict(size=16)  # tamanho da fonte
         )
+      
+        
         
 
         # Vendas do ano atual
@@ -142,6 +144,7 @@ def home(request):
         graph_json5 = json.dumps(fig5, cls=plotly.utils.PlotlyJSONEncoder)
         graph_json6 = json.dumps(fig6, cls=plotly.utils.PlotlyJSONEncoder)
         graph_json7 = json.dumps(fig7, cls=plotly.utils.PlotlyJSONEncoder)
+        config_json = json.dumps(dict(displayModeBar=False))
 
         context = {
             'graph_json1': graph_json1,
@@ -151,6 +154,7 @@ def home(request):
             'graph_json5': graph_json5,
             'graph_json6': graph_json6,
             'graph_json7': graph_json7,
+            'config_json': config_json,
         }
         return render(request, 'vendas\home.html', context)
     else:
