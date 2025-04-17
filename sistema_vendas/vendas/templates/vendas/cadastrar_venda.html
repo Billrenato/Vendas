@@ -60,7 +60,7 @@
           <label for="venda_id">Pesquisar Venda (ID):</label>
           <input style="width:25%;" type="number" name="venda_id" id="venda_id">
           <br>
-          <button class="button_edit" type="submit">Buscar</button>
+          <button class="button_prod" type="submit">Buscar</button>
    
           <br>
           <br>
@@ -73,7 +73,7 @@
           <p><strong>Vendedor:</strong> {{ venda.vendedor.nome_vendedor }}</p>
           <p><strong>Forma de Pagamento:</strong> {{ venda.forma_pagamento }}</p>
           <p><strong>Total:</strong> R$ {{ venda.total|floatformat:2 }}</p>
-          <p><a href="{% url 'gerar_pdf_venda' venda.id %}" class="button_edit">Gerar PDF</a></p>
+          <p><a href="{% url 'gerar_pdf_venda' venda.id %}" class="button_prod">Gerar PDF</a></p>
   
           
           <table>
@@ -97,10 +97,14 @@
       <br>
 
     <!-- Formulário de cadastro/edição de venda -->
+    <div class="nav-padrao">
+        {% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}
+    </div>
     <form class="form_prod" style=" padding:100px; gap:15px;" method="post" action="{% if venda %}{% url 'editar_venda' venda.id %}{% else %}{% url 'cadastrar_venda' %}{% endif %}">
-
         
-        <h1 >{% if venda %}Editar Venda{% else %}Cadastrar Venda{% endif %}</h1>
+        
+        
+       
         {% csrf_token %}
 
        

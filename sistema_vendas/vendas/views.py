@@ -27,6 +27,9 @@ from django.shortcuts import render
 from .models import Venda, Vendedor
 import plotly.utils
 import plotly.express as px
+from datetime import date
+from django.db.models import Sum
+import plotly.graph_objects as go
 
 
 @login_required
@@ -39,22 +42,23 @@ def home(request):
 
         # Gráfico de barras do resumo de vendas dos últimos 6 meses
         df_vendas_meses = df_vendas.groupby(pd.Grouper(key='data_venda', freq='ME')).sum()
-        fig1 = go.Figure(data=[go.Scatter(x=df_vendas_meses.index.strftime('%Y-%m-%d'), y=df_vendas_meses['total'], mode='lines')])
+        fig1 = go.Figure(data=[go.Line(x=df_vendas_meses.index.astype(str), y=df_vendas_meses['total'],line=dict(color='green'))])
         fig1.update_layout(
         title='Resumo de Vendas dos Últimos 6 Meses',
-        height=400,  # altura do gráfico
+        height=400,
+        font=dict(size=11),  # altura do gráfico
         autosize=True,  # ajusta automaticamente o tamanho do gráfico
             xaxis=dict(
             tickformat='%Y-%m-%d',  # formato da data no eixo x
-            tickangle=-45  # ângulo da data no eixo x
+         
             )
         )
-        
+         
 
         # Indicador com o valor bruto de vendas do mês atual
         df_vendas_mes_atual = df_vendas[df_vendas['data_venda'].dt.month == pd.Timestamp.now().month]
         valor_bruto_mes_atual = df_vendas_mes_atual['total'].sum()
-        fig2 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_mes_atual,title={'text': "Vendas do Mês Atual", 'font': {'size': 12}},number={'prefix': "R$", 'valueformat': ",.2f"})])
+        fig2 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_mes_atual,title={'text': "Vendas do Mês Atual", 'font': {'size': 12}},number={'prefix': "R$", 'valueformat': ",.2f",'font': {'color': 'limegreen'}})])
         fig2.update_layout(
         height=220,  # altura do gráfico
         font=dict(size=16)  # tamanho da fonte
@@ -73,7 +77,7 @@ def home(request):
        
         df_vendas_dia_atual = df_vendas[df_vendas['data_venda'].dt.date == pd.Timestamp.now().date()]
         valor_bruto_dia_atual = df_vendas_dia_atual['total'].sum()
-        fig4 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_dia_atual,title={'text': "Vendas do Dia Atual", 'font': {'size': 12}},number={'prefix': "R$", 'valueformat': ",.2f"})])
+        fig4 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_dia_atual,title={'text': "Vendas do Dia Atual", 'font': {'size': 12}},number={'prefix': "R$", 'valueformat': ",.2f",'font': {'color': 'limegreen'}})])
         fig4.update_layout(
         height=220,  # altura do gráfico
         font=dict(size=16)  # tamanho da fonte
@@ -85,7 +89,7 @@ def home(request):
         # Vendas do ano atual
         df_vendas_ano_atual = df_vendas[df_vendas['data_venda'].dt.year == pd.Timestamp.now().year]
         valor_bruto_ano_atual = df_vendas_ano_atual['total'].sum()
-        fig5 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_ano_atual,title={'text': "Vendas do Ano Atual", 'font': {'size': 12}},number={'prefix': "R$", 'valueformat': ",.2f"})])
+        fig5 = go.Figure(data=[go.Indicator(mode="number",value=valor_bruto_ano_atual,title={'text': "Vendas do Ano Atual", 'font': {'size': 12}},number={'prefix': "R$", 'valueformat': ",.2f",'font': {'color': 'limegreen'}})])
         fig5.update_layout(
         height=220,  # altura do gráfico
         font=dict(size=16)  # tamanho da fonte
@@ -106,7 +110,7 @@ def home(request):
         df_itens_venda['acumulado'] = df_itens_venda['participacao'].cumsum()
 
 # Plota a curva ABC
-        fig6 = go.Figure(data=[go.Scatter(x=df_itens_venda.index, y=df_itens_venda['acumulado'], mode='lines')])
+        fig6 = go.Figure(data=[go.Scatter(x=df_itens_venda.index, y=df_itens_venda['acumulado'], mode='lines',line=dict(color='red'))])
         fig6.update_layout(
             title='Curva ABC de Produtos',
             xaxis_title='Produtos',
@@ -124,10 +128,134 @@ def home(request):
         fig7.update_layout(title='Produtos Mais Vendidos')
 
 
+        despesas_hoje = Despesa.objects.filter(pago=False, data_vencimento=date.today())
+        valor_despesas_hoje = despesas_hoje.aggregate(total=Sum('valor'))['total'] or 0
+        fig8 = go.Figure(data=[go.Indicator(
+        mode="number",
+        value=valor_despesas_hoje,
+        title={'text': "Despesas a Pagar Hoje", 'font': {'size': 12}},
+        number={'prefix': "R$", 'valueformat': ",.2f",'font': {'color': 'red'}}
+        )])
+        fig8.update_layout(
+        height=220,
+        font=dict(size=16)
+        )
 
-        
+
+        # Despesas do mês atual
+        despesas_mes_atual = Despesa.objects.filter(pago=False, data_vencimento__month=date.today().month, data_vencimento__year=date.today().year)
+        valor_despesas_mes_atual = despesas_mes_atual.aggregate(total=Sum('valor'))['total'] or 0
+        fig9 = go.Figure(data=[go.Indicator(
+        mode="number",
+        value=valor_despesas_mes_atual,
+        title={'text': "Despesas do Mês Atual", 'font': {'size': 12}},
+        number={'prefix': "R$", 'valueformat': ",.2f",'font': {'color': 'orange'}}
+        )])
 
 
+
+        fig9.update_layout(
+        height=220,
+        font=dict(size=16)
+        )
+
+        # Total de despesas não pagas
+        despesas_nao_pagas = Despesa.objects.filter(pago=False)
+        valor_total_despesas = despesas_nao_pagas.aggregate(total=Sum('valor'))['total'] or 0
+
+        fig10 = go.Figure(data=[go.Indicator(
+        mode="number",
+        value=valor_total_despesas,
+        title={'text': "Total de Despesas Não Pagas", 'font': {'size': 12}},
+        number={'prefix': "R$", 'valueformat': ",.2f",'font': {'color': 'yellow'}}
+        )])
+        fig10.update_layout(
+        height=220,
+        font=dict(size=16)
+        )
+
+
+        # Vendas a pagar no atual (considerando "atual" como hoje) para contas de clientes
+        vendas_hoje = Venda.objects.filter(pago=False, forma_pagamento='conta_cliente', data_vencimento=date.today())
+        valor_vendas_hoje = vendas_hoje.aggregate(total=Sum('total'))['total'] or 0
+
+        fig11 = go.Figure(data=[go.Indicator(
+            mode="number",
+            value=valor_vendas_hoje,
+            title={'text': "Vendas a Pagar Hoje (Conta Cliente)", 'font': {'size': 12}},
+            number={'prefix': "R$", 'valueformat': ",.2f",'font': {'color': 'blue'}},
+            
+        )])
+        fig11.update_layout(
+            height=220,
+            font=dict(size=16)
+        )
+
+# Vendas do mês atual para contas de clientes
+        vendas_mes_atual = Venda.objects.filter(pago=False, forma_pagamento='conta_cliente', data_vencimento__month=date.today().month, data_vencimento__year=date.today().year)
+        valor_vendas_mes_atual = vendas_mes_atual.aggregate(total=Sum('total'))['total'] or 0
+
+        fig12 = go.Figure(data=[go.Indicator(
+            mode="number",
+            value=valor_vendas_mes_atual,
+            title={'text': "Vendas do Mês Atual (Conta Cliente)", 'font': {'size': 12}},
+            number={'prefix': "R$", 'valueformat': ",.2f"}
+        )])
+        fig12.update_layout(
+            height=220,
+            font=dict(size=16)
+        )
+
+# Total de vendas não pagas para contas de clientes
+        vendas_nao_pagas = Venda.objects.filter(pago=False, forma_pagamento='conta_cliente')
+        valor_total_vendas = vendas_nao_pagas.aggregate(total=Sum('total'))['total'] or 0
+
+        fig13 = go.Figure(data=[go.Indicator(
+            mode="number",
+            value=valor_total_vendas,
+            title={'text': "Total de Vendas Não Pagas (Conta Cliente)", 'font': {'size': 12}},
+            number={'prefix': "R$", 'valueformat': ",.2f"}
+        )])
+        fig13.update_layout(
+            height=220,
+            font=dict(size=16)
+        )
+
+        # Obter todas as despesas
+        despesas = Despesa.objects.filter(pago=False)
+
+        # Criar listas para o gráfico
+        datas = [d.data_vencimento for d in despesas]
+        valores = [d.valor for d in despesas]
+
+        # Criar o gráfico
+        fig14 = go.Figure(data=[go.Bar(x=datas, y=valores,marker_color='green')])
+        fig15 = go.Figure(data=[go.Scatter(x=datas, y=valores, fill='tozeroy')])
+
+
+        # Configurar o layout do gráfico
+        fig14.update_layout(
+            title='Gráfico de Despesas',
+            xaxis_title='Data de Vencimento',
+            yaxis_title='Valor (R$)',
+            xaxis=dict(
+                type='date',
+                tickformat='%d/%m/%Y'
+            ),
+            height=450,
+            font=dict(size=11)
+        )
+        fig15.update_layout(
+            title='Gráfico de Despesas',
+            xaxis_title='Data de Vencimento',
+            yaxis_title='Valor (R$)',
+            xaxis=dict(
+                type='date',
+                tickformat='%d/%m/%Y'
+            ),
+            height=450,
+            font=dict(size=11)
+        )
 
 
 
@@ -144,6 +272,14 @@ def home(request):
         graph_json5 = json.dumps(fig5, cls=plotly.utils.PlotlyJSONEncoder)
         graph_json6 = json.dumps(fig6, cls=plotly.utils.PlotlyJSONEncoder)
         graph_json7 = json.dumps(fig7, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json8 = json.dumps(fig8, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json9 = json.dumps(fig9, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json10 = json.dumps(fig10, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json11 = json.dumps(fig11, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json12 = json.dumps(fig12, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json13 = json.dumps(fig13, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json14 = json.dumps(fig14, cls=plotly.utils.PlotlyJSONEncoder)
+        graph_json15 = json.dumps(fig15, cls=plotly.utils.PlotlyJSONEncoder)
         config_json = json.dumps(dict(displayModeBar=False))
 
         context = {
@@ -154,6 +290,14 @@ def home(request):
             'graph_json5': graph_json5,
             'graph_json6': graph_json6,
             'graph_json7': graph_json7,
+            'graph_json8': graph_json8,
+            'graph_json9': graph_json9,
+            'graph_json10': graph_json10,
+            'graph_json11': graph_json11,
+            'graph_json12': graph_json12,
+            'graph_json13': graph_json13,
+            'graph_json14': graph_json14,
+            'graph_json15': graph_json15,
             'config_json': config_json,
         }
         return render(request, 'vendas\home.html', context)

@@ -60,14 +60,29 @@
             <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico5"></div>
         </div>
         <div style="display: flex; justify-content: flex-start;">
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);width: 100%; margin: 4px" id="grafico1"></div>
+        </div>
+        <div style="display: flex; justify-content: flex-start;">
             <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 50%; margin: 4px;" id="grafico6"></div>
             <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 50%; margin: 4px;" id="grafico7"></div>
         </div>
         <div style="display: flex; justify-content: flex-start;">
             <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);width: 100%; margin: 4px" id="grafico3"></div>
         </div>
+        
         <div style="display: flex; justify-content: flex-start;">
-            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);width: 100%; margin: 4px" id="grafico1"></div>
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico8"></div>
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico9"></div>
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico10"></div>
+        </div>
+        <div style="display: flex; justify-content: flex-start;">
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);width: 100%; margin: 4px" id="grafico14"></div>
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);width: 100%; margin: 4px" id="grafico15"></div>
+        </div>
+        <div style="display: flex; justify-content: flex-start;">
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico11"></div>
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico12"></div>
+            <div style=" box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); width: 33%; margin: 4px;" id="grafico13"></div>
         </div>
         
         
@@ -83,6 +98,14 @@
             var graph5 = JSON.parse('{{ graph_json5|escapejs }}');
             var graph6 = JSON.parse('{{ graph_json6|escapejs }}');
             var graph7 = JSON.parse('{{ graph_json7|escapejs }}');
+            var graph8 = JSON.parse('{{ graph_json8|escapejs }}');
+            var graph9 = JSON.parse('{{ graph_json9|escapejs }}');
+            var graph10 = JSON.parse('{{ graph_json10|escapejs }}');
+            var graph11 = JSON.parse('{{ graph_json11|escapejs }}');
+            var graph12 = JSON.parse('{{ graph_json12|escapejs }}');
+            var graph13 = JSON.parse('{{ graph_json13|escapejs }}');
+            var graph14 = JSON.parse('{{ graph_json14|escapejs }}');
+            var graph15 = JSON.parse('{{ graph_json15|escapejs }}');
 
             Plotly.newPlot('grafico1', graph1.data, graph1.layout,config);
             Plotly.newPlot('grafico2', graph2.data, graph2.layout,config);
@@ -91,6 +114,14 @@
             Plotly.newPlot('grafico5', graph5.data, graph5.layout,config);
             Plotly.newPlot('grafico6', graph6.data, graph6.layout,config);
             Plotly.newPlot('grafico7', graph7.data, graph7.layout,config);
+            Plotly.newPlot('grafico8', graph8.data, graph8.layout,config);
+            Plotly.newPlot('grafico9', graph9.data, graph9.layout,config);
+            Plotly.newPlot('grafico10', graph10.data, graph10.layout,config);
+            Plotly.newPlot('grafico11', graph11.data, graph11.layout,config);
+            Plotly.newPlot('grafico12', graph12.data, graph12.layout,config);
+            Plotly.newPlot('grafico13', graph13.data, graph13.layout,config);
+            Plotly.newPlot('grafico14', graph14.data, graph14.layout,config);
+            Plotly.newPlot('grafico15', graph15.data, graph15.layout,config);
         </script>
     
 </body>
