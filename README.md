@@ -1,10 +1,16 @@
 # Sistema de Vendas 🚀
-Este é um sistema de vendas robusto e completo, desenvolvido com Django e PostgreSQL, ideal para o gerenciamento de produtos, clientes e operações comerciais.
 
-Além das funcionalidades principais, o sistema conta com integração direta com a API do Mercado Livre, possibilitando a publicação e o controle dos seus produtos na plataforma de forma automatizada.
+Este é um sistema de vendas robusto e completo, desenvolvido com Django e PostgreSQL, 
+ideal para o gerenciamento de produtos, clientes e operações comerciais.
+
+Além das funcionalidades principais, o sistema conta com integração direta com a API do Mercado Livre,
+possibilitando a publicação e o controle dos seus produtos na plataforma de forma automatizada.
+
 
 ✨ Funcionalidades Principais
+
 ✔️ Gestão Comercial e Financeira
+
 📦 Cadastro e gerenciamento de produtos
 
 👥 Cadastro de clientes
@@ -13,11 +19,10 @@ Além das funcionalidades principais, o sistema conta com integração direta co
 
 💰 Controle de contas a pagar e a receber
 
-🧾 Emissão de NF-e e envio à Receita Federal
-
 📊 Relatórios e gráficos interativos de vendas, despesas e contas a receber
 
 📊 Novidade: Gráficos Interativos
+
 Agora o sistema conta com painéis interativos para indicadores financeiros e operacionais:
 
 Evolução de vendas por período
