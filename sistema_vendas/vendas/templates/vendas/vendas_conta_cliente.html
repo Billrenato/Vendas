@@ -7,46 +7,7 @@
     <title>Contas Clientes</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-    <script>
-        function calcularTotal() {
-            let total = 0;
-            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            let vendaIds = [];
     
-            checkboxes.forEach(function(checkbox) {
-                if (checkbox.value !== "on") { // Evita considerar o checkbox "Selecionar todas"
-                    let vendaId = checkbox.value;
-                    vendaIds.push(vendaId);
-                    let totalVendaElement = document.getElementById('total_' + vendaId);
-                    
-                    if (totalVendaElement) {
-                        let totalVenda = parseFloat(totalVendaElement.innerText.replace(",", "."));
-                        if (!isNaN(totalVenda)) {
-                            total += totalVenda;
-                        }
-                    }
-                }
-            });
-    
-            document.getElementById('total_sum').innerText =  total.toFixed(2);
-            document.getElementById('venda_ids').value = vendaIds.join(',');
-        }
-    
-        function selecionarTodas() {
-            let checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#selecionar_todas)');
-            let selecionarTodasCheckbox = document.getElementById('selecionar_todas');
-            
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = selecionarTodasCheckbox.checked;
-            });
-    
-            calcularTotal();
-        }
-    
-        function imprimirPdf() {
-            document.querySelector('form[method="get"]').submit();
-        }
-    </script>
 </head>    
     <body>
         <nav class="navbar-horizontal">
@@ -100,6 +61,7 @@
     
         <div class="produto-acoes-detalhes">
                <button class="button_prod" type="submit">Filtrar</button>
+               
         </div>
 
     </form>
@@ -147,6 +109,7 @@
                 
             </tbody>
         </table>
+        {% csrf_token %}
         <div class="produto-acoes-detalhes">
             <button class="pago" type="submit" name="marcar_pago">Marcar como pago</button>
             <button class="nao_pago" type="submit" name="marcar_nao_pago" value="1">Marcar como não pago</button>
@@ -162,7 +125,46 @@
         <p></p>
         
     </form>
+    <script>
+        function calcularTotal() {
+            let total = 0;
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            let vendaIds = [];
+    
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.value !== "on") { // Evita considerar o checkbox "Selecionar todas"
+                    let vendaId = checkbox.value;
+                    vendaIds.push(vendaId);
+                    let totalVendaElement = document.getElementById('total_' + vendaId);
+                    
+                    if (totalVendaElement) {
+                        let totalVenda = parseFloat(totalVendaElement.innerText.replace(",", "."));
+                        if (!isNaN(totalVenda)) {
+                            total += totalVenda;
+                        }
+                    }
+                }
+            });
+    
+            document.getElementById('total_sum').innerText =  total.toFixed(2);
+            document.getElementById('venda_ids').value = vendaIds.join(',');
+        }
+    
+        function selecionarTodas() {
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#selecionar_todas)');
+            let selecionarTodasCheckbox = document.getElementById('selecionar_todas');
             
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selecionarTodasCheckbox.checked;
+            });
+    
+            calcularTotal();
+        }
+    
+        function imprimirPdf() {
+            document.querySelector('form[method="get"]').submit();
+        }
+    </script>       
         
 <body>
     

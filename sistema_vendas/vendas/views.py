@@ -42,7 +42,7 @@ def home(request):
 
         # Gráfico de barras do resumo de vendas dos últimos 6 meses
         df_vendas_meses = df_vendas.groupby(pd.Grouper(key='data_venda', freq='ME')).sum()
-        fig1 = go.Figure(data=[go.Line(x=df_vendas_meses.index.astype(str), y=df_vendas_meses['total'],line=dict(color='green'))])
+        fig1 = go.Figure(data=[go.Line(x=df_vendas_meses.index.astype(str), y=df_vendas_meses['total'])])
         fig1.update_layout(
         title='Resumo de Vendas dos Últimos 6 Meses',
         height=400,
@@ -1156,15 +1156,21 @@ def vendas_conta_cliente(request):
                     venda.save(update_fields=['pago'])
         return redirect('vendas_conta_cliente')
 
-    if request.GET.get('imprimir'):
+    if request.POST.get('imprimir'):
+        ids = request.POST.get('venda_ids', '')
+        id_list = [int(i) for i in ids.split(',') if i.strip().isdigit()]
+        vendas_selecionadas = Venda.objects.filter(id__in=id_list)
+
+        total = sum(v.total for v in vendas_selecionadas)
+
         template = get_template('vendas/vendas_conta_cliente_pdf.html')
-        html = template.render({'vendas': vendas, 'total': total})
+        html = template.render({'vendas': vendas_selecionadas, 'total': total})
         config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
         pdf = pdfkit.from_string(html, False, configuration=config)
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="vendas_conta_cliente.pdf"'
         return response
-
+    
     return render(request, 'vendas/vendas_conta_cliente.html', {'vendas': vendas, 'total': total, 'pago': pago})
 
 
