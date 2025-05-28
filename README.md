@@ -8,25 +8,26 @@ O sistema também conta com integração nativa à API do Mercado Livre , permit
 🔗 Gestão Comercial e Financeira
 📦 Gestão de Produtos:
 
-Cadastro, edição, pesquisa e controle de estoque.
+    Cadastro, edição, pesquisa e controle de estoque.
 
 👥 Gestão de Clientes:
 
-Cadastro detalhado de clientes, com busca por nome, CPF/CNPJ ou código.
+    Cadastro detalhado de clientes, com busca por nome, CPF/CNPJ ou código.
 
 🛒 Gestão de Vendas:
 
-Controle completo do ciclo de vendas, com geração de pedidos, carrinho inteligente, cálculo automático de totais, descontos e acréscimos.
+    Controle completo do ciclo de vendas, com geração de pedidos, carrinho inteligente, cálculo automático de totais, descontos e acréscimos.
 
 💰 Financeiro:
 
-Controle de Contas a Pagar e Contas a Receber , com gestão de vencimentos, status de pagamento e geração de relatórios financeiros.
+    Controle de Contas a Pagar e Contas a Receber , com gestão de vencimentos, status de pagamento e geração de relatórios financeiros.
 
 🧾 Geração de Documentos:
 
-Exportação de pedidos e vendas em PDF com layout profissional.
+    Exportação de pedidos e vendas em PDF com layout profissional.
 
 📊 Relatórios e Análises
+
 Dashboard interativo com indicadores financeiros e operacionais:
 
     ✔️ Evolução das vendas por período.
