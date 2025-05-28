@@ -1,68 +1,75 @@
 # Sistema de Vendas 🚀
 
-Este é um sistema de vendas robusto e completo, desenvolvido com Django e PostgreSQL, 
-ideal para o gerenciamento de produtos, clientes e operações comerciais.
+Sistema de Vendas robusto, escalável e integrado, desenvolvido utilizando Django e PostgreSQL , projetado para melhoria do gerenciamento de operações comerciais, financeiras e controle de estoque.
 
-Além das funcionalidades principais, o sistema conta com integração direta com a API do Mercado Livre,
-possibilitando a publicação e o controle dos seus produtos na plataforma de forma automatizada.
-
+O sistema também conta com integração nativa à API do Mercado Livre , permitindo a gestão de produtos de forma centralizada e automatizada diretamente pela plataforma.
 
 ✨ Funcionalidades Principais
+🔗 Gestão Comercial e Financeira
+📦 Gestão de Produtos:
 
-✔️ Gestão Comercial e Financeira
+Cadastro, edição, pesquisa e controle de estoque.
 
-📦 Cadastro e gerenciamento de produtos
+👥 Gestão de Clientes:
 
-👥 Cadastro de clientes
+Cadastro detalhado de clientes, com busca por nome, CPF/CNPJ ou código.
 
-🛒 Registro e controle de vendas
+🛒 Gestão de Vendas:
 
-💰 Controle de contas a pagar e a receber
+Controle completo do ciclo de vendas, com geração de pedidos, carrinho inteligente, cálculo automático de totais, descontos e acréscimos.
 
-📊 Relatórios e gráficos interativos de vendas, despesas e contas a receber
+💰 Financeiro:
 
-📊 Novidade: Gráficos Interativos
+Controle de Contas a Pagar e Contas a Receber , com gestão de vencimentos, status de pagamento e geração de relatórios financeiros.
 
-Agora o sistema conta com painéis interativos para indicadores financeiros e operacionais:
+🧾 Geração de Documentos:
 
-Evolução de vendas por período
+Exportação de pedidos e vendas em PDF com layout profissional.
 
-Controle visual de despesas
+📊 Relatórios e Análises
+Dashboard interativo com indicadores financeiros e operacionais:
 
-Acompanhamento de contas a receber
+    ✔️ Evolução das vendas por período.
+    
+    ✔️ Controle visual de despesas (pagamentos e não pagamentos).
+    
+    ✔️ Monitoramento de contas a receber.
+    
+    ✔️ Ranking de vendas por vendedores.
+    
+    ✔️ Indicadores de valor bruto, lucro e margem.
 
-Tudo com gráficos dinâmicos e filtros inteligentes para facilitar sua tomada de decisão.
+Gráficos dinâmicos e responsivos, utilizando Plotly Dash integrado ao Django.
 
-🔗 Integração com o Mercado Livre
-🚀 Publicação de produtos diretamente na plataforma
+Filtros avançados para análise de dados, cliente, produto ou status financeiro.
 
-🔍 Busca automática da categoria ideal com base na descrição do produto
+    🔗 Integração com Mercado Livre
+    🚀 Publicação de produtos diretamente na plataforma Mercado Livre.
+    
+    🔍 Busca inteligente da categoria ideal com base na descrição do produto.
+    
+    📑 Consulta dinâmica dos atributos obrigatórios exigidos por categoria.
+    
+    🔄 Atualização automatizada de produtos já publicados.
+    
+    ❌ Remoção e gerenciamento de anúncios no Mercado Livre.
+    
+    💡 Experiência do Usuário (UX/UI)
+    🎨 Interface moderna, minimalista e intuitiva.
+    
+    📱 Design 100% responsivo, adaptável a desktops, tablets e smartphones.
+    
+    🔊 Feedback sonoro e notificações visuais durante as operações.
+    
+    🔍Busque inteligente em todos os módulos do sistema.
 
-📝 Consulta aos atributos obrigatórios por categoria
+🛠️ Requisitos Técnicos
 
-🔄 Atualização de produtos existentes
-
-❌ Exclusão de produtos no Mercado Livre
-
-💡 Experiência do Usuário
-🎨 Interface moderna e intuitiva
-
-📱 Design responsivo, adaptável a diferentes dispositivos
-
-📌 Requisitos para Instalação
-Certifique-se de ter os seguintes requisitos antes de instalar o sistema:
-
-🐍 Python 3.9 ou superior
-
-🌐 Django 3.2 ou superior
-
-🗄️ PostgreSQL 13 ou superior
-
-📦 Bibliotecas Adicionais
-kit pdf
-
-wkhtmltopdf
-
-pyOpenSSL
-
-psycopg2
+    Tecnologia	Versão Recomendada
+    Pitão	>= 3,9
+    Django	>= 3,2
+    PostgreSQL	>= 13
+    wkhtmltopdf	Última versão estável
+    kit pdf	Mais recente
+    pyOpenSSL	Mais recente
+    psicopg2	Mais recente
